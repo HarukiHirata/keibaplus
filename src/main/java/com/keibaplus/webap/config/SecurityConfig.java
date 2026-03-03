@@ -11,19 +11,21 @@ import org.springframework.security.web.authentication.LoginUrlAuthenticationEnt
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/notlogin", "/welcome", "/login", "/register", "/error", "/css/**", "/js/**",
-                        "/images/**")
-                .permitAll()
-                .anyRequest().authenticated())
-                .formLogin(login -> login
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/top", true)
-                        .permitAll())
-                .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/notlogin")));
-        return http.build();
-    }
+        @Bean
+        SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+                http.authorizeHttpRequests(auth -> auth
+                                .requestMatchers("/notlogin", "/welcome", "/login", "/register", "/error", "/css/**",
+                                                "/js/**",
+                                                "/images/**", "**/favicon**")
+                                .permitAll()
+                                .anyRequest().authenticated())
+                                .formLogin(login -> login
+                                                .loginPage("/login")
+                                                .defaultSuccessUrl("/top", true)
+                                                .permitAll())
+                                .exceptionHandling(ex -> ex
+                                                .authenticationEntryPoint(
+                                                                new LoginUrlAuthenticationEntryPoint("/notlogin")));
+                return http.build();
+        }
 }
