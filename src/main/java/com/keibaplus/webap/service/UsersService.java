@@ -7,11 +7,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.keibaplus.webap.dto.UsersRequestDto;
 import com.keibaplus.webap.dto.UsersResponseDto;
+import com.keibaplus.webap.config.PasswordConfig;
 import com.keibaplus.webap.dto.UsersRegisterDto;
 import com.keibaplus.webap.entity.Users;
 import com.keibaplus.webap.entity.Saiban;
 import com.keibaplus.webap.repository.UsersRepository;
 import com.keibaplus.webap.repository.SaibanRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 
@@ -19,10 +21,13 @@ import java.time.LocalDateTime;
 public class UsersService {
         private final UsersRepository usersRepository;
         private final SaibanRepository saibanRepository;
+        private final PasswordEncoder passwordEncoder;
 
-        public UsersService(UsersRepository usersRepository, SaibanRepository saibanRepository) {
+        public UsersService(UsersRepository usersRepository, SaibanRepository saibanRepository,
+                        PasswordEncoder passwordEncoder) {
                 this.usersRepository = usersRepository;
                 this.saibanRepository = saibanRepository;
+                this.passwordEncoder = passwordEncoder;
         }
 
         public List<UsersResponseDto> findAllUsers() {
@@ -44,7 +49,7 @@ public class UsersService {
                 Users user = new Users(
                                 newUserNo,
                                 dto.getUserId(),
-                                dto.getPassword(),
+                                passwordEncoder.encode(dto.getPassword()),
                                 dto.getMailAddress(),
                                 "0",
                                 now,
