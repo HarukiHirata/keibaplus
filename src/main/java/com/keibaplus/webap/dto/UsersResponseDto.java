@@ -2,8 +2,6 @@ package com.keibaplus.webap.dto;
 
 import java.time.LocalDateTime;
 
-import org.springframework.cglib.core.Local;
-
 public class UsersResponseDto {
     private String userNo;
     private String userId;
