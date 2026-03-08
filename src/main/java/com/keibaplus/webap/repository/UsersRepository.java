@@ -2,9 +2,12 @@ package com.keibaplus.webap.repository;
 
 import java.util.Optional;
 
+import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.repository.query.Param;
+
+import java.time.LocalDateTime;
 
 import com.keibaplus.webap.entity.Users;
 
@@ -18,5 +21,21 @@ public interface UsersRepository extends ListCrudRepository<Users, String> {
 
     @Query("SELECT * FROM USERS WHERE MAILADDRESS = :mailAddress")
     Optional<Users> findByMailAddress(@Param("mailAddress") String mailAddress);
+
+    @Modifying
+    @Query("""
+                INSERT INTO USERS
+                (USER_NO, USER_ID, PASSWORD_ENCRYPT, MAILADDRESS, DEL_FLG, LAST_LOGIN_DATE, INS_DATE, UPD_DATE)
+                VALUES
+                (:userNo, :userId, :password, :mailAddress, :delFlg, :lastLoginDate, :insDate, :updDate)
+            """)
+    void registerUser(@Param("userNo") String userNo,
+            @Param("userId") String userId,
+            @Param("password") String password,
+            @Param("mailAddress") String mailAddress,
+            @Param("delFlg") String delFlg,
+            @Param("lastLoginDate") LocalDateTime lastLoginDate,
+            @Param("insDate") LocalDateTime insDate,
+            @Param("updDate") LocalDateTime updDate);
 
 }

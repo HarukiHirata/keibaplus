@@ -14,9 +14,4 @@ public class WelcomeController {
     public String welcome() {
         return "welcome";
     }
-
-    @GetMapping("/register")
-    public String register() {
-        return "register";
-    }
 }

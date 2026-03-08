@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.keibaplus.webap.dto.UsersRequestDto;
 import com.keibaplus.webap.dto.UsersResponseDto;
+import com.keibaplus.webap.dto.UsersRegisterDto;
 import com.keibaplus.webap.entity.Users;
 import com.keibaplus.webap.repository.UsersRepository;
 
@@ -31,23 +32,31 @@ public class UsersService {
     }
 
     @Transactional
-    public UsersResponseDto createUser(UsersRequestDto dto) {
+    public UsersResponseDto createUser(UsersRegisterDto dto) {
         LocalDateTime now = LocalDateTime.now();
         Users user = new Users(
-                dto.getUserNo(),
+                "US00000001",
                 dto.getUserId(),
-                "password",
+                dto.getPassword(),
                 dto.getMailAddress(),
                 "0",
                 now,
                 now,
                 now);
-        Users savedUser = usersRepository.save(user);
+        usersRepository.registerUser(
+                user.getUserNo(),
+                user.getUserId(),
+                user.getPassword(),
+                user.getMailAddress(),
+                user.getDelFlg(),
+                user.getLastLoginDate(),
+                user.getInsDate(),
+                user.getUpdDate());
 
         return new UsersResponseDto(
-                savedUser.getUserNo(),
-                savedUser.getUserId(),
-                savedUser.getMailAddress(),
-                savedUser.getLastLoginDate());
+                user.getUserNo(),
+                user.getUserId(),
+                user.getMailAddress(),
+                user.getLastLoginDate());
     }
 }
