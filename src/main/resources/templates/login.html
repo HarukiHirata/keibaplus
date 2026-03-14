@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ja">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,8 +9,9 @@
   <body>
     <h1>ログイン画面</h1>
     <div th:if="${param.registered}">登録完了しました。ログインしてください</div>
+    <div th:if="${param.error}">ログインに失敗しました。</div>
     <div th:if="${param.logout}">ログアウトしました。</div>
-    <form action="/login" method="post">
+    <form th:action="@{/login}" method="post">
       <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
       <div>
         <input type="text" name="username" placeholder="ユーザーID">
