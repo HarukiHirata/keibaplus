@@ -12,15 +12,19 @@ import org.springframework.ui.Model;
 import jakarta.validation.Valid;
 
 import com.keibaplus.webap.dto.UsersRegisterDto;
+import com.keibaplus.webap.dto.ShuushiRegisterDto;
+import com.keibaplus.webap.service.ShuushiService;
 import com.keibaplus.webap.service.UsersService;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class UsersController {
     private final UsersService usersService;
+    private final ShuushiService shuushiService;
 
-    public UsersController(UsersService usersService) {
+    public UsersController(UsersService usersService, ShuushiService shuushiService) {
         this.usersService = usersService;
+        this.shuushiService = shuushiService;
     }
 
     @GetMapping("/register")
@@ -41,10 +45,23 @@ public class UsersController {
     }
 
     @GetMapping("/shuushitouroku")
-    public String shuushitouroku(Principal principal, Model model) {
+    public String shuushitourokugamen(Principal principal, Model model) {
+        model.addAttribute("form", new ShuushiRegisterDto());
         String userId = principal.getName();
         model.addAttribute("loginUser", usersService.getLoginUser(userId));
         return "shuushitouroku";
     }
 
+    @PostMapping("/shuushitouroku")
+    public String shuushitouroku(@ModelAttribute("form") @Valid ShuushiRegisterDto dto,
+            BindingResult bindingResult,
+            Principal principal, Model model) {
+        String userId = principal.getName();
+        model.addAttribute("loginUser", usersService.getLoginUser(userId));
+        if (bindingResult.hasErrors()) {
+            return "shuushitouroku?error";
+        }
+        shuushiService.createShuushi(dto);
+        return "redirect:/top";
+    }
 }
