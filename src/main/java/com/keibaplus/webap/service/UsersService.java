@@ -38,6 +38,16 @@ public class UsersService {
                                 .toList();
         }
 
+        public UsersResponseDto getLoginUser(String userId) {
+                Users user = usersRepository.findByUserId(userId)
+                                .orElseThrow(() -> new IllegalArgumentException("ユーザーが見つかりません。"));
+                return new UsersResponseDto(
+                                user.getUserNo(),
+                                user.getUserId(),
+                                user.getMailAddress(),
+                                user.getLastLoginDate());
+        }
+
         @Transactional
         public UsersResponseDto createUser(UsersRegisterDto dto) {
                 LocalDateTime now = LocalDateTime.now();
