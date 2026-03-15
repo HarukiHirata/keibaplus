@@ -4,20 +4,20 @@ public class ShuushiResponseDto {
 
     private String userNo;
 
-    private String kenshuNo;
+    private int kenshuNo;
 
     private String raceDate;
 
-    private String courseNo;
+    private int courseNo;
 
-    private String raceNo;
+    private int raceNo;
 
     private int kounyuuKingaku;
 
     private int haraimodoshi;
 
-    public ShuushiResponseDto(String userNo, String kenshuNo, String raceDate, String courseNo,
-            String raceNo, int kounyuuKingaku, int haraimodoshi) {
+    public ShuushiResponseDto(String userNo, int kenshuNo, String raceDate, int courseNo,
+            int raceNo, int kounyuuKingaku, int haraimodoshi) {
         this.userNo = userNo;
         this.kenshuNo = kenshuNo;
         this.raceDate = raceDate;
@@ -35,11 +35,11 @@ public class ShuushiResponseDto {
         this.userNo = userNo;
     }
 
-    public String getKenshuNo() {
+    public int getKenshuNo() {
         return kenshuNo;
     }
 
-    public void setKenshuNo(String kenshuNo) {
+    public void setKenshuNo(int kenshuNo) {
         this.kenshuNo = kenshuNo;
     }
 
@@ -51,19 +51,19 @@ public class ShuushiResponseDto {
         this.raceDate = raceDate;
     }
 
-    public String getCourseNo() {
+    public int getCourseNo() {
         return courseNo;
     }
 
-    public void setCourseNo(String courseNo) {
+    public void setCourseNo(int courseNo) {
         this.courseNo = courseNo;
     }
 
-    public String getRaceNo() {
+    public int getRaceNo() {
         return raceNo;
     }
 
-    public void setRaceNo(String raceNo) {
+    public void setRaceNo(int raceNo) {
         this.raceNo = raceNo;
     }
 

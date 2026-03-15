@@ -23,10 +23,10 @@ public interface ShuushiRepository extends ListCrudRepository<Shuushi, Integer> 
             """)
     void registerShuushi(@Param("shuushiNo") int shuushiNo,
             @Param("userNo") String userNo,
-            @Param("kenshuNo") String kenshuNo,
+            @Param("kenshuNo") int kenshuNo,
             @Param("raceDate") String raceDate,
-            @Param("courseNo") String courseNo,
-            @Param("raceNo") String raceNo,
+            @Param("courseNo") int courseNo,
+            @Param("raceNo") int raceNo,
             @Param("kounyuuKingaku") int kounyuuKingaku,
             @Param("haraimodoshi") int haraimodoshi,
             @Param("insDate") LocalDateTime insDate,
