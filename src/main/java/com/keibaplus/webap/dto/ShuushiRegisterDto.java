@@ -4,17 +4,17 @@ public class ShuushiRegisterDto {
 
     private String userNo;
 
-    private int kenshuNo;
+    private Integer kenshuNo;
 
     private String raceDate;
 
-    private int courseNo;
+    private Integer courseNo;
 
-    private int raceNo;
+    private Integer raceNo;
 
-    private int kounyuuKingaku;
+    private Integer kounyuuKingaku;
 
-    private int haraimodoshi;
+    private Integer haraimodoshi;
 
     public ShuushiRegisterDto() {
     }
@@ -27,11 +27,11 @@ public class ShuushiRegisterDto {
         this.userNo = userNo;
     }
 
-    public int getKenshuNo() {
+    public Integer getKenshuNo() {
         return kenshuNo;
     }
 
-    public void setKenshuNo(int kenshuNo) {
+    public void setKenshuNo(Integer kenshuNo) {
         this.kenshuNo = kenshuNo;
     }
 
@@ -43,35 +43,35 @@ public class ShuushiRegisterDto {
         this.raceDate = raceDate;
     }
 
-    public int getCourseNo() {
+    public Integer getCourseNo() {
         return courseNo;
     }
 
-    public void setCourseNo(int courseNo) {
+    public void setCourseNo(Integer courseNo) {
         this.courseNo = courseNo;
     }
 
-    public int getRaceNo() {
+    public Integer getRaceNo() {
         return raceNo;
     }
 
-    public void setRaceNo(int raceNo) {
+    public void setRaceNo(Integer raceNo) {
         this.raceNo = raceNo;
     }
 
-    public int getKounyuuKingaku() {
+    public Integer getKounyuuKingaku() {
         return kounyuuKingaku;
     }
 
-    public void setKounyuuKingaku(int kounyuuKingaku) {
+    public void setKounyuuKingaku(Integer kounyuuKingaku) {
         this.kounyuuKingaku = kounyuuKingaku;
     }
 
-    public int getHaraimodoshi() {
+    public Integer getHaraimodoshi() {
         return haraimodoshi;
     }
 
-    public void setHaraimodoshi(int haraimodoshi) {
+    public void setHaraimodoshi(Integer haraimodoshi) {
         this.haraimodoshi = haraimodoshi;
     }
 

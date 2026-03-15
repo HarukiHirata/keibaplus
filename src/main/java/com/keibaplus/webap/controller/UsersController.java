@@ -49,6 +49,8 @@ public class UsersController {
         model.addAttribute("form", new ShuushiRegisterDto());
         String userId = principal.getName();
         model.addAttribute("loginUser", usersService.getLoginUser(userId));
+        model.addAttribute("kenshuList", shuushiService.findAllKenshu());
+        model.addAttribute("courseList", shuushiService.findAllCourse());
         return "shuushitouroku";
     }
 
