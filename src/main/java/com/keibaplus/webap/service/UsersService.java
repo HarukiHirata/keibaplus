@@ -13,6 +13,10 @@ import com.keibaplus.webap.repository.UsersRepository;
 import com.keibaplus.webap.repository.SaibanRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.time.LocalDateTime;
 
 @Service
@@ -38,14 +42,22 @@ public class UsersService {
                                 .toList();
         }
 
-        public UsersResponseDto getLoginUser(String userId) {
-                Users user = usersRepository.findByUserId(userId)
-                                .orElseThrow(() -> new IllegalArgumentException("ユーザーが見つかりません。"));
-                return new UsersResponseDto(
-                                user.getUserNo(),
-                                user.getUserId(),
-                                user.getMailAddress(),
-                                user.getLastLoginDate());
+        public LoginUser getLoginUser() {
+                Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+                LoginUser loginUser = (LoginUser) auth.getPrincipal();
+                return loginUser;
+        }
+
+        public String getLoginUserNo() {
+                return getLoginUser().getUserNo();
+        }
+
+        public String getLoginUserId() {
+                return getLoginUser().getUserId();
+        }
+
+        public String getLoginUserMailaddress() {
+                return getLoginUser().getMailAddress();
         }
 
         @Transactional

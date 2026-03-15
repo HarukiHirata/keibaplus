@@ -14,6 +14,9 @@ public interface ShuushiRepository extends ListCrudRepository<Shuushi, Integer> 
     @Query("SELECT * FROM SHUUSHI WHERE SHUUSHI = :userNo")
     Optional<Shuushi> findByUserNo(@Param("userNo") String userNo);
 
+    @Query("SELECT * FROM SHUUSHI WHERE SHUUSHI = :shuushiNo")
+    Optional<Shuushi> findByShuushiNo(@Param("shuushiNo") Integer shuushiNo);
+
     @Modifying
     @Query("""
                 INSERT INTO SHUUSHI

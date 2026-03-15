@@ -19,6 +19,10 @@ import com.keibaplus.webap.dto.ShuushiRegisterDto;
 import com.keibaplus.webap.dto.ShuushiResponseDto;
 import com.keibaplus.webap.dto.UsersResponseDto;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.time.LocalDateTime;
 
 @Service
@@ -85,6 +89,12 @@ public class ShuushiService {
 
         public List<Course> findAllCourse() {
                 return courseRepository.findAll();
+        }
+
+        public String getLoginUserNo() {
+                Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+                LoginUser loginUser = (LoginUser) auth.getPrincipal();
+                return loginUser.getUserNo();
         }
 
 }

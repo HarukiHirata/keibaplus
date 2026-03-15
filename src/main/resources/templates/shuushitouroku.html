@@ -11,7 +11,7 @@
       <h1 class="fs-1 fw-bold text-center mb-3 mb-md-5">収支登録画面</h1>
       <form th:action="@{/shuushitouroku}" th:object="${form}" method="post">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-        <input type="hidden" th:value="${loginUser.userNo}" th:name="userNo" />
+        <input type="hidden" th:value="${loginUserNo}" th:name="userNo" />
         <div class="row g-3 align-items-center my-1 my-md-3">
           <div class="col-12 col-md-3">
             <label for="kenshuNo" class="form-label text-center">券種</label>

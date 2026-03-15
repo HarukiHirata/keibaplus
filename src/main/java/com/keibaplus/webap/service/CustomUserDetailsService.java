@@ -1,5 +1,6 @@
 package com.keibaplus.webap.service;
 
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +20,15 @@ public class CustomUserDetailsService implements UserDetailsService {
             throws UsernameNotFoundException {
         Users user = usersRepository.findByUserId(username)
                 .orElseThrow(() -> new UsernameNotFoundException("ユーザーが存在しません"));
-
-        return User.builder()
-                .username(user.getUserId())
-                .password(user.getPassword())
-                .authorities("USER")
-                .build();
-
+        return new LoginUser(user.getUserNo(),
+                user.getUserId(),
+                user.getMailAddress(),
+                user.getLastLoginDate(),
+                user.getPassword(),
+                true,
+                true,
+                true,
+                true,
+                AuthorityUtils.createAuthorityList("ROLE_USER"));
     }
 }

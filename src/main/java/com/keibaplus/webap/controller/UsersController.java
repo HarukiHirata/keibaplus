@@ -45,10 +45,9 @@ public class UsersController {
     }
 
     @GetMapping("/shuushitouroku")
-    public String shuushitourokugamen(Principal principal, Model model) {
+    public String shuushitourokugamen(Model model) {
         model.addAttribute("form", new ShuushiRegisterDto());
-        String userId = principal.getName();
-        model.addAttribute("loginUser", usersService.getLoginUser(userId));
+        model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         model.addAttribute("kenshuList", shuushiService.findAllKenshu());
         model.addAttribute("courseList", shuushiService.findAllCourse());
         return "shuushitouroku";
@@ -57,9 +56,8 @@ public class UsersController {
     @PostMapping("/shuushitouroku")
     public String shuushitouroku(@ModelAttribute("form") @Valid ShuushiRegisterDto dto,
             BindingResult bindingResult,
-            Principal principal, Model model) {
-        String userId = principal.getName();
-        model.addAttribute("loginUser", usersService.getLoginUser(userId));
+            Model model) {
+        model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         if (bindingResult.hasErrors()) {
             return "shuushitouroku?error";
         }

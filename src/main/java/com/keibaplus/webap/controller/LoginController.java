@@ -29,9 +29,11 @@ public class LoginController {
     }
 
     @GetMapping("/top")
-    public String top(Principal principal, Model model) {
-        String userId = principal.getName();
-        model.addAttribute("loginUser", usersService.getLoginUser(userId));
+    public String top(Model model) {
+        // String userId = principal.getName();
+        model.addAttribute("loginUserNo", usersService.getLoginUserNo());
+        model.addAttribute("loginUserId", usersService.getLoginUserId());
+        model.addAttribute("loginUserMailaddress", usersService.getLoginUserMailaddress());
         return "top";
     }
 }
