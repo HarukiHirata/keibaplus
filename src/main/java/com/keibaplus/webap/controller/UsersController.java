@@ -64,4 +64,12 @@ public class UsersController {
         shuushiService.createShuushi(dto);
         return "redirect:/top";
     }
+
+    @GetMapping("/shuushiitiran")
+    public String shuushiitiran(Model model) {
+        model.addAttribute("loginUserNo", usersService.getLoginUserNo());
+        model.addAttribute("shuushiList", shuushiService.findAllShushiByLoginUser());
+        return "shuushiitiran";
+    }
+
 }

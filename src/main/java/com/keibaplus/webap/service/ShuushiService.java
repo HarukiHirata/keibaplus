@@ -97,4 +97,8 @@ public class ShuushiService {
                 return loginUser.getUserNo();
         }
 
+        public List<Shuushi> findAllShushiByLoginUser() {
+                return shuushiRepository.findByUserNo(getLoginUserNo());
+        }
+
 }

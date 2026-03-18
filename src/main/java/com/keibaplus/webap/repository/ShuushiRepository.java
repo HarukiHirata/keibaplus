@@ -1,6 +1,7 @@
 package com.keibaplus.webap.repository;
 
 import java.util.Optional;
+import java.util.List;
 
 import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
@@ -11,10 +12,10 @@ import java.time.LocalDateTime;
 import com.keibaplus.webap.entity.Shuushi;
 
 public interface ShuushiRepository extends ListCrudRepository<Shuushi, Integer> {
-    @Query("SELECT * FROM SHUUSHI WHERE SHUUSHI = :userNo")
-    Optional<Shuushi> findByUserNo(@Param("userNo") String userNo);
+    @Query("SELECT * FROM SHUUSHI WHERE USER_NO = :userNo ORDER BY SHUUSHI_NO")
+    List<Shuushi> findByUserNo(@Param("userNo") String userNo);
 
-    @Query("SELECT * FROM SHUUSHI WHERE SHUUSHI = :shuushiNo")
+    @Query("SELECT * FROM SHUUSHI WHERE SHUUSHI_NO = :shuushiNo")
     Optional<Shuushi> findByShuushiNo(@Param("shuushiNo") Integer shuushiNo);
 
     @Modifying
