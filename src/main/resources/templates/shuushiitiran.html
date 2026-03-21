@@ -7,30 +7,46 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
   </head>
   <body>
-    <h1 class="fs-1 fw-bold text-center mb-3 mb-md-5">収支一覧画面</h1>
-    <p class="fs-3 text-center mb-1 mb-md-2"><span class="fs-3 fw-bold" th:text="${loginUserNo}"></span>さんの収支一覧</p>
-    <table>
-        <tr>
-            <th>券種</th>
-            <th>レース日</th>
-            <th>コース</th>
-            <th>レース</th>
-            <th>購入金額</th>
-            <th>払い戻し</th>
-        </tr>
-        <tr th:each="shuushi : ${shuushiList}">
-            <td th:text="${shuushi.kenshuNo}"></td>
-            <td th:text="${shuushi.raceDate}"></td>
-            <td th:text="${shuushi.courseNo}"></td>
-            <td th:text="${shuushi.raceNo}"></td>
-            <td th:text="${shuushi.kounyuuKingaku}"></td>
-            <td th:text="${shuushi.haraimodoshi}"></td>
-        </tr>
-    </table>
-    <div class="text-center my-3 my-md-5">
-      <form th:action="@{/logout}" method="post">
-        <button class="btn btn-info" type="submit">ログアウト</button>
-      </form>
+    <div class="container">
+      <h1 class="fs-1 fw-bold text-center mb-3 mb-md-5">収支一覧画面</h1>
+      <p class="fs-3 text-center mb-1 mb-md-2"><span class="fs-3 fw-bold" th:text="${loginUserNo}"></span>さんの収支一覧</p>
+      <div class="text-center my-3 my-md-5">
+        <div class="table-responsive">
+          <table class="table-striped table-hover table-bordered mx-auto w-auto">
+              <thead class="table-light">
+                <tr>
+                    <th>券種</th>
+                    <th>レース日</th>
+                    <th>コース</th>
+                    <th>レース</th>
+                    <th>購入金額</th>
+                    <th>払い戻し</th>
+                    <th>編集</th>
+                    <th>削除</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="shuushi : ${shuushiList}">
+                    <td th:text="${shuushi.kenshuName}"></td>
+                    <td th:text="${shuushi.raceDate}"></td>
+                    <td th:text="${shuushi.courseName}"></td>
+                    <td th:text="${shuushi.raceNo}"></td>
+                    <td th:text="${shuushi.kounyuuKingaku}"></td>
+                    <td th:text="${shuushi.haraimodoshi}"></td>
+                    <td>
+                      <a th:href="@{/shuushihenshuu/{shuushiNo}(shuushiNo=${shuushi.shuushiNo})}" class="btn btn-info">編集</a>
+                    </td>
+                    <td>削除</td>
+                </tr>
+              </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="text-center my-3 my-md-5">
+        <form th:action="@{/logout}" method="post">
+          <button class="btn btn-info" type="submit">ログアウト</button>
+        </form>
+      </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-jdSIJTK9l6XwXj3RixpVDXtMcA2bFd9O81RlLAwhpr2oXRqvQP88rr16IeFXTgFE" crossorigin="anonymous"></script>
   </body>

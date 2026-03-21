@@ -15,8 +15,10 @@ import com.keibaplus.webap.repository.UsersRepository;
 import com.keibaplus.webap.repository.KenshuRepository;
 import com.keibaplus.webap.repository.CourseRepository;
 import com.keibaplus.webap.repository.SaibanRepository;
+import com.keibaplus.webap.repository.ShuushiKenshuCourseRepository;
 import com.keibaplus.webap.dto.ShuushiRegisterDto;
 import com.keibaplus.webap.dto.ShuushiResponseDto;
+import com.keibaplus.webap.dto.ShuushiKenshuCourseDto;
 import com.keibaplus.webap.dto.UsersResponseDto;
 
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,13 +33,16 @@ public class ShuushiService {
         private final SaibanRepository saibanRepository;
         private final KenshuRepository kenshuRepository;
         private final CourseRepository courseRepository;
+        private final ShuushiKenshuCourseRepository shuushiKenshuCourseRepository;
 
         public ShuushiService(ShuushiRepository shuushiRepository, SaibanRepository saibanRepository,
-                        KenshuRepository kenshuRepository, CourseRepository courseRepository) {
+                        KenshuRepository kenshuRepository, CourseRepository courseRepository,
+                        ShuushiKenshuCourseRepository shuushiKenshuCourseRepository) {
                 this.shuushiRepository = shuushiRepository;
                 this.saibanRepository = saibanRepository;
                 this.kenshuRepository = kenshuRepository;
                 this.courseRepository = courseRepository;
+                this.shuushiKenshuCourseRepository = shuushiKenshuCourseRepository;
         }
 
         @Transactional
@@ -97,8 +102,8 @@ public class ShuushiService {
                 return loginUser.getUserNo();
         }
 
-        public List<Shuushi> findAllShushiByLoginUser() {
-                return shuushiRepository.findByUserNo(getLoginUserNo());
+        public List<ShuushiKenshuCourseDto> findAllShushiByLoginUser() {
+                return shuushiKenshuCourseRepository.findByUserNo(getLoginUserNo());
         }
 
 }
