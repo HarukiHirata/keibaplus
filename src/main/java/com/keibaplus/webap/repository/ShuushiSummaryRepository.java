@@ -1,0 +1,61 @@
+package com.keibaplus.webap.repository;
+
+import org.springframework.stereotype.Repository;
+
+import com.keibaplus.webap.dto.ShuushiSummarySearchDto;
+import com.keibaplus.webap.dto.ShuushiSummaryDto;
+
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+
+@Repository
+@RequiredArgsConstructor
+public class ShuushiSummaryRepository {
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+    public ShuushiSummaryDto searchSummary(ShuushiSummarySearchDto dto) {
+        StringBuilder sql = new StringBuilder();
+
+        sql.append("""
+                SELECT
+                COALESCE(SUM(KOUNYUU_KINGAKU),0) AS "totalKounyuuKingaku",
+                COALESCE(SUM(HARAIMODOSHI),0) AS "totalHaraimodoshi"
+                FROM SHUUSHI
+                WHERE USER_NO = :userNo
+                """);
+
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("userNo", dto.getUserNo());
+
+        if (dto.getRaceDateFrom() != null && !dto.getRaceDateFrom().isBlank()) {
+            sql.append(" AND RACE_DATE >= :raceDateFrom");
+            params.addValue("raceDateFrom", dto.getRaceDateFrom());
+        }
+
+        if (dto.getRaceDateTo() != null && !dto.getRaceDateTo().isBlank()) {
+            sql.append(" AND RACE_DATE <= :raceDateTo");
+            params.addValue("raceDateTo", dto.getRaceDateTo());
+        }
+
+        if (dto.getKenshuNo() != null) {
+            sql.append(" AND KENSHU_NO <= :kenshuNo");
+            params.addValue("kenshuNo", dto.getKenshuNo());
+        }
+
+        if (dto.getCourseNo() != null) {
+            sql.append(" AND COURSE_NO <= :courseNo");
+            params.addValue("courseNo", dto.getCourseNo());
+        }
+
+        return namedParameterJdbcTemplate.queryForObject(sql.toString(), params, (rs,
+                rowNum) -> {
+            int totalKounyuuKingaku = rs.getInt("totalKounyuuKingaku");
+            int totalHaraimodoshi = rs.getInt("totalHaraimodoshi");
+            return new ShuushiSummaryDto(
+                    totalKounyuuKingaku,
+                    totalHaraimodoshi);
+        });
+    }
+}

@@ -23,6 +23,7 @@ public class SecurityConfig {
         SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 http.authorizeHttpRequests(auth -> auth
                                 .requestMatchers("/notlogin", "/welcome", "/login", "/register", "/error", "/css/**",
+                                                "/api/**",
                                                 "/js/**",
                                                 "/images/**", "**/favicon**")
                                 .permitAll()
