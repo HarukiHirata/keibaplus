@@ -17,6 +17,7 @@ import com.keibaplus.webap.repository.CourseRepository;
 import com.keibaplus.webap.repository.SaibanRepository;
 import com.keibaplus.webap.repository.ShuushiKenshuCourseRepository;
 import com.keibaplus.webap.dto.ShuushiRegisterDto;
+import com.keibaplus.webap.dto.ShuushiUpdateDto;
 import com.keibaplus.webap.dto.ShuushiResponseDto;
 import com.keibaplus.webap.dto.ShuushiKenshuCourseDto;
 import com.keibaplus.webap.dto.UsersResponseDto;
@@ -104,6 +105,45 @@ public class ShuushiService {
 
         public List<ShuushiKenshuCourseDto> findAllShushiByLoginUser() {
                 return shuushiKenshuCourseRepository.findByUserNo(getLoginUserNo());
+        }
+
+        public ShuushiUpdateDto getShuushiByShuushiNo(Integer shuushiNo) {
+                Shuushi shuushi = shuushiRepository.findByShuushiNo(shuushiNo)
+                                .orElseThrow(() -> new IllegalArgumentException("収支テーブルの値が存在しません"));
+                ShuushiUpdateDto dto = new ShuushiUpdateDto();
+                dto.setShuushiNo(shuushi.getShuushiNo());
+                dto.setUserNo(shuushi.getUserNo());
+                dto.setKenshuNo(shuushi.getKenshuNo());
+                dto.setRaceDate(shuushi.getRaceDate());
+                dto.setCourseNo(shuushi.getCourseNo());
+                dto.setRaceNo(shuushi.getRaceNo());
+                dto.setKounyuuKingaku(shuushi.getKounyuuKingaku());
+                dto.setHaraimodoshi(shuushi.getHaraimodoshi());
+                return dto;
+        }
+
+        @Transactional
+        public ShuushiResponseDto updateShuushi(ShuushiUpdateDto dto) {
+                LocalDateTime now = LocalDateTime.now();
+                shuushiRepository.updateShuushi(
+                                dto.getShuushiNo(),
+                                dto.getKenshuNo(),
+                                dto.getRaceDate(),
+                                dto.getCourseNo(),
+                                dto.getRaceNo(),
+                                dto.getKounyuuKingaku(),
+                                dto.getHaraimodoshi(),
+                                now);
+
+                return new ShuushiResponseDto(
+                                dto.getUserNo(),
+                                dto.getKenshuNo(),
+                                dto.getRaceDate(),
+                                dto.getCourseNo(),
+                                dto.getRaceNo(),
+                                dto.getKounyuuKingaku(),
+                                dto.getHaraimodoshi());
+
         }
 
 }

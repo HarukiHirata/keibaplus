@@ -36,4 +36,25 @@ public interface ShuushiRepository extends ListCrudRepository<Shuushi, Integer> 
             @Param("insDate") LocalDateTime insDate,
             @Param("updDate") LocalDateTime updDate);
 
+    @Modifying
+    @Query("""
+            UPDATE SHUUSHI
+            SET KENSHU_NO = :kenshuNo,
+            RACE_DATE = :raceDate,
+            COURSE_NO = :courseNo,
+            RACE_NO = :raceNo,
+            KOUNYUU_KINGAKU = :kounyuuKingaku,
+            HARAIMODOSHI = :haraimodoshi,
+            UPD_DATE = :updDate
+            WHERE SHUUSHI_NO = :shuushiNo
+            """)
+    void updateShuushi(@Param("shuushiNo") int shuushiNo,
+            @Param("kenshuNo") int kenshuNo,
+            @Param("raceDate") String raceDate,
+            @Param("courseNo") int courseNo,
+            @Param("raceNo") int raceNo,
+            @Param("kounyuuKingaku") int kounyuuKingaku,
+            @Param("haraimodoshi") int haraimodoshi,
+            @Param("updDate") LocalDateTime updDate);
+
 }
