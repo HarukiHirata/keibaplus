@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.validation.BindingResult;
 
-import java.security.Principal;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import jakarta.validation.Valid;
@@ -17,7 +15,6 @@ import com.keibaplus.webap.dto.ShuushiRegisterDto;
 import com.keibaplus.webap.dto.ShuushiUpdateDto;
 import com.keibaplus.webap.service.ShuushiService;
 import com.keibaplus.webap.service.UsersService;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class UsersController {

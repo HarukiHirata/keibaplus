@@ -3,14 +3,10 @@ package com.keibaplus.webap.service;
 import java.time.LocalDateTime;
 
 import org.springframework.security.core.userdetails.*;
-import org.springframework.stereotype.Service;
 
 import org.springframework.security.core.GrantedAuthority;
 import java.util.Collection;
 import java.util.Collections;
-
-import com.keibaplus.webap.entity.Users;
-import com.keibaplus.webap.repository.UsersRepository;
 
 public class LoginUser implements UserDetails {
     private String userNo;
