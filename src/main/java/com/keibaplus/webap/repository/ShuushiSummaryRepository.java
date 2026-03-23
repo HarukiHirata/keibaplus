@@ -40,12 +40,12 @@ public class ShuushiSummaryRepository {
         }
 
         if (dto.getKenshuNo() != null) {
-            sql.append(" AND KENSHU_NO <= :kenshuNo");
+            sql.append(" AND KENSHU_NO = :kenshuNo");
             params.addValue("kenshuNo", dto.getKenshuNo());
         }
 
         if (dto.getCourseNo() != null) {
-            sql.append(" AND COURSE_NO <= :courseNo");
+            sql.append(" AND COURSE_NO = :courseNo");
             params.addValue("courseNo", dto.getCourseNo());
         }
 
