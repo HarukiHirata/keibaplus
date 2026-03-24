@@ -3,26 +3,142 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <title>トップ画面</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
   </head>
   <body>
-    <h1 class="fs-1 fw-bold text-center mb-3 mb-md-5">トップ画面</h1>
-    <p class="fs-3 text-center mb-1 mb-md-2">こんにちは<span class="fs-3 fw-bold" th:text="${loginUserNo}"></span>さん</p>
-    <div class="text-center my-3 my-md-5">
-      <a class="btn btn-info" th:href="@{/shuushitouroku}">収支登録</a>
+    <div class="container">
+      <h1 class="fs-1 fw-bold text-center mb-3 mb-md-5">トップ画面</h1>
+      <div class="row g-3 align-items-center my-1 my-md-3">
+        <div class="col-3 col-md-2">
+          <label class="form-label text-center">開始日</label>
+        </div>
+        <div class="col-9 col-md-4">
+          <input type="text" id="raceDateFrom" class="form-control">
+        </div>
+        <div class="col-3 col-md-2">
+          <label class="form-label text-center">終了日</label>
+        </div>
+        <div class="col-9 col-md-4">
+          <input type="text" id="raceDateTo" class="form-control">
+        </div>
+        <div class="col-3 col-md-2">
+          <label class="form-label text-center">券種</label>
+        </div>
+        <div class="col-9 col-md-4">
+          <select class="form-select" id="kenshuNo">
+            <option value="">--選択してください--</option>
+            <option th:each="kenshu : ${kenshuList}"
+                    th:value="${kenshu.kenshuNo}"
+                    th:text="${kenshu.kenshuName}">
+            </option>
+          </select>
+          <!-- <input type="number" id="kenshuNo" class="form-control"> -->
+        </div>
+        <div class="col-3 col-md-2">
+          <label class="form-label text-center">コース</label>
+        </div>
+        <div class="col-9 col-md-4">
+          <select class="form-select" id="courseNo">
+            <option value="">--選択してください--</option>
+            <option th:each="course : ${courseList}"
+                    th:value="${course.courseNo}"
+                    th:text="${course.courseName}">
+            </option>
+          </select>
+          <!-- <input type="number" id="courseNo" class="form-control"> -->
+        </div>
+      </div>
+
+      <div class="text-center">
+        <button type="button" class="btn btn-info" onclick="searchSummary()">検索</button>
+      </div>
+
+      <hr>
+
+      <div class="row g-3 align-items-center my-1 my-md-3">
+        <div class="col-12 col-md-4">
+          <p class="fs-5">購入額合計: <span id="totalKounyuuKingaku" class="fw-bold">-</span></p>
+        </div>
+        <div class="col-12 col-md-4">
+          <p class="fs-5">払戻額合計: <span id="totalHaraimodoshi" class="fw-bold">-</span></p>
+        </div>
+        <div class="col-12 col-md-4">
+          <p class="fs-5">回収率: <span id="kaishuuritsu" class="fw-bold">-</span>%</p>
+        </div>
+      </div>
+
+      <script th:inline="javascript">
+          // const userNo = /*[[${#authentication.name}]]*/ "U0001";
+          const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+          const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+
+
+          async function searchSummary() {
+              const requestBody = {
+                  // userNo: userNo,
+                  raceDateFrom: document.getElementById("raceDateFrom").value,
+                  raceDateTo: document.getElementById("raceDateTo").value,
+                  kenshuNo: document.getElementById("kenshuNo").value,
+                  courseNo: document.getElementById("courseNo").value
+              };
+
+              try {
+                  const response = await fetch('/api/shuushisummary/search', {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json',
+                          [csrfHeader]: csrfToken
+                      },
+                      body: JSON.stringify(requestBody)
+                  });
+
+                  if (!response.ok) {
+                      throw new Error("集計結果の取得に失敗しました");
+                  }
+
+                  const data = await response.json();
+
+                  document.getElementById("totalKounyuuKingaku").textContent = data.totalKounyuuKingaku;
+                  document.getElementById("totalHaraimodoshi").textContent = data.totalHaraimodoshi;
+                  // document.getElementById("totalShuushi").textContent = data.totalShuushi;
+
+                  let kounyuu = data.totalKounyuuKingaku;
+                  let haraimodoshi = data.totalHaraimodoshi;
+
+                  let rate = 0;
+
+                  if (kounyuu && kounyuu !== 0) {
+                      rate = (haraimodoshi / kounyuu) * 100;
+                  }
+
+                  document.getElementById("kaishuuritsu").textContent = rate.toFixed(2);
+
+              } catch (error) {
+                  console.error(error);
+                  document.getElementById("totalKounyuuKingaku").textContent = "取得失敗";
+                  document.getElementById("totalHaraimodoshi").textContent = "取得失敗";
+                  // document.getElementById("totalShuushi").textContent = "取得失敗";
+              }
+          }
+
+          window.addEventListener("load", searchSummary);
+      </script>
+
+      <div class="text-center my-3 my-md-5">
+        <a class="btn btn-info" th:href="@{/shuushitouroku}">収支登録</a>
+      </div>
+      <div class="text-center my-3 my-md-5">
+        <a class="btn btn-info" th:href="@{/shuushiitiran}">収支一覧</a>
+      </div>
+      <div class="text-center my-3 my-md-5">
+        <form th:action="@{/logout}" method="post">
+          <button class="btn btn-info" type="submit">ログアウト</button>
+        </form>
+      </div>
     </div>
-    <div class="text-center my-3 my-md-5">
-      <a class="btn btn-info" th:href="@{/shuushiitiran}">収支一覧</a>
-    </div>
-    <div class="text-center my-3 my-md-5">
-      <a class="btn btn-info" th:href="@{/shuushisummary}">収支まとめ</a>
-    </div>
-    <div class="text-center my-3 my-md-5">
-      <form th:action="@{/logout}" method="post">
-        <button class="btn btn-info" type="submit">ログアウト</button>
-      </form>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-jdSIJTK9l6XwXj3RixpVDXtMcA2bFd9O81RlLAwhpr2oXRqvQP88rr16IeFXTgFE" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-L0XZBFD+a5R/Q+jXRJXW+YY6nKl+MBLAye9ktyaUBtVGzgUqd6RLzfYvnkfwyaJV" crossorigin="anonymous"></script>
   </body>
 </html>

@@ -92,11 +92,4 @@ public class UsersController {
         shuushiService.updateShuushi(dto);
         return "redirect:/top";
     }
-
-    @GetMapping("/shuushisummary")
-    public String showShuushiSummaryPage(Model model) {
-        model.addAttribute("form", new ShuushiSummarySearchDto());
-        return "shuushisummary";
-    }
-
 }
