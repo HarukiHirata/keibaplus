@@ -4,8 +4,11 @@ import org.springframework.stereotype.Repository;
 
 import com.keibaplus.webap.dto.ShuushiSearchDto;
 import com.keibaplus.webap.dto.ShuushiSummaryDto;
+import com.keibaplus.webap.dto.ShuushiKenshuCourseDto;
 
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -58,4 +61,64 @@ public class ShuushiSummaryRepository {
                     totalHaraimodoshi);
         });
     }
+
+    public List<ShuushiKenshuCourseDto> findByUserNo(ShuushiSearchDto dto) {
+        StringBuilder sql = new StringBuilder();
+        sql.append(
+                """
+                        SELECT
+                        SHUUSHI.SHUUSHI_NO AS "shuushiNo",
+                        SHUUSHI.USER_NO AS "userNo",
+                        KENSHU.KENSHU_NAME AS "kenshuName",
+                        SHUUSHI.RACE_DATE AS "raceDate",
+                        COURSE.COURSE_NAME AS "courseName",
+                        SHUUSHI.RACE_NO AS "raceNo",
+                        SHUUSHI.KOUNYUU_KINGAKU AS "kounyuuKingaku",
+                        SHUUSHI.HARAIMODOSHI AS "haraimodoshi"
+                        FROM SHUUSHI
+                        JOIN KENSHU ON SHUUSHI.KENSHU_NO = KENSHU.KENSHU_NO
+                        JOIN COURSE ON SHUUSHI.COURSE_NO = COURSE.COURSE_NO
+                        WHERE SHUUSHI.USER_NO = :userNo
+                        """);
+
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("userNo", dto.getUserNo());
+
+        if (dto.getRaceDateFrom() != null && !dto.getRaceDateFrom().isBlank()) {
+            sql.append(" AND SHUUSHI.RACE_DATE >= :raceDateFrom");
+            params.addValue("raceDateFrom", dto.getRaceDateFrom());
+        }
+
+        if (dto.getRaceDateTo() != null && !dto.getRaceDateTo().isBlank()) {
+            sql.append(" AND SHUUSHI.RACE_DATE <= :raceDateTo");
+            params.addValue("raceDateTo", dto.getRaceDateTo());
+        }
+
+        if (dto.getKenshuNo() != null) {
+            sql.append(" AND SHUUSHI.KENSHU_NO = :kenshuNo");
+            params.addValue("kenshuNo", dto.getKenshuNo());
+        }
+
+        if (dto.getCourseNo() != null) {
+            sql.append(" AND SHUUSHI.COURSE_NO = :courseNo");
+            params.addValue("courseNo", dto.getCourseNo());
+        }
+
+        sql.append(" ORDER BY SHUUSHI.SHUUSHI_NO");
+
+        return namedParameterJdbcTemplate.query(sql.toString(), params, (rs,
+                rowNum) -> {
+            return new ShuushiKenshuCourseDto(
+                    rs.getInt("shuushiNo"),
+                    rs.getString("userNo"),
+                    rs.getString("kenshuName"),
+                    rs.getString("raceDate"),
+                    rs.getString("courseName"),
+                    rs.getInt("raceNo"),
+                    rs.getInt("kounyuuKingaku"),
+                    rs.getInt("haraimodoshi"));
+        });
+
+    }
+
 }

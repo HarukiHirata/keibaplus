@@ -14,7 +14,9 @@ import com.keibaplus.webap.repository.KenshuRepository;
 import com.keibaplus.webap.repository.CourseRepository;
 import com.keibaplus.webap.repository.SaibanRepository;
 import com.keibaplus.webap.repository.ShuushiKenshuCourseRepository;
+import com.keibaplus.webap.repository.ShuushiSummaryRepository;
 import com.keibaplus.webap.dto.ShuushiRegisterDto;
+import com.keibaplus.webap.dto.ShuushiSearchDto;
 import com.keibaplus.webap.dto.ShuushiUpdateDto;
 import com.keibaplus.webap.dto.ShuushiKenshuCourseDto;
 
@@ -29,16 +31,16 @@ public class ShuushiService {
         private final SaibanRepository saibanRepository;
         private final KenshuRepository kenshuRepository;
         private final CourseRepository courseRepository;
-        private final ShuushiKenshuCourseRepository shuushiKenshuCourseRepository;
+        private final ShuushiSummaryRepository shuushiSummaryRepository;
 
         public ShuushiService(ShuushiRepository shuushiRepository, SaibanRepository saibanRepository,
                         KenshuRepository kenshuRepository, CourseRepository courseRepository,
-                        ShuushiKenshuCourseRepository shuushiKenshuCourseRepository) {
+                        ShuushiSummaryRepository shuushiSummaryRepository) {
                 this.shuushiRepository = shuushiRepository;
                 this.saibanRepository = saibanRepository;
                 this.kenshuRepository = kenshuRepository;
                 this.courseRepository = courseRepository;
-                this.shuushiKenshuCourseRepository = shuushiKenshuCourseRepository;
+                this.shuushiSummaryRepository = shuushiSummaryRepository;
         }
 
         @Transactional
@@ -89,8 +91,8 @@ public class ShuushiService {
                 return loginUser.getUserNo();
         }
 
-        public List<ShuushiKenshuCourseDto> findAllShushiByLoginUser() {
-                return shuushiKenshuCourseRepository.findByUserNo(getLoginUserNo());
+        public List<ShuushiKenshuCourseDto> findAllShushiByLoginUser(ShuushiSearchDto dto) {
+                return shuushiSummaryRepository.findByUserNo(dto);
         }
 
         public ShuushiUpdateDto getShuushiByShuushiNo(Integer shuushiNo) {

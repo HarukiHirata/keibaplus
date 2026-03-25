@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 
 import com.keibaplus.webap.dto.UsersRegisterDto;
 import com.keibaplus.webap.dto.ShuushiRegisterDto;
+import com.keibaplus.webap.dto.ShuushiSearchDto;
 import com.keibaplus.webap.dto.ShuushiUpdateDto;
 import com.keibaplus.webap.service.ShuushiService;
 import com.keibaplus.webap.service.UsersService;
@@ -67,7 +68,10 @@ public class UsersController {
     @GetMapping("/shuushiitiran")
     public String shuushiitiran(Model model) {
         model.addAttribute("loginUserNo", usersService.getLoginUserNo());
-        model.addAttribute("shuushiList", shuushiService.findAllShushiByLoginUser());
+        model.addAttribute("form", new ShuushiSearchDto());
+        model.addAttribute("kenshuList", shuushiService.findAllKenshu());
+        model.addAttribute("courseList", shuushiService.findAllCourse());
+        // model.addAttribute("shuushiList", shuushiService.findAllShushiByLoginUser());
         return "shuushiitiran";
     }
 

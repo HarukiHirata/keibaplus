@@ -3,6 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <title>収支一覧画面</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
   </head>
@@ -11,7 +13,48 @@
       <h1 class="fs-1 fw-bold text-center mb-3 mb-md-5">収支一覧画面</h1>
       <p class="fs-3 text-center mb-1 mb-md-2"><span class="fs-3 fw-bold" th:text="${loginUserNo}"></span>さんの収支一覧</p>
       <div class="text-center my-3 my-md-5">
-        <div class="table-responsive">
+          <div class="row g-3 align-items-center my-1 my-md-3">
+            <div class="col-3 col-md-2">
+              <label class="form-label text-center">開始日</label>
+            </div>
+            <div class="col-9 col-md-4">
+              <input type="text" id="raceDateFrom" class="form-control">
+            </div>
+            <div class="col-3 col-md-2">
+              <label class="form-label text-center">終了日</label>
+            </div>
+            <div class="col-9 col-md-4">
+              <input type="text" id="raceDateTo" class="form-control">
+            </div>
+            <div class="col-3 col-md-2">
+              <label class="form-label text-center">券種</label>
+            </div>
+            <div class="col-9 col-md-4">
+              <select class="form-select" id="kenshuNo">
+                <option value="">--選択してください--</option>
+                <option th:each="kenshu : ${kenshuList}"
+                        th:value="${kenshu.kenshuNo}"
+                        th:text="${kenshu.kenshuName}">
+                </option>
+              </select>
+            </div>
+            <div class="col-3 col-md-2">
+              <label class="form-label text-center">コース</label>
+            </div>
+            <div class="col-9 col-md-4">
+              <select class="form-select" id="courseNo">
+                <option value="">--選択してください--</option>
+                <option th:each="course : ${courseList}"
+                        th:value="${course.courseNo}"
+                        th:text="${course.courseName}">
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="text-center">
+            <button type="button" class="btn btn-primary" onclick="search()">検索</button>
+          </div>
+        <div id="resultArea" class="table-responsive">
           <table class="table-striped table-hover table-bordered mx-auto w-auto">
               <thead class="table-light">
                 <tr>
@@ -25,18 +68,9 @@
                     <th>削除</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr th:each="shuushi : ${shuushiList}">
-                    <td th:text="${shuushi.kenshuName}"></td>
-                    <td th:text="${shuushi.raceDate}"></td>
-                    <td th:text="${shuushi.courseName}"></td>
-                    <td th:text="${shuushi.raceNo}"></td>
-                    <td th:text="${shuushi.kounyuuKingaku}"></td>
-                    <td th:text="${shuushi.haraimodoshi}"></td>
-                    <td>
-                      <a th:href="@{/shuushihenshuu/{shuushiNo}(shuushiNo=${shuushi.shuushiNo})}" class="btn btn-info">編集</a>
-                    </td>
-                    <td>削除</td>
+              <tbody id="resultBody">
+                <tr>
+                  <td colspan="7" class="text-center">検索結果はここに表示されます</td>
                 </tr>
               </tbody>
           </table>
@@ -48,6 +82,76 @@
         </form>
       </div>
     </div>
+  <script th:inline="javascript">
+    const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+    async function search() {
+      const requestBody = {
+          // userNo: userNo,
+          raceDateFrom: document.getElementById("raceDateFrom").value,
+          raceDateTo: document.getElementById("raceDateTo").value,
+          kenshuNo: document.getElementById("kenshuNo").value,
+          courseNo: document.getElementById("courseNo").value
+      };
+
+      const resultBody = document.getElementById("resultBody");
+
+      try {
+          const response = await fetch('/api/shuushisummary/itiran', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+                  [csrfHeader]: csrfToken
+              },
+              body: JSON.stringify(requestBody)
+          });
+
+          if (!response.ok) {
+              throw new Error("検索結果の取得に失敗しました");
+          }
+
+          const data = await response.json();
+
+          resultBody.innerHTML = "";
+
+          if (!data || data.length === 0) {
+            resultBody.innerHTML = `
+              <tr>
+                <td colspan="8" class="text-center">検索結果は0件です</td>
+              </tr>
+            `;
+            return;
+          }
+
+          data.forEach(row => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td>${row.kenshuName ?? ""}</td>
+              <td>${row.courseName ?? ""}</td>
+              <td>${row.raceDate ?? ""}</td>
+              <td>${row.raceNo ?? ""}</td>
+              <td>${row.kounyuuKingaku ?? ""}</td>
+              <td>${row.haraimodoshi ?? ""}</td>
+              <td>
+                <a href="/shuushihenshuu/${row.shuushiNo}" class="btn btn-info">編集</a>
+              </td>
+              <td>削除</td>
+            `;
+            resultBody.appendChild(tr);
+          });
+
+
+      } catch (error) {
+          console.error(error);
+          resultBody.innerHTML = `
+            <tr>
+              <td colspan="8" class="text-center text-danger">検索中にエラーが発生しました</td>
+            </tr>
+          `;
+      }
+    }
+
+  </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-jdSIJTK9l6XwXj3RixpVDXtMcA2bFd9O81RlLAwhpr2oXRqvQP88rr16IeFXTgFE" crossorigin="anonymous"></script>
   </body>
 </html>
