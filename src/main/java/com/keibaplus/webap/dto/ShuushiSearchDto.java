@@ -1,6 +1,6 @@
 package com.keibaplus.webap.dto;
 
-public class ShuushiSummarySearchDto {
+public class ShuushiSearchDto {
     private String userNo;
 
     private String raceDateFrom;

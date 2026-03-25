@@ -4,7 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.keibaplus.webap.dto.ShuushiSummarySearchDto;
+import com.keibaplus.webap.dto.ShuushiSearchDto;
 import com.keibaplus.webap.service.ShuushiService;
 import com.keibaplus.webap.service.UsersService;
 
@@ -34,7 +34,7 @@ public class LoginController {
         model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         model.addAttribute("loginUserId", usersService.getLoginUserId());
         model.addAttribute("loginUserMailaddress", usersService.getLoginUserMailaddress());
-        model.addAttribute("form", new ShuushiSummarySearchDto());
+        model.addAttribute("form", new ShuushiSearchDto());
         model.addAttribute("kenshuList", shuushiService.findAllKenshu());
         model.addAttribute("courseList", shuushiService.findAllCourse());
         return "top";

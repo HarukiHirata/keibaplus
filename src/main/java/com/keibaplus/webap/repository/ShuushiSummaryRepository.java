@@ -2,7 +2,7 @@ package com.keibaplus.webap.repository;
 
 import org.springframework.stereotype.Repository;
 
-import com.keibaplus.webap.dto.ShuushiSummarySearchDto;
+import com.keibaplus.webap.dto.ShuushiSearchDto;
 import com.keibaplus.webap.dto.ShuushiSummaryDto;
 
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 public class ShuushiSummaryRepository {
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    public ShuushiSummaryDto searchSummary(ShuushiSummarySearchDto dto) {
+    public ShuushiSummaryDto searchSummary(ShuushiSearchDto dto) {
         StringBuilder sql = new StringBuilder();
 
         sql.append("""
