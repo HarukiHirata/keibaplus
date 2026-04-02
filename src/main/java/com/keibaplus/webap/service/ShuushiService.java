@@ -27,6 +27,7 @@ import java.time.LocalDateTime;
 
 @Service
 public class ShuushiService {
+        private final ShuushiKenshuCourseRepository shuushiKenshuCourseRepository;
         private final ShuushiRepository shuushiRepository;
         private final SaibanRepository saibanRepository;
         private final KenshuRepository kenshuRepository;
@@ -35,12 +36,14 @@ public class ShuushiService {
 
         public ShuushiService(ShuushiRepository shuushiRepository, SaibanRepository saibanRepository,
                         KenshuRepository kenshuRepository, CourseRepository courseRepository,
-                        ShuushiSummaryRepository shuushiSummaryRepository) {
+                        ShuushiSummaryRepository shuushiSummaryRepository,
+                        ShuushiKenshuCourseRepository shuushiKenshuCourseRepository) {
                 this.shuushiRepository = shuushiRepository;
                 this.saibanRepository = saibanRepository;
                 this.kenshuRepository = kenshuRepository;
                 this.courseRepository = courseRepository;
                 this.shuushiSummaryRepository = shuushiSummaryRepository;
+                this.shuushiKenshuCourseRepository = shuushiKenshuCourseRepository;
         }
 
         @Transactional
@@ -123,6 +126,11 @@ public class ShuushiService {
                                 dto.getHaraimodoshi(),
                                 now);
 
+        }
+
+        public ShuushiKenshuCourseDto getShuushiByShuushiNoForDelete(Integer shuushiNo) {
+                return shuushiKenshuCourseRepository.findByShuushiNo(shuushiNo)
+                                .orElseThrow(() -> new IllegalArgumentException("収支テーブルの値が存在しません"));
         }
 
 }

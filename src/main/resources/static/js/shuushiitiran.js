@@ -49,7 +49,9 @@ async function search() {
             <td>
             <a href="/shuushihenshuu/${row.shuushiNo}" class="btn btn-info">編集</a>
             </td>
-            <td>削除</td>
+            <td>
+            <a href="/shuushidelete/${row.shuushiNo}" class="btn btn-danger">削除</a>
+            </td>
         `;
         resultBody.appendChild(tr);
         });

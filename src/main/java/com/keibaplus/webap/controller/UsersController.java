@@ -14,6 +14,7 @@ import com.keibaplus.webap.dto.UsersRegisterDto;
 import com.keibaplus.webap.dto.ShuushiRegisterDto;
 import com.keibaplus.webap.dto.ShuushiSearchDto;
 import com.keibaplus.webap.dto.ShuushiUpdateDto;
+import com.keibaplus.webap.dto.ShuushiKenshuCourseDto;
 import com.keibaplus.webap.service.ShuushiService;
 import com.keibaplus.webap.service.UsersService;
 
@@ -95,4 +96,12 @@ public class UsersController {
         shuushiService.updateShuushi(dto);
         return "redirect:/top";
     }
+
+    @GetMapping("/shuushidelete/{shuushiNo}")
+    public String shuushideletegamen(@PathVariable Integer shuushiNo, Model model) {
+        ShuushiKenshuCourseDto dto = shuushiService.getShuushiByShuushiNoForDelete(shuushiNo);
+        model.addAttribute("shuushi", dto);
+        return "shuushidelete";
+    }
+
 }
