@@ -133,4 +133,9 @@ public class ShuushiService {
                                 .orElseThrow(() -> new IllegalArgumentException("収支テーブルの値が存在しません"));
         }
 
+        @Transactional
+        public void deleteShuushi(Integer shuushiNo) {
+                shuushiRepository.deleteShuushi(shuushiNo);
+        }
+
 }

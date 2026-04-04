@@ -104,4 +104,9 @@ public class UsersController {
         return "shuushidelete";
     }
 
+    @PostMapping("/shuushidelete/{shuushiNo}")
+    public String shuushidelete(@PathVariable Integer shuushiNo) {
+        shuushiService.deleteShuushi(shuushiNo);
+        return "redirect:/shuushiitiran";
+    }
 }
