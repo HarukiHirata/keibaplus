@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.keibaplus.webap.dto.UsersResponseDto;
+import com.keibaplus.webap.dto.UsersUpdateDto;
 import com.keibaplus.webap.dto.UsersRegisterDto;
 import com.keibaplus.webap.entity.Users;
 import com.keibaplus.webap.entity.Saiban;
@@ -93,5 +94,24 @@ public class UsersService {
                                 user.getUserId(),
                                 user.getMailAddress(),
                                 user.getLastLoginDate());
+        }
+
+        public UsersUpdateDto getUserByUserNo(String userNo) {
+                Users user = usersRepository.findByUserNo(userNo)
+                                .orElseThrow(() -> new IllegalArgumentException("ユーザーテーブルの値が存在しません"));
+                UsersUpdateDto dto = new UsersUpdateDto();
+                dto.setUserNo(user.getUserNo());
+                dto.setUserId(user.getUserId());
+                dto.setMailAddress(user.getMailAddress());
+                return dto;
+        }
+
+        @Transactional
+        public void updateUser(UsersUpdateDto dto) {
+                usersRepository.updateUser(
+                                dto.getUserNo(),
+                                dto.getUserId(),
+                                dto.getMailAddress(),
+                                dto.getPassword());
         }
 }

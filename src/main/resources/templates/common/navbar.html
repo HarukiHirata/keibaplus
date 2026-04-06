@@ -29,6 +29,9 @@
             <a class="nav-link" th:href="@{/shuushiitiran}">収支一覧</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" th:href="@{/userhenshuu/{userNo}(userNo=${loginUserNo})}">ユーザー情報変更</a>
+          </li>
+          <li class="nav-item">
             <form th:action="@{/logout}" method="post" class="d-inline">
               <button class="btn btn-link nav-link" type="submit">ログアウト</button>
             </form>

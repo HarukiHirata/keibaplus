@@ -38,4 +38,17 @@ public interface UsersRepository extends ListCrudRepository<Users, String> {
             @Param("insDate") LocalDateTime insDate,
             @Param("updDate") LocalDateTime updDate);
 
+    @Modifying
+    @Query("""
+            UPDATE USERS
+            SET USER_ID = :userId,
+            MAILADDRESS = :mailAddress,
+            PASSWORD_ENCRYPT = :password
+            WHERE USER_NO = :userNo
+            """)
+    void updateUser(@Param("userNo") String userNo,
+            @Param("userId") String userId,
+            @Param("mailAddress") String mailAddress,
+            @Param("password") String password);
+
 }
