@@ -10,9 +10,9 @@
     <div th:replace="common/navbar :: navbar"></div>
     <div class="container">
       <h1 class="fs-1 fw-bold text-center mb-3 mb-md-5">収支登録画面</h1>
-      <form th:action="@{/shuushiupdate}" th:object="${form}" method="post">
+      <form th:action="@{/userhenshuu/{userNo}(userNo=${loginUserNo})}" th:object="${form}" method="post">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-        <input type="hidden" th:field="*{userNo}" />
+        <input type="hidden" th:value="${loginUserNo}" th:field="*{userNo}" />
         <div class="row g-3 align-items-center my-1 my-md-3">
           <div class="col-12 col-md-3">
             <label class="form-label text-center">ユーザーID</label>
@@ -31,7 +31,7 @@
         </div>
         <div class="row g-3 align-items-center my-1 my-md-3">
           <div class="col-12 col-md-3">
-            <label class="form-label text-center">パスワード</label>
+            <label class="form-label text-center">パスワード※変更しない場合は未入力のまま</label>
           </div>
           <div class="col-12 col-md-9">
             <input type="password" class="form-control" th:field="*{password}" />

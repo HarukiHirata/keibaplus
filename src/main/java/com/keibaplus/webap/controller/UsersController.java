@@ -115,8 +115,21 @@ public class UsersController {
     @GetMapping("/userhenshuu/{userNo}")
     public String userupdategamen(@PathVariable String userNo, Model model) {
         UsersUpdateDto dto = usersService.getUserByUserNo(userNo);
+        model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         model.addAttribute("form", dto);
         return "userhenshuu";
+    }
+
+    @PostMapping("/userhenshuu/{userNo}")
+    public String userupdate(@ModelAttribute("form") @Valid UsersUpdateDto dto,
+            BindingResult bindingResult,
+            Model model) {
+        model.addAttribute("loginUserNo", usersService.getLoginUserNo());
+        if (bindingResult.hasErrors()) {
+            return "userhenshuu?error";
+        }
+        usersService.updateUser(dto);
+        return "redirect:/top";
     }
 
 }
