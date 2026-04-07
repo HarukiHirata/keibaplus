@@ -113,7 +113,7 @@ public class UsersService {
                                 dto.getUserId(),
                                 dto.getMailAddress());
 
-                if (dto.getPassword().isBlank() && dto.getPassword() == null) {
+                if (!(dto.getPassword().isBlank()) && !(dto.getPassword() == null)) {
                         usersRepository.updatePassword(dto.getUserNo(), passwordEncoder.encode(dto.getPassword()));
                 }
         }
