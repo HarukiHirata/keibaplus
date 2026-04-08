@@ -16,10 +16,10 @@ public class Users {
     @Column("USER_ID")
     private String userId;
 
-    @Column("PASSWORD_ENCRYPT")
+    @Column("PASSWORD")
     private String password;
 
-    @Column("MAILADDRESS")
+    @Column("MAIL_ADDRESS")
     private String mailAddress;
 
     @Column("DEL_FLG")
