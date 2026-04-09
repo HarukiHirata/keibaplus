@@ -10,7 +10,7 @@
     <div th:replace="common/navbar :: navbar"></div>
     <div class="container">
       <h1 class="fs-1 fw-bold text-center mb-3 mb-md-5">収支登録画面</h1>
-      <form th:action="@{/shuushiupdate}" th:object="${form}" method="post">
+      <form th:action="@{/shuushiedit/{shuushiNo}(shuushiNo=${shuushiNo})}" th:object="${form}" method="post">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
         <input type="hidden" th:field="*{shuushiNo}" />
         <input type="hidden" th:field="*{userNo}" />

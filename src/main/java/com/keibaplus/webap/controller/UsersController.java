@@ -48,7 +48,7 @@ public class UsersController {
     }
 
     @GetMapping("/shuushiregister")
-    public String shuushitourokugamen(Model model) {
+    public String shuushiRegisterPage(Model model) {
         model.addAttribute("form", new ShuushiRegisterDto());
         model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         model.addAttribute("kenshuList", shuushiService.findAllKenshu());
@@ -56,8 +56,8 @@ public class UsersController {
         return "shuushiregister";
     }
 
-    @PostMapping("/shuushitouroku")
-    public String shuushitouroku(@ModelAttribute("form") @Valid ShuushiRegisterDto dto,
+    @PostMapping("/shuushiregister")
+    public String shuushiRegister(@ModelAttribute("form") @Valid ShuushiRegisterDto dto,
             BindingResult bindingResult,
             Model model) {
         model.addAttribute("loginUserNo", usersService.getLoginUserNo());
@@ -68,18 +68,18 @@ public class UsersController {
         return "redirect:/top";
     }
 
-    @GetMapping("/shuushiitiran")
-    public String shuushiitiran(Model model) {
+    @GetMapping("/shuushilist")
+    public String shuushiList(Model model) {
         model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         model.addAttribute("form", new ShuushiSearchDto());
         model.addAttribute("kenshuList", shuushiService.findAllKenshu());
         model.addAttribute("courseList", shuushiService.findAllCourse());
         // model.addAttribute("shuushiList", shuushiService.findAllShushiByLoginUser());
-        return "shuushiitiran";
+        return "shuushilist";
     }
 
     @GetMapping("/shuushiedit/{shuushiNo}")
-    public String shuushihenshuugamen(@PathVariable Integer shuushiNo, Model model) {
+    public String shuushiEditPage(@PathVariable Integer shuushiNo, Model model) {
         ShuushiUpdateDto dto = shuushiService.getShuushiByShuushiNo(shuushiNo);
         model.addAttribute("form", dto);
         model.addAttribute("kenshuList", shuushiService.findAllKenshu());
@@ -87,8 +87,8 @@ public class UsersController {
         return "shuushiedit";
     }
 
-    @PostMapping("/shuushiupdate")
-    public String shuushiupdate(@ModelAttribute("form") @Valid ShuushiUpdateDto dto,
+    @PostMapping("/shuushiedit/{shuushiNo}")
+    public String shuushiEdit(@ModelAttribute("form") @Valid ShuushiUpdateDto dto,
             BindingResult bindingResult,
             Model model) {
         model.addAttribute("loginUserNo", usersService.getLoginUserNo());
@@ -100,28 +100,28 @@ public class UsersController {
     }
 
     @GetMapping("/shuushidelete/{shuushiNo}")
-    public String shuushideletegamen(@PathVariable Integer shuushiNo, Model model) {
+    public String shuushiDeletePage(@PathVariable Integer shuushiNo, Model model) {
         ShuushiKenshuCourseDto dto = shuushiService.getShuushiByShuushiNoForDelete(shuushiNo);
         model.addAttribute("shuushi", dto);
         return "shuushidelete";
     }
 
     @PostMapping("/shuushidelete/{shuushiNo}")
-    public String shuushidelete(@PathVariable Integer shuushiNo) {
+    public String shuushiDelete(@PathVariable Integer shuushiNo) {
         shuushiService.deleteShuushi(shuushiNo);
         return "redirect:/shuushiitiran";
     }
 
     @GetMapping("/useredit/{userNo}")
-    public String userupdategamen(@PathVariable String userNo, Model model) {
+    public String userEditPage(@PathVariable String userNo, Model model) {
         UsersUpdateDto dto = usersService.getUserByUserNo(userNo);
         model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         model.addAttribute("form", dto);
         return "useredit";
     }
 
-    @PostMapping("/userhenshuu/{userNo}")
-    public String userupdate(@ModelAttribute("form") @Valid UsersUpdateDto dto,
+    @PostMapping("/useredit/{userNo}")
+    public String userEdit(@ModelAttribute("form") @Valid UsersUpdateDto dto,
             BindingResult bindingResult,
             Model model) {
         model.addAttribute("loginUserNo", usersService.getLoginUserNo());

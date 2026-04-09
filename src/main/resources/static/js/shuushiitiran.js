@@ -47,7 +47,7 @@ async function search() {
             <td>${row.kounyuuKingaku ?? ""}</td>
             <td>${row.haraimodoshi ?? ""}</td>
             <td>
-            <a href="/shuushihenshuu/${row.shuushiNo}" class="btn btn-info">編集</a>
+            <a href="/shuushiedit/${row.shuushiNo}" class="btn btn-info">編集</a>
             </td>
             <td>
             <a href="/shuushidelete/${row.shuushiNo}" class="btn btn-danger">削除</a>
