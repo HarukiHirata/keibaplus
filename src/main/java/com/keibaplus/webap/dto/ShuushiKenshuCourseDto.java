@@ -5,13 +5,13 @@ public class ShuushiKenshuCourseDto {
 
     private String userNo;
 
-    private String kenshuName;
-
     private String raceDate;
 
     private String courseName;
 
     private Integer raceNo;
+
+    private String kenshuName;
 
     private Integer kounyuuKingaku;
 
@@ -20,15 +20,14 @@ public class ShuushiKenshuCourseDto {
     public ShuushiKenshuCourseDto() {
     }
 
-    public ShuushiKenshuCourseDto(Integer shuushiNo, String userNo, String kenshuName, String raceDate,
-            String courseName,
-            Integer raceNo, Integer kounyuuKingaku, Integer haraimodoshi) {
+    public ShuushiKenshuCourseDto(Integer shuushiNo, String userNo, String raceDate, String courseName,
+            Integer raceNo, String kenshuName, Integer kounyuuKingaku, Integer haraimodoshi) {
         this.shuushiNo = shuushiNo;
         this.userNo = userNo;
-        this.kenshuName = kenshuName;
         this.raceDate = raceDate;
         this.courseName = courseName;
         this.raceNo = raceNo;
+        this.kenshuName = kenshuName;
         this.kounyuuKingaku = kounyuuKingaku;
         this.haraimodoshi = haraimodoshi;
     }
@@ -47,14 +46,6 @@ public class ShuushiKenshuCourseDto {
 
     public void setUserNo(String userNo) {
         this.userNo = userNo;
-    }
-
-    public String getKenshuName() {
-        return kenshuName;
-    }
-
-    public void setKenshuName(String kenshuName) {
-        this.kenshuName = kenshuName;
     }
 
     public String getRaceDate() {
@@ -79,6 +70,14 @@ public class ShuushiKenshuCourseDto {
 
     public void setRaceNo(Integer raceNo) {
         this.raceNo = raceNo;
+    }
+
+    public String getKenshuName() {
+        return kenshuName;
+    }
+
+    public void setKenshuName(String kenshuName) {
+        this.kenshuName = kenshuName;
     }
 
     public Integer getKounyuuKingaku() {

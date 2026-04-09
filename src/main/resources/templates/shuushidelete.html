@@ -12,12 +12,6 @@
       <h1 class="fs-1 fw-bold text-center mb-3 mb-md-5">収支削除画面</h1>
       <div class="row g-3 align-items-center my-1 my-md-3" th:object="${shuushi}">
         <div class="col-12 col-md-3 text-center">
-          <label class="text-center">券種</label>
-        </div>
-        <div class="col-12 col-md-9 text-center">
-          <span th:text="${shuushi.kenshuName}"></span>
-        </div>
-        <div class="col-12 col-md-3 text-center">
           <label class="text-center">レース日</label>
         </div>
         <div class="col-12 col-md-9 text-center">
@@ -34,6 +28,12 @@
         </div>
         <div class="col-12 col-md-9 text-center">
           <span th:text="${shuushi.raceNo}"></span>
+        </div>
+        <div class="col-12 col-md-3 text-center">
+          <label class="text-center">券種</label>
+        </div>
+        <div class="col-12 col-md-9 text-center">
+          <span th:text="${shuushi.kenshuName}"></span>
         </div>
         <div class="col-12 col-md-3 text-center">
           <label class="text-center">購入金額</label>

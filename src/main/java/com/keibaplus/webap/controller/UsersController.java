@@ -109,7 +109,7 @@ public class UsersController {
     @PostMapping("/shuushidelete/{shuushiNo}")
     public String shuushiDelete(@PathVariable Integer shuushiNo) {
         shuushiService.deleteShuushi(shuushiNo);
-        return "redirect:/shuushiitiran";
+        return "redirect:/shuushilist";
     }
 
     @GetMapping("/useredit/{userNo}")

@@ -69,10 +69,10 @@ public class ShuushiSummaryRepository {
                         SELECT
                         SHUUSHI.SHUUSHI_NO AS "shuushiNo",
                         SHUUSHI.USER_NO AS "userNo",
-                        KENSHU.KENSHU_NAME AS "kenshuName",
                         SHUUSHI.RACE_DATE AS "raceDate",
                         COURSE.COURSE_NAME AS "courseName",
                         SHUUSHI.RACE_NO AS "raceNo",
+                        KENSHU.KENSHU_NAME AS "kenshuName",
                         SHUUSHI.KOUNYUU_KINGAKU AS "kounyuuKingaku",
                         SHUUSHI.HARAIMODOSHI AS "haraimodoshi"
                         FROM SHUUSHI
@@ -111,10 +111,10 @@ public class ShuushiSummaryRepository {
             return new ShuushiKenshuCourseDto(
                     rs.getInt("shuushiNo"),
                     rs.getString("userNo"),
-                    rs.getString("kenshuName"),
                     rs.getString("raceDate"),
                     rs.getString("courseName"),
                     rs.getInt("raceNo"),
+                    rs.getString("kenshuName"),
                     rs.getInt("kounyuuKingaku"),
                     rs.getInt("haraimodoshi"));
         });

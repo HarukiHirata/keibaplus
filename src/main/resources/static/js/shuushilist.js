@@ -40,10 +40,10 @@ async function search() {
         data.forEach(row => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td>${row.kenshuName ?? ""}</td>
-            <td>${row.courseName ?? ""}</td>
             <td>${row.raceDate ?? ""}</td>
+            <td>${row.courseName ?? ""}</td>
             <td>${row.raceNo ?? ""}</td>
+            <td>${row.kenshuName ?? ""}</td>
             <td>${row.kounyuuKingaku ?? ""}</td>
             <td>${row.haraimodoshi ?? ""}</td>
             <td>
