@@ -16,9 +16,6 @@ public class Shuushi {
     @Column("USER_NO")
     private String userNo;
 
-    @Column("KENSHU_NO")
-    private int kenshuNo;
-
     @Column("RACE_DATE")
     private String raceDate;
 
@@ -27,6 +24,9 @@ public class Shuushi {
 
     @Column("RACE_NO")
     private int raceNo;
+
+    @Column("KENSHU_NO")
+    private int kenshuNo;
 
     @Column("KOUNYUU_KINGAKU")
     private int kounyuuKingaku;
@@ -40,14 +40,14 @@ public class Shuushi {
     @Column("UPD_DATE")
     private LocalDateTime updDate;
 
-    public Shuushi(int shuushiNo, String userNo, int kenshuNo, String raceDate, int courseNo,
-            int raceNo, int kounyuuKingaku, int haraimodoshi, LocalDateTime insDate, LocalDateTime updDate) {
+    public Shuushi(int shuushiNo, String userNo, String raceDate, int courseNo, int raceNo,
+            int kenshuNo, int kounyuuKingaku, int haraimodoshi, LocalDateTime insDate, LocalDateTime updDate) {
         this.shuushiNo = shuushiNo;
         this.userNo = userNo;
-        this.kenshuNo = kenshuNo;
         this.raceDate = raceDate;
         this.courseNo = courseNo;
         this.raceNo = raceNo;
+        this.kenshuNo = kenshuNo;
         this.kounyuuKingaku = kounyuuKingaku;
         this.haraimodoshi = haraimodoshi;
         this.insDate = insDate;
@@ -68,14 +68,6 @@ public class Shuushi {
 
     public void setUserNo(String userNo) {
         this.userNo = userNo;
-    }
-
-    public int getKenshuNo() {
-        return kenshuNo;
-    }
-
-    public void setKenshuNo(int kenshuNo) {
-        this.kenshuNo = kenshuNo;
     }
 
     public String getRaceDate() {
@@ -100,6 +92,14 @@ public class Shuushi {
 
     public void setRaceNo(int raceNo) {
         this.raceNo = raceNo;
+    }
+
+    public int getKenshuNo() {
+        return kenshuNo;
+    }
+
+    public void setKenshuNo(int kenshuNo) {
+        this.kenshuNo = kenshuNo;
     }
 
     public int getKounyuuKingaku() {

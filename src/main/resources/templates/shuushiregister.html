@@ -15,20 +15,6 @@
         <input type="hidden" th:value="${loginUserNo}" th:name="userNo" />
         <div class="row g-3 align-items-center my-1 my-md-3">
           <div class="col-12 col-md-3">
-            <label for="kenshuNo" class="form-label text-center">券種</label>
-          </div>
-          <div class="col-12 col-md-9">
-            <select class="form-select" id="kenshuNo" th:field="*{kenshuNo}">
-              <option value="">--選択してください--</option>
-              <option th:each="kenshu : ${kenshuList}"
-                      th:value="${kenshu.kenshuNo}"
-                      th:text="${kenshu.kenshuName}">
-              </option>
-            </select>
-          </div>
-        </div>
-        <div class="row g-3 align-items-center my-1 my-md-3">
-          <div class="col-12 col-md-3">
             <label class="form-label text-center">レース日</label>
           </div>
           <div class="col-12 col-md-9">
@@ -55,6 +41,20 @@
           </div>
           <div class="col-12 col-md-9">
             <input type="text" class="form-control" th:field="*{raceNo}" />
+          </div>
+        </div>
+        <div class="row g-3 align-items-center my-1 my-md-3">
+          <div class="col-12 col-md-3">
+            <label for="kenshuNo" class="form-label text-center">券種</label>
+          </div>
+          <div class="col-12 col-md-9">
+            <select class="form-select" id="kenshuNo" th:field="*{kenshuNo}">
+              <option value="">--選択してください--</option>
+              <option th:each="kenshu : ${kenshuList}"
+                      th:value="${kenshu.kenshuNo}"
+                      th:text="${kenshu.kenshuName}">
+              </option>
+            </select>
           </div>
         </div>
         <div class="row g-3 align-items-center my-1 my-md-3">

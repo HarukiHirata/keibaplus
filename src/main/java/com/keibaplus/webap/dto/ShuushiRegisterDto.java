@@ -4,13 +4,13 @@ public class ShuushiRegisterDto {
 
     private String userNo;
 
-    private Integer kenshuNo;
-
     private String raceDate;
 
     private Integer courseNo;
 
     private Integer raceNo;
+
+    private Integer kenshuNo;
 
     private Integer kounyuuKingaku;
 
@@ -25,14 +25,6 @@ public class ShuushiRegisterDto {
 
     public void setUserNo(String userNo) {
         this.userNo = userNo;
-    }
-
-    public Integer getKenshuNo() {
-        return kenshuNo;
-    }
-
-    public void setKenshuNo(Integer kenshuNo) {
-        this.kenshuNo = kenshuNo;
     }
 
     public String getRaceDate() {
@@ -57,6 +49,14 @@ public class ShuushiRegisterDto {
 
     public void setRaceNo(Integer raceNo) {
         this.raceNo = raceNo;
+    }
+
+    public Integer getKenshuNo() {
+        return kenshuNo;
+    }
+
+    public void setKenshuNo(Integer kenshuNo) {
+        this.kenshuNo = kenshuNo;
     }
 
     public Integer getKounyuuKingaku() {

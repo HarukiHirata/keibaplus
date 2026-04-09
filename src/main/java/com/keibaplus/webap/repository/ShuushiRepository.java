@@ -21,16 +21,16 @@ public interface ShuushiRepository extends ListCrudRepository<Shuushi, Integer> 
         @Modifying
         @Query("""
                             INSERT INTO SHUUSHI
-                            (SHUUSHI_NO, USER_NO, KENSHU_NO, RACE_DATE, COURSE_NO, RACE_NO, KOUNYUU_KINGAKU, HARAIMODOSHI, INS_DATE, UPD_DATE)
+                            (SHUUSHI_NO, USER_NO, RACE_DATE, COURSE_NO, RACE_NO, KENSHU_NO, KOUNYUU_KINGAKU, HARAIMODOSHI, INS_DATE, UPD_DATE)
                             VALUES
-                            (:shuushiNo, :userNo, :kenshuNo, :raceDate, :courseNo, :raceNo, :kounyuuKingaku, :haraimodoshi, :insDate, :updDate)
+                            (:shuushiNo, :userNo, :raceDate, :courseNo, :raceNo, :kenshuNo, :kounyuuKingaku, :haraimodoshi, :insDate, :updDate)
                         """)
         void registerShuushi(@Param("shuushiNo") int shuushiNo,
                         @Param("userNo") String userNo,
-                        @Param("kenshuNo") int kenshuNo,
                         @Param("raceDate") String raceDate,
                         @Param("courseNo") int courseNo,
                         @Param("raceNo") int raceNo,
+                        @Param("kenshuNo") int kenshuNo,
                         @Param("kounyuuKingaku") int kounyuuKingaku,
                         @Param("haraimodoshi") int haraimodoshi,
                         @Param("insDate") LocalDateTime insDate,
@@ -39,20 +39,20 @@ public interface ShuushiRepository extends ListCrudRepository<Shuushi, Integer> 
         @Modifying
         @Query("""
                         UPDATE SHUUSHI
-                        SET KENSHU_NO = :kenshuNo,
-                        RACE_DATE = :raceDate,
+                        SET RACE_DATE = :raceDate,
                         COURSE_NO = :courseNo,
                         RACE_NO = :raceNo,
+                        KENSHU_NO = :kenshuNo,
                         KOUNYUU_KINGAKU = :kounyuuKingaku,
                         HARAIMODOSHI = :haraimodoshi,
                         UPD_DATE = :updDate
                         WHERE SHUUSHI_NO = :shuushiNo
                         """)
         void updateShuushi(@Param("shuushiNo") int shuushiNo,
-                        @Param("kenshuNo") int kenshuNo,
                         @Param("raceDate") String raceDate,
                         @Param("courseNo") int courseNo,
                         @Param("raceNo") int raceNo,
+                        @Param("kenshuNo") int kenshuNo,
                         @Param("kounyuuKingaku") int kounyuuKingaku,
                         @Param("haraimodoshi") int haraimodoshi,
                         @Param("updDate") LocalDateTime updDate);

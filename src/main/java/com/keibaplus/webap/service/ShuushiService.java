@@ -55,10 +55,10 @@ public class ShuushiService {
                 Shuushi shuushi = new Shuushi(
                                 newShuushiNo,
                                 dto.getUserNo(),
-                                dto.getKenshuNo(),
                                 dto.getRaceDate(),
                                 dto.getCourseNo(),
                                 dto.getRaceNo(),
+                                dto.getKenshuNo(),
                                 dto.getKounyuuKingaku(),
                                 dto.getHaraimodoshi(),
                                 now,
@@ -66,10 +66,10 @@ public class ShuushiService {
                 shuushiRepository.registerShuushi(
                                 shuushi.getShuushiNo(),
                                 shuushi.getUserNo(),
-                                shuushi.getKenshuNo(),
                                 shuushi.getRaceDate(),
                                 shuushi.getCourseNo(),
                                 shuushi.getRaceNo(),
+                                shuushi.getKenshuNo(),
                                 shuushi.getKounyuuKingaku(),
                                 shuushi.getHaraimodoshi(),
                                 shuushi.getInsDate(),
@@ -118,10 +118,10 @@ public class ShuushiService {
                 LocalDateTime now = LocalDateTime.now();
                 shuushiRepository.updateShuushi(
                                 dto.getShuushiNo(),
-                                dto.getKenshuNo(),
                                 dto.getRaceDate(),
                                 dto.getCourseNo(),
                                 dto.getRaceNo(),
+                                dto.getKenshuNo(),
                                 dto.getKounyuuKingaku(),
                                 dto.getHaraimodoshi(),
                                 now);
