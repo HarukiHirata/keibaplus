@@ -47,13 +47,13 @@ public class UsersController {
         return "redirect:/login?registered";
     }
 
-    @GetMapping("/shuushitouroku")
+    @GetMapping("/shuushiregister")
     public String shuushitourokugamen(Model model) {
         model.addAttribute("form", new ShuushiRegisterDto());
         model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         model.addAttribute("kenshuList", shuushiService.findAllKenshu());
         model.addAttribute("courseList", shuushiService.findAllCourse());
-        return "shuushitouroku";
+        return "shuushiregister";
     }
 
     @PostMapping("/shuushitouroku")
@@ -62,7 +62,7 @@ public class UsersController {
             Model model) {
         model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         if (bindingResult.hasErrors()) {
-            return "shuushitouroku?error";
+            return "shuushiregister?error";
         }
         shuushiService.createShuushi(dto);
         return "redirect:/top";
@@ -78,13 +78,13 @@ public class UsersController {
         return "shuushiitiran";
     }
 
-    @GetMapping("/shuushihenshuu/{shuushiNo}")
+    @GetMapping("/shuushiedit/{shuushiNo}")
     public String shuushihenshuugamen(@PathVariable Integer shuushiNo, Model model) {
         ShuushiUpdateDto dto = shuushiService.getShuushiByShuushiNo(shuushiNo);
         model.addAttribute("form", dto);
         model.addAttribute("kenshuList", shuushiService.findAllKenshu());
         model.addAttribute("courseList", shuushiService.findAllCourse());
-        return "shuushihenshuu";
+        return "shuushiedit";
     }
 
     @PostMapping("/shuushiupdate")
@@ -93,7 +93,7 @@ public class UsersController {
             Model model) {
         model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         if (bindingResult.hasErrors()) {
-            return "shuushitouroku?error";
+            return "shuushiedit?error";
         }
         shuushiService.updateShuushi(dto);
         return "redirect:/top";
@@ -112,12 +112,12 @@ public class UsersController {
         return "redirect:/shuushiitiran";
     }
 
-    @GetMapping("/userhenshuu/{userNo}")
+    @GetMapping("/useredit/{userNo}")
     public String userupdategamen(@PathVariable String userNo, Model model) {
         UsersUpdateDto dto = usersService.getUserByUserNo(userNo);
         model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         model.addAttribute("form", dto);
-        return "userhenshuu";
+        return "useredit";
     }
 
     @PostMapping("/userhenshuu/{userNo}")
@@ -126,7 +126,7 @@ public class UsersController {
             Model model) {
         model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         if (bindingResult.hasErrors()) {
-            return "userhenshuu?error";
+            return "useredit?error";
         }
         usersService.updateUser(dto);
         return "redirect:/top";
