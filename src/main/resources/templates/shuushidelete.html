@@ -3,58 +3,59 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>トップ画面</title>
+    <title>収支削除画面</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
   </head>
   <body>
     <div th:replace="common/navbar :: navbar"></div>
     <div class="container">
       <h1 class="fs-1 fw-bold text-center mb-3 mb-md-5">収支削除画面</h1>
       <div class="row g-3 align-items-center my-1 my-md-3" th:object="${shuushi}">
-        <div class="col-12 col-md-3 text-center">
+        <div class="col-12 col-md-5 text-start">
           <label class="text-center">レース日</label>
         </div>
-        <div class="col-12 col-md-9 text-center">
+        <div class="col-12 col-md-7 text-start">
           <span th:text="${shuushi.raceDate}"></span>
         </div>
-        <div class="col-12 col-md-3 text-center">
+        <div class="col-12 col-md-5 text-start">
           <label class="text-center">コース</label>
         </div>
-        <div class="col-12 col-md-9 text-center">
+        <div class="col-12 col-md-7 text-start">
           <span th:text="${shuushi.courseName}"></span>
         </div>
-        <div class="col-12 col-md-3 text-center">
+        <div class="col-12 col-md-5 text-start">
           <label class="text-center">レース番号</label>
         </div>
-        <div class="col-12 col-md-9 text-center">
+        <div class="col-12 col-md-7 text-start">
           <span th:text="${shuushi.raceNo}"></span>
         </div>
-        <div class="col-12 col-md-3 text-center">
+        <div class="col-12 col-md-5 text-start">
           <label class="text-center">券種</label>
         </div>
-        <div class="col-12 col-md-9 text-center">
+        <div class="col-12 col-md-7 text-start">
           <span th:text="${shuushi.kenshuName}"></span>
         </div>
-        <div class="col-12 col-md-3 text-center">
+        <div class="col-12 col-md-5 text-start">
           <label class="text-center">購入金額</label>
         </div>
-        <div class="col-12 col-md-9 text-center">
+        <div class="col-12 col-md-7 text-start">
           <span th:text="${shuushi.kounyuuKingaku}"></span>
         </div>
-        <div class="col-12 col-md-3 text-center">
+        <div class="col-12 col-md-5 text-start">
           <label class="text-center">払い戻し</label>
         </div>
-        <div class="col-12 col-md-9 text-center">
+        <div class="col-12 col-md-7 text-start">
           <span th:text="${shuushi.haraimodoshi}"></span>
         </div>
       </div>
       <div class="my-1 my-md-2 d-flex flex-column flex-md-row justify-content-center gap-2">
-        <div class="text-center">
-          <a th:href="@{/shuushiitiran}" class="btn btn-info w-80 w-md-auto" type="button">収支一覧画面へ戻る</a>
+        <div class="text-center my-1 my-md-2">
+          <a th:href="@{/shuushilist}" class="btn btn-secondary w-80 w-md-auto btn-responsive" type="button">収支一覧画面へ戻る</a>
         </div>
-        <div class="text-center">
+        <div class="text-center my-1 my-md-2">
           <form th:action="@{/shuushidelete/{shuushiNo}(shuushiNo=${shuushi.shuushiNo})}" method="post">
-            <button class="btn btn-danger w-80 w-md-auto" type="submit">削除</button>
+            <button class="btn btn-danger w-80 w-md-auto btn-responsive" type="submit">削除</button>
           </form>
         </div>
       </div>

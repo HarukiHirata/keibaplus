@@ -82,6 +82,7 @@ public class UsersController {
     public String shuushiEditPage(@PathVariable Integer shuushiNo, Model model) {
         ShuushiUpdateDto dto = shuushiService.getShuushiByShuushiNo(shuushiNo);
         model.addAttribute("form", dto);
+        model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         model.addAttribute("kenshuList", shuushiService.findAllKenshu());
         model.addAttribute("courseList", shuushiService.findAllCourse());
         return "shuushiedit";
@@ -103,6 +104,7 @@ public class UsersController {
     public String shuushiDeletePage(@PathVariable Integer shuushiNo, Model model) {
         ShuushiKenshuCourseDto dto = shuushiService.getShuushiByShuushiNoForDelete(shuushiNo);
         model.addAttribute("shuushi", dto);
+        model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         return "shuushidelete";
     }
 
