@@ -8,9 +8,34 @@ body {
   padding: 0.375rem 0.75rem;
 }
 
+#resultArea table {
+  min-width: 800px;
+}
+
+.filter-toggle {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.filter-toggle:hover {
+  text-decoration: underline;
+}
+
+#arrowIcon {
+  transition: transform 0.3s;
+}
+
 @media (min-width: 768px) {
   .btn-responsive {
     font-size: 1.25rem;
     padding: 0.5rem 1rem;
+  }
+
+  #searchConditionArea {
+    display: block !important;
+    height: auto !important;
+    visibility: visible !important;
   }
 }

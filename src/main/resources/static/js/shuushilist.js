@@ -40,18 +40,18 @@ async function search() {
         data.forEach(row => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td>${row.raceDate ?? ""}</td>
-            <td>${row.courseName ?? ""}</td>
-            <td>${row.raceNo ?? ""}</td>
-            <td>${row.kenshuName ?? ""}</td>
-            <td>${row.kounyuuKingaku ?? ""}</td>
-            <td>${row.haraimodoshi ?? ""}</td>
             <td>
             <a href="/shuushiedit/${row.shuushiNo}" class="btn btn-info">編集</a>
             </td>
             <td>
             <a href="/shuushidelete/${row.shuushiNo}" class="btn btn-danger">削除</a>
             </td>
+            <td>${row.raceDate ?? ""}</td>
+            <td>${row.courseName ?? ""}</td>
+            <td>${row.raceNo ?? ""}</td>
+            <td>${row.kenshuName ?? ""}</td>
+            <td>${row.kounyuuKingaku ?? ""}</td>
+            <td>${row.haraimodoshi ?? ""}</td>
         `;
         resultBody.appendChild(tr);
         });
@@ -69,3 +69,13 @@ async function search() {
 
 window.addEventListener("load", search);
 
+const target = document.getElementById('searchConditionArea');
+const icon = document.getElementById('arrowIcon');
+
+target.addEventListener('show.bs.collapse', () => {
+  icon.style.transform = 'rotate(180deg)';
+});
+
+target.addEventListener('hide.bs.collapse', () => {
+  icon.style.transform = 'rotate(0deg)';
+});

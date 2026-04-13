@@ -54,7 +54,7 @@ public class ShuushiController {
 
     @GetMapping("/shuushilist")
     public String shuushiList(Model model) {
-        model.addAttribute("loginUserNo", usersService.getLoginUserNo());
+        model.addAttribute("loginUserId", usersService.getLoginUserId());
         model.addAttribute("form", new ShuushiSearchDto());
         model.addAttribute("kenshuList", shuushiService.findAllKenshu());
         model.addAttribute("courseList", shuushiService.findAllCourse());
