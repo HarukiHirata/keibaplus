@@ -30,12 +30,14 @@ public class SummaryApiController {
     @PostMapping("/search")
     public ShuushiSummaryDto search(@RequestBody ShuushiSearchDto dto) {
         dto.setUserNo(usersService.getLoginUserNo());
+        dto.setDelFLg("0");
         return shuushiSummaryService.searchSummary(dto);
     }
 
     @PostMapping("/itiran")
     public List<ShuushiKenshuCourseDto> itiran(@RequestBody ShuushiSearchDto dto) {
         dto.setUserNo(usersService.getLoginUserNo());
+        dto.setDelFLg("0");
         return shuushiService.findAllShushiByLoginUser(dto);
     }
 }

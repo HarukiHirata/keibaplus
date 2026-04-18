@@ -61,6 +61,7 @@ public class ShuushiService {
                                 dto.getKenshuNo(),
                                 dto.getKounyuuKingaku(),
                                 dto.getHaraimodoshi(),
+                                "0",
                                 now,
                                 now);
                 shuushiRepository.registerShuushi(
@@ -72,6 +73,7 @@ public class ShuushiService {
                                 shuushi.getKenshuNo(),
                                 shuushi.getKounyuuKingaku(),
                                 shuushi.getHaraimodoshi(),
+                                shuushi.getDelFlg(),
                                 shuushi.getInsDate(),
                                 shuushi.getUpdDate());
 
@@ -99,7 +101,7 @@ public class ShuushiService {
         }
 
         public ShuushiUpdateDto getShuushiByShuushiNo(Integer shuushiNo) {
-                Shuushi shuushi = shuushiRepository.findByShuushiNo(shuushiNo)
+                Shuushi shuushi = shuushiRepository.findByShuushiNo(shuushiNo, "0")
                                 .orElseThrow(() -> new IllegalArgumentException("収支テーブルの値が存在しません"));
                 ShuushiUpdateDto dto = new ShuushiUpdateDto();
                 dto.setShuushiNo(shuushi.getShuushiNo());
@@ -135,7 +137,7 @@ public class ShuushiService {
 
         @Transactional
         public void deleteShuushi(Integer shuushiNo) {
-                shuushiRepository.deleteShuushi(shuushiNo);
+                shuushiRepository.deleteShuushi("1", shuushiNo);
         }
 
 }

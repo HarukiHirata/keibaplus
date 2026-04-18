@@ -27,10 +27,12 @@ public class ShuushiSummaryRepository {
                 COALESCE(SUM(HARAIMODOSHI),0) AS "totalHaraimodoshi"
                 FROM SHUUSHI
                 WHERE USER_NO = :userNo
+                AND DEL_FLG = :delFlg
                 """);
 
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("userNo", dto.getUserNo());
+        params.addValue("delFlg", dto.getDelFlg());
 
         if (dto.getRaceDateFrom() != null && !dto.getRaceDateFrom().isBlank()) {
             sql.append(" AND RACE_DATE >= :raceDateFrom");
@@ -79,10 +81,12 @@ public class ShuushiSummaryRepository {
                         JOIN KENSHU ON SHUUSHI.KENSHU_NO = KENSHU.KENSHU_NO
                         JOIN COURSE ON SHUUSHI.COURSE_NO = COURSE.COURSE_NO
                         WHERE SHUUSHI.USER_NO = :userNo
+                        AND DEL_FLG = :delFlg
                         """);
 
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("userNo", dto.getUserNo());
+        params.addValue("delFlg", dto.getDelFlg());
 
         if (dto.getRaceDateFrom() != null && !dto.getRaceDateFrom().isBlank()) {
             sql.append(" AND SHUUSHI.RACE_DATE >= :raceDateFrom");

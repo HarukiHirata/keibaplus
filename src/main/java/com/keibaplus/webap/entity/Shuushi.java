@@ -34,6 +34,9 @@ public class Shuushi {
     @Column("HARAIMODOSHI")
     private int haraimodoshi;
 
+    @Column("DEL_FLG")
+    private String delFlg;
+
     @Column("INS_DATE")
     private LocalDateTime insDate;
 
@@ -41,7 +44,8 @@ public class Shuushi {
     private LocalDateTime updDate;
 
     public Shuushi(int shuushiNo, String userNo, String raceDate, int courseNo, int raceNo,
-            int kenshuNo, int kounyuuKingaku, int haraimodoshi, LocalDateTime insDate, LocalDateTime updDate) {
+            int kenshuNo, int kounyuuKingaku, int haraimodoshi, String delFlg, LocalDateTime insDate,
+            LocalDateTime updDate) {
         this.shuushiNo = shuushiNo;
         this.userNo = userNo;
         this.raceDate = raceDate;
@@ -50,6 +54,7 @@ public class Shuushi {
         this.kenshuNo = kenshuNo;
         this.kounyuuKingaku = kounyuuKingaku;
         this.haraimodoshi = haraimodoshi;
+        this.delFlg = delFlg;
         this.insDate = insDate;
         this.updDate = updDate;
     }
@@ -116,6 +121,14 @@ public class Shuushi {
 
     public void setHaraimodoshi(int haraimodoshi) {
         this.haraimodoshi = haraimodoshi;
+    }
+
+    public String getDelFlg() {
+        return delFlg;
+    }
+
+    public void setDelFlg(String delFlg) {
+        this.delFlg = delFlg;
     }
 
     public LocalDateTime getInsDate() {

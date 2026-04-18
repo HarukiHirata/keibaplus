@@ -3,6 +3,8 @@ package com.keibaplus.webap.dto;
 public class ShuushiSearchDto {
     private String userNo;
 
+    private String delFlg;
+
     private String raceDateFrom;
 
     private String raceDateTo;
@@ -17,6 +19,14 @@ public class ShuushiSearchDto {
 
     public void setUserNo(String userNo) {
         this.userNo = userNo;
+    }
+
+    public String getDelFlg() {
+        return delFlg;
+    }
+
+    public void setDelFLg(String delFlg) {
+        this.delFlg = delFlg;
     }
 
     public String getRaceDateFrom() {
