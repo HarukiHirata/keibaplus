@@ -4,6 +4,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.keibaplus.webap.dto.ShuushiSearchDto;
 import com.keibaplus.webap.service.ShuushiService;
 import com.keibaplus.webap.service.UsersService;
@@ -13,6 +16,7 @@ public class LoginController {
 
     private final UsersService usersService;
     private final ShuushiService shuushiService;
+    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     public LoginController(UsersService usersService, ShuushiService shuushiService) {
         this.usersService = usersService;
@@ -21,6 +25,7 @@ public class LoginController {
 
     @GetMapping("/login")
     public String getLogin() {
+        logger.info("ログイン画面表示");
         return "login";
     }
 

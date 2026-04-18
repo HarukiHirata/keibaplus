@@ -14,9 +14,21 @@ import com.keibaplus.webap.service.CustomUserDetailsService;
 @EnableWebSecurity
 public class SecurityConfig {
         private final CustomUserDetailsService customUserDetailsService;
+        private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+        private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
+        private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+        private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
 
-        public SecurityConfig(CustomUserDetailsService customUserDetailsService) {
+        public SecurityConfig(CustomUserDetailsService customUserDetailsService,
+                        CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler,
+                        CustomAuthenticationFailureHandler customAuthenticationFailureHandler,
+                        CustomAuthenticationEntryPoint customAuthenticationEntryPoint,
+                        CustomLogoutSuccessHandler customLogoutSuccessHandler) {
                 this.customUserDetailsService = customUserDetailsService;
+                this.customAuthenticationSuccessHandler = customAuthenticationSuccessHandler;
+                this.customAuthenticationFailureHandler = customAuthenticationFailureHandler;
+                this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
+                this.customLogoutSuccessHandler = customLogoutSuccessHandler;
         }
 
         @Bean
@@ -31,17 +43,16 @@ public class SecurityConfig {
                                 .formLogin(login -> login
                                                 .loginPage("/login")
                                                 .loginProcessingUrl("/login")
-                                                .defaultSuccessUrl("/top", true)
-                                                .failureUrl("/login?error")
+                                                .successHandler(customAuthenticationSuccessHandler)
+                                                .failureHandler(customAuthenticationFailureHandler)
                                                 .permitAll())
                                 .logout(logout -> logout
                                                 .logoutUrl("/logout")
-                                                .logoutSuccessUrl("/login?logout")
+                                                .logoutSuccessHandler(customLogoutSuccessHandler)
                                                 .permitAll())
                                 .authenticationProvider(authenticationProvider())
                                 .exceptionHandling(ex -> ex
-                                                .authenticationEntryPoint(
-                                                                new LoginUrlAuthenticationEntryPoint("/notlogin")));
+                                                .authenticationEntryPoint(customAuthenticationEntryPoint));
                 return http.build();
         }
 
