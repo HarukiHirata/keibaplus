@@ -8,7 +8,7 @@
     <link th:href="@{/css/style.css}" rel="stylesheet">
   </head>
   <body>
-    <div th:replace="common/navbar :: navbar"></div>
+    <div th:replace="~{common/navbar :: navbar}"></div>
     <div class="container text-center">
       <h1 class="fs-2 fs-md-1 fw-bold m-2 m-md-4">収支編集画面</h1>
       <form th:action="@{/shuushiedit/{shuushiNo}(shuushiNo=${shuushiNo})}" th:object="${form}" method="post">

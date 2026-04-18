@@ -11,12 +11,12 @@
     <link th:href="@{/css/style.css}" rel="stylesheet">
   </head>
   <body>
-    <div th:replace="common/navbar :: navbar"></div>
+    <div th:replace="~{common/navbar :: navbar}"></div>
     <div class="container text-center">
       <h1 class="fs-2 fs-md-1 fw-bold m-2 m-md-4">収支一覧画面</h1>
       <p class="fs-3 text-center mb-1 mb-md-2"><span class="fs-3 fw-bold" th:text="${loginUserId}"></span>さんの収支一覧</p>
       <div class="text-center my-3 my-md-5">
-        <div th:replace="common/searchCondition :: searchCondition"></div>
+        <div th:replace="~{common/searchCondition :: searchCondition}"></div>
         <div class="text-center">
           <button type="button" class="btn btn-primary" onclick="search()">検索</button>
         </div>

@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.keibaplus.webap.dto.UsersResponseDto;
 import com.keibaplus.webap.dto.UsersUpdateDto;
+import com.keibaplus.webap.controller.LoginController;
 import com.keibaplus.webap.dto.UsersRegisterDto;
 import com.keibaplus.webap.entity.Users;
 import com.keibaplus.webap.entity.Saiban;
@@ -17,6 +18,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.Authentication;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.time.LocalDateTime;
 
 @Service
@@ -24,6 +28,7 @@ public class UsersService {
         private final UsersRepository usersRepository;
         private final SaibanRepository saibanRepository;
         private final PasswordEncoder passwordEncoder;
+        private static final Logger logger = LoggerFactory.getLogger(UsersService.class);
 
         public UsersService(UsersRepository usersRepository, SaibanRepository saibanRepository,
                         PasswordEncoder passwordEncoder) {
@@ -61,39 +66,40 @@ public class UsersService {
         }
 
         @Transactional
-        public UsersResponseDto createUser(UsersRegisterDto dto) {
-                LocalDateTime now = LocalDateTime.now();
-                Saiban saiban = saibanRepository.findByTableName("USERS")
-                                .orElseThrow(() -> new IllegalArgumentException("採番テーブルの値が存在しません"));
-                String newUserNo = saiban.getPrefix() + saiban.getSaibanNo();
-                Users user = new Users(
-                                newUserNo,
-                                dto.getUserId(),
-                                passwordEncoder.encode(dto.getPassword()),
-                                dto.getMailAddress(),
-                                "0",
-                                now,
-                                now,
-                                now);
-                usersRepository.registerUser(
-                                user.getUserNo(),
-                                user.getUserId(),
-                                user.getPassword(),
-                                user.getMailAddress(),
-                                user.getDelFlg(),
-                                user.getLastLoginDate(),
-                                user.getInsDate(),
-                                user.getUpdDate());
+        public void createUser(UsersRegisterDto dto) {
+                try {
+                        LocalDateTime now = LocalDateTime.now();
+                        Saiban saiban = saibanRepository.findByTableName("USERS")
+                                        .orElseThrow(() -> new IllegalArgumentException("採番テーブルの値が存在しません"));
+                        String newUserNo = saiban.getPrefix() + saiban.getSaibanNo();
+                        Users user = new Users(
+                                        newUserNo,
+                                        dto.getUserId(),
+                                        passwordEncoder.encode(dto.getPassword()),
+                                        dto.getMailAddress(),
+                                        "0",
+                                        now,
+                                        now,
+                                        now);
+                        usersRepository.registerUser(
+                                        user.getUserNo(),
+                                        user.getUserId(),
+                                        user.getPassword(),
+                                        user.getMailAddress(),
+                                        user.getDelFlg(),
+                                        user.getLastLoginDate(),
+                                        user.getInsDate(),
+                                        user.getUpdDate());
 
-                String newSaibanNo = String.format("%08d", (Integer.parseInt(saiban.getSaibanNo()) + 1));
+                        String newSaibanNo = String.format("%08d", (Integer.parseInt(saiban.getSaibanNo()) + 1));
 
-                saibanRepository.updateSaibanNo(newSaibanNo, "USERS");
+                        saibanRepository.updateSaibanNo(newSaibanNo, "USERS");
 
-                return new UsersResponseDto(
-                                user.getUserNo(),
-                                user.getUserId(),
-                                user.getMailAddress(),
-                                user.getLastLoginDate());
+                        logger.info("ユーザー登録成功", user.getUserNo());
+
+                } catch (Exception e) {
+                        logger.error("ユーザー登録失敗", e);
+                }
         }
 
         public UsersUpdateDto getUserByUserNo(String userNo) {
@@ -108,13 +114,20 @@ public class UsersService {
 
         @Transactional
         public void updateUser(UsersUpdateDto dto) {
-                usersRepository.updateUser(
-                                dto.getUserNo(),
-                                dto.getUserId(),
-                                dto.getMailAddress());
+                try {
+                        usersRepository.updateUser(
+                                        dto.getUserNo(),
+                                        dto.getUserId(),
+                                        dto.getMailAddress());
 
-                if (!(dto.getPassword().isBlank()) && !(dto.getPassword() == null)) {
-                        usersRepository.updatePassword(dto.getUserNo(), passwordEncoder.encode(dto.getPassword()));
+                        if (!(dto.getPassword().isBlank()) && !(dto.getPassword() == null)) {
+                                usersRepository.updatePassword(dto.getUserNo(),
+                                                passwordEncoder.encode(dto.getPassword()));
+                        }
+
+                        logger.info("ユーザー情報変更成功 userNo={}", getLoginUserNo());
+                } catch (Exception e) {
+                        logger.error("ユーザー情報変更失敗", e);
                 }
         }
 }

@@ -11,10 +11,10 @@
     <link th:href="@{/css/style.css}" rel="stylesheet">
   </head>
   <body>
-    <div th:replace="common/navbar :: navbar"></div>
+    <div th:replace="~{common/navbar :: navbar}"></div>
     <div class="container text-center">
       <h1 class="fs-2 fs-md-1 fw-bold m-2 m-md-4">トップ画面</h1>
-      <div th:replace="common/searchCondition :: searchCondition"></div>
+      <div th:replace="~{common/searchCondition :: searchCondition}"></div>
       <div class="text-center">
         <button type="button" class="btn btn-info" onclick="searchSummary()">検索</button>
       </div>

@@ -36,6 +36,7 @@ public class LoginController {
 
     @GetMapping("/top")
     public String top(Model model) {
+        logger.info("トップ画面表示 userNo={}", usersService.getLoginUserNo());
         model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         model.addAttribute("loginUserId", usersService.getLoginUserId());
         model.addAttribute("loginUserMailaddress", usersService.getLoginUserMailaddress());

@@ -10,6 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import jakarta.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.keibaplus.webap.dto.UsersRegisterDto;
 import com.keibaplus.webap.dto.UsersUpdateDto;
 import com.keibaplus.webap.service.UsersService;
@@ -18,12 +21,15 @@ import com.keibaplus.webap.service.UsersService;
 public class UsersController {
     private final UsersService usersService;
 
+    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
+
     public UsersController(UsersService usersService) {
         this.usersService = usersService;
     }
 
     @GetMapping("/register")
     public String registerPage(Model model) {
+        logger.info("新規登録画面表示");
         model.addAttribute("form", new UsersRegisterDto());
         return "register";
     }
@@ -33,7 +39,7 @@ public class UsersController {
             BindingResult bindingResult,
             Model model) {
         if (bindingResult.hasErrors()) {
-            return "register";
+            return "register?error";
         }
         usersService.createUser(dto);
         return "redirect:/login?registered";
@@ -44,6 +50,7 @@ public class UsersController {
         UsersUpdateDto dto = usersService.getUserByUserNo(userNo);
         model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         model.addAttribute("form", dto);
+        logger.info("ユーザー情報変更画面表示 userNo={}", usersService.getLoginUserNo());
         return "useredit";
     }
 
