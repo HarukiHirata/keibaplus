@@ -12,22 +12,14 @@ import jakarta.validation.Valid;
 
 import com.keibaplus.webap.dto.UsersRegisterDto;
 import com.keibaplus.webap.dto.UsersUpdateDto;
-import com.keibaplus.webap.dto.ShuushiRegisterDto;
-import com.keibaplus.webap.dto.ShuushiSearchDto;
-import com.keibaplus.webap.dto.ShuushiUpdateDto;
-import com.keibaplus.webap.dto.ShuushiKenshuCourseDto;
-import com.keibaplus.webap.service.ShuushiService;
 import com.keibaplus.webap.service.UsersService;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class UsersController {
     private final UsersService usersService;
-    private final ShuushiService shuushiService;
 
-    public UsersController(UsersService usersService, ShuushiService shuushiService) {
+    public UsersController(UsersService usersService) {
         this.usersService = usersService;
-        this.shuushiService = shuushiService;
     }
 
     @GetMapping("/register")

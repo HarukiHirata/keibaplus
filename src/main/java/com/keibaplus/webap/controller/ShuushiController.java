@@ -10,15 +10,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import jakarta.validation.Valid;
 
-import com.keibaplus.webap.dto.UsersRegisterDto;
-import com.keibaplus.webap.dto.UsersUpdateDto;
 import com.keibaplus.webap.dto.ShuushiRegisterDto;
 import com.keibaplus.webap.dto.ShuushiSearchDto;
 import com.keibaplus.webap.dto.ShuushiUpdateDto;
 import com.keibaplus.webap.dto.ShuushiKenshuCourseDto;
 import com.keibaplus.webap.service.ShuushiService;
 import com.keibaplus.webap.service.UsersService;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ShuushiController {
