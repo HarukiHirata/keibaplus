@@ -10,6 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import jakarta.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.keibaplus.webap.dto.ShuushiRegisterDto;
 import com.keibaplus.webap.dto.ShuushiSearchDto;
 import com.keibaplus.webap.dto.ShuushiUpdateDto;
@@ -23,6 +26,8 @@ public class ShuushiController {
     private final UsersService usersService;
     private final ShuushiService shuushiService;
 
+    private static final Logger logger = LoggerFactory.getLogger(ShuushiController.class);
+
     public ShuushiController(UsersService usersService, ShuushiService shuushiService) {
         this.usersService = usersService;
         this.shuushiService = shuushiService;
@@ -34,6 +39,7 @@ public class ShuushiController {
         model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         model.addAttribute("kenshuList", shuushiService.findAllKenshu());
         model.addAttribute("courseList", shuushiService.findAllCourse());
+        logger.info("収支登録画面表示 userNo={}", usersService.getLoginUserNo());
         return "shuushiregister";
     }
 
@@ -56,6 +62,7 @@ public class ShuushiController {
         model.addAttribute("form", new ShuushiSearchDto());
         model.addAttribute("kenshuList", shuushiService.findAllKenshu());
         model.addAttribute("courseList", shuushiService.findAllCourse());
+        logger.info("収支一覧画面表示 userNo={}", usersService.getLoginUserNo());
         // model.addAttribute("shuushiList", shuushiService.findAllShushiByLoginUser());
         return "shuushilist";
     }
@@ -67,6 +74,7 @@ public class ShuushiController {
         model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         model.addAttribute("kenshuList", shuushiService.findAllKenshu());
         model.addAttribute("courseList", shuushiService.findAllCourse());
+        logger.info("収支編集画面表示 userNo={} shuushiNo={}", usersService.getLoginUserNo(), shuushiNo);
         return "shuushiedit";
     }
 
@@ -87,6 +95,7 @@ public class ShuushiController {
         ShuushiKenshuCourseDto dto = shuushiService.getShuushiByShuushiNoForDelete(shuushiNo);
         model.addAttribute("shuushi", dto);
         model.addAttribute("loginUserNo", usersService.getLoginUserNo());
+        logger.info("収支削除画面表示 userNo={} shuushiNo={}", usersService.getLoginUserNo(), shuushiNo);
         return "shuushidelete";
     }
 

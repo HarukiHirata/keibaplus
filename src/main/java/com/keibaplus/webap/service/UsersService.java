@@ -95,7 +95,7 @@ public class UsersService {
 
                         saibanRepository.updateSaibanNo(newSaibanNo, "USERS");
 
-                        logger.info("ユーザー登録成功", user.getUserNo());
+                        logger.info("ユーザー登録成功 userNo={}", user.getUserNo());
 
                 } catch (Exception e) {
                         logger.error("ユーザー登録失敗", e);

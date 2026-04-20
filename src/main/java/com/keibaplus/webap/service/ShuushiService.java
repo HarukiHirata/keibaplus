@@ -5,6 +5,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.keibaplus.webap.entity.Saiban;
 import com.keibaplus.webap.entity.Shuushi;
 import com.keibaplus.webap.entity.Kenshu;
@@ -33,6 +36,7 @@ public class ShuushiService {
         private final KenshuRepository kenshuRepository;
         private final CourseRepository courseRepository;
         private final ShuushiSummaryRepository shuushiSummaryRepository;
+        private static final Logger logger = LoggerFactory.getLogger(ShuushiService.class);
 
         public ShuushiService(ShuushiRepository shuushiRepository, SaibanRepository saibanRepository,
                         KenshuRepository kenshuRepository, CourseRepository courseRepository,
@@ -48,38 +52,45 @@ public class ShuushiService {
 
         @Transactional
         public void createShuushi(ShuushiRegisterDto dto) {
-                LocalDateTime now = LocalDateTime.now();
-                Saiban saiban = saibanRepository.findByTableName("SHUUSHI")
-                                .orElseThrow(() -> new IllegalArgumentException("採番テーブルの値が存在しません"));
-                int newShuushiNo = Integer.parseInt(saiban.getSaibanNo());
-                Shuushi shuushi = new Shuushi(
-                                newShuushiNo,
-                                dto.getUserNo(),
-                                dto.getRaceDate(),
-                                dto.getCourseNo(),
-                                dto.getRaceNo(),
-                                dto.getKenshuNo(),
-                                dto.getKounyuuKingaku(),
-                                dto.getHaraimodoshi(),
-                                "0",
-                                now,
-                                now);
-                shuushiRepository.registerShuushi(
-                                shuushi.getShuushiNo(),
-                                shuushi.getUserNo(),
-                                shuushi.getRaceDate(),
-                                shuushi.getCourseNo(),
-                                shuushi.getRaceNo(),
-                                shuushi.getKenshuNo(),
-                                shuushi.getKounyuuKingaku(),
-                                shuushi.getHaraimodoshi(),
-                                shuushi.getDelFlg(),
-                                shuushi.getInsDate(),
-                                shuushi.getUpdDate());
+                try {
+                        LocalDateTime now = LocalDateTime.now();
+                        Saiban saiban = saibanRepository.findByTableName("SHUUSHI")
+                                        .orElseThrow(() -> new IllegalArgumentException("採番テーブルの値が存在しません"));
+                        int newShuushiNo = Integer.parseInt(saiban.getSaibanNo());
+                        Shuushi shuushi = new Shuushi(
+                                        newShuushiNo,
+                                        dto.getUserNo(),
+                                        dto.getRaceDate(),
+                                        dto.getCourseNo(),
+                                        dto.getRaceNo(),
+                                        dto.getKenshuNo(),
+                                        dto.getKounyuuKingaku(),
+                                        dto.getHaraimodoshi(),
+                                        "0",
+                                        now,
+                                        now);
+                        shuushiRepository.registerShuushi(
+                                        shuushi.getShuushiNo(),
+                                        shuushi.getUserNo(),
+                                        shuushi.getRaceDate(),
+                                        shuushi.getCourseNo(),
+                                        shuushi.getRaceNo(),
+                                        shuushi.getKenshuNo(),
+                                        shuushi.getKounyuuKingaku(),
+                                        shuushi.getHaraimodoshi(),
+                                        shuushi.getDelFlg(),
+                                        shuushi.getInsDate(),
+                                        shuushi.getUpdDate());
 
-                String newSaibanNo = Integer.toString(newShuushiNo + 1);
+                        String newSaibanNo = Integer.toString(newShuushiNo + 1);
 
-                saibanRepository.updateSaibanNo(newSaibanNo, "SHUUSHI");
+                        saibanRepository.updateSaibanNo(newSaibanNo, "SHUUSHI");
+
+                        logger.info("収支登録成功 userNo={} shuushiNo={}", getLoginUserNo(), shuushi.getShuushiNo());
+
+                } catch (Exception e) {
+                        logger.error("収支登録失敗", e);
+                }
         }
 
         public List<Kenshu> findAllKenshu() {
@@ -117,16 +128,21 @@ public class ShuushiService {
 
         @Transactional
         public void updateShuushi(ShuushiUpdateDto dto) {
-                LocalDateTime now = LocalDateTime.now();
-                shuushiRepository.updateShuushi(
-                                dto.getShuushiNo(),
-                                dto.getRaceDate(),
-                                dto.getCourseNo(),
-                                dto.getRaceNo(),
-                                dto.getKenshuNo(),
-                                dto.getKounyuuKingaku(),
-                                dto.getHaraimodoshi(),
-                                now);
+                try {
+                        LocalDateTime now = LocalDateTime.now();
+                        shuushiRepository.updateShuushi(
+                                        dto.getShuushiNo(),
+                                        dto.getRaceDate(),
+                                        dto.getCourseNo(),
+                                        dto.getRaceNo(),
+                                        dto.getKenshuNo(),
+                                        dto.getKounyuuKingaku(),
+                                        dto.getHaraimodoshi(),
+                                        now);
+                        logger.info("収支更新成功 userNo={} shuushiNo={}", getLoginUserNo(), dto.getShuushiNo());
+                } catch (Exception e) {
+                        logger.error("収支更新失敗", e);
+                }
 
         }
 
@@ -137,7 +153,13 @@ public class ShuushiService {
 
         @Transactional
         public void deleteShuushi(Integer shuushiNo) {
-                shuushiRepository.deleteShuushi("1", shuushiNo);
+                try {
+                        shuushiRepository.deleteShuushi("1", shuushiNo);
+                        logger.info("収支削除成功 userNo={} shuushiNo={}", getLoginUserNo(), shuushiNo);
+                } catch (Exception e) {
+                        logger.error("収支削除失敗", e);
+
+                }
         }
 
 }

@@ -8,6 +8,8 @@ import org.springframework.validation.BindingResult;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 import org.slf4j.Logger;
@@ -28,8 +30,8 @@ public class UsersController {
     }
 
     @GetMapping("/register")
-    public String registerPage(Model model) {
-        logger.info("新規登録画面表示");
+    public String registerPage(Model model, HttpServletRequest request) {
+        logger.info("新規登録画面表示 uri={}", request.getRequestURI());
         model.addAttribute("form", new UsersRegisterDto());
         return "register";
     }
@@ -46,11 +48,11 @@ public class UsersController {
     }
 
     @GetMapping("/useredit/{userNo}")
-    public String userEditPage(@PathVariable String userNo, Model model) {
+    public String userEditPage(@PathVariable String userNo, Model model, HttpServletRequest request) {
         UsersUpdateDto dto = usersService.getUserByUserNo(userNo);
         model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         model.addAttribute("form", dto);
-        logger.info("ユーザー情報変更画面表示 userNo={}", usersService.getLoginUserNo());
+        logger.info("ユーザー情報変更画面表示 uri={} userNo={}", request.getRequestURI(), usersService.getLoginUserNo());
         return "useredit";
     }
 

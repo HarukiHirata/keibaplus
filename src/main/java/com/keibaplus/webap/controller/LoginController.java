@@ -11,6 +11,8 @@ import com.keibaplus.webap.dto.ShuushiSearchDto;
 import com.keibaplus.webap.service.ShuushiService;
 import com.keibaplus.webap.service.UsersService;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @Controller
 public class LoginController {
 
@@ -24,8 +26,8 @@ public class LoginController {
     }
 
     @GetMapping("/login")
-    public String getLogin() {
-        logger.info("ログイン画面表示");
+    public String getLogin(HttpServletRequest request) {
+        logger.info("ログイン画面表示 uri={}", request.getRequestURI());
         return "login";
     }
 
@@ -35,8 +37,8 @@ public class LoginController {
     }
 
     @GetMapping("/top")
-    public String top(Model model) {
-        logger.info("トップ画面表示 userNo={}", usersService.getLoginUserNo());
+    public String top(Model model, HttpServletRequest request) {
+        logger.info("トップ画面表示 uri={} userNo={}", request.getRequestURI(), usersService.getLoginUserNo());
         model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         model.addAttribute("loginUserId", usersService.getLoginUserId());
         model.addAttribute("loginUserMailaddress", usersService.getLoginUserMailaddress());
