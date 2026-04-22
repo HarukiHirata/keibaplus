@@ -90,6 +90,7 @@ public class ShuushiService {
 
                 } catch (Exception e) {
                         logger.error("収支登録失敗", e);
+                        throw new RuntimeException("収支登録処理でエラーが発生しました", e);
                 }
         }
 
@@ -142,6 +143,7 @@ public class ShuushiService {
                         logger.info("収支更新成功 userNo={} shuushiNo={}", getLoginUserNo(), dto.getShuushiNo());
                 } catch (Exception e) {
                         logger.error("収支更新失敗", e);
+                        throw new RuntimeException("収支更新処理でエラーが発生しました", e);
                 }
 
         }
@@ -158,7 +160,7 @@ public class ShuushiService {
                         logger.info("収支削除成功 userNo={} shuushiNo={}", getLoginUserNo(), shuushiNo);
                 } catch (Exception e) {
                         logger.error("収支削除失敗", e);
-
+                        throw new RuntimeException("収支削除処理でエラーが発生しました", e);
                 }
         }
 

@@ -99,6 +99,7 @@ public class UsersService {
 
                 } catch (Exception e) {
                         logger.error("ユーザー登録失敗", e);
+                        throw new RuntimeException("ユーザー登録処理でエラーが発生しました", e);
                 }
         }
 
@@ -128,6 +129,7 @@ public class UsersService {
                         logger.info("ユーザー情報変更成功 userNo={}", getLoginUserNo());
                 } catch (Exception e) {
                         logger.error("ユーザー情報変更失敗", e);
+                        throw new RuntimeException("ユーザー登録処理でエラーが発生しました", e);
                 }
         }
 }
