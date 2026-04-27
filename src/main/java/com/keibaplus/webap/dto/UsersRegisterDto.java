@@ -1,8 +1,23 @@
 package com.keibaplus.webap.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 public class UsersRegisterDto {
+
+    @NotBlank(message = "ユーザーIDを入力してください")
+    @Size(min = 8, max = 20, message = "ユーザーIDは8文字以上20文字以内で入力してください")
+    @Pattern(regexp = "^[a-zA-Z0-9]+$", message = "ユーザーIDは半角英数字で入力してください")
     private String userId;
+
+    @NotBlank(message = "メールアドレスを入力してください")
+    @Email(message = "メールアドレスを正しい形式で入力してください")
     private String mailAddress;
+
+    @NotBlank(message = "パスワードを入力してください")
+    @Size(min = 8, max = 20, message = "パスワードは8文字以上20文字以内で入力してください")
     private String password;
 
     public UsersRegisterDto() {

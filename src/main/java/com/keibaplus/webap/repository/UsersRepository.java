@@ -22,6 +22,23 @@ public interface UsersRepository extends ListCrudRepository<Users, String> {
     @Query("SELECT * FROM USERS WHERE MAILADDRESS = :mailAddress")
     Optional<Users> findByMailAddress(@Param("mailAddress") String mailAddress);
 
+    @Query("""
+            SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+            FROM USERS
+            WHERE USER_ID = :userId
+            AND DEL_FLG = 0
+            """)
+    boolean existsByUserId(String userId);
+
+    @Query("""
+            SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+            FROM USERS
+            WHERE MAIL_ADDRESS = :mailAddress
+            AND DEL_FLG = 0
+            """)
+
+    boolean existsByMailAddress(String mailAddress);
+
     @Modifying
     @Query("""
                 INSERT INTO USERS

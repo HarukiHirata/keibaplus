@@ -40,8 +40,14 @@ public class UsersController {
     public String register(@ModelAttribute("form") @Valid UsersRegisterDto dto,
             BindingResult bindingResult,
             Model model) {
+        if (usersService.existsByUserId(dto.getUserId())) {
+            bindingResult.rejectValue("userId", "error.userId", "入力したユーザーIDは既に使用されています");
+        }
+        if (usersService.existsByMailAddress(dto.getMailAddress())) {
+            bindingResult.rejectValue("mailAddress", "error.mailAddress", "入力したメールアドレスは既に使用されています");
+        }
         if (bindingResult.hasErrors()) {
-            return "register?error";
+            return "register";
         }
         usersService.createUser(dto);
         return "redirect:/login?registered";
