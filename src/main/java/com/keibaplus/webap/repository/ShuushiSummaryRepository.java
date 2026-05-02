@@ -78,8 +78,8 @@ public class ShuushiSummaryRepository {
                         SHUUSHI.KOUNYUU_KINGAKU AS "kounyuuKingaku",
                         SHUUSHI.HARAIMODOSHI AS "haraimodoshi"
                         FROM SHUUSHI
-                        JOIN KENSHU ON SHUUSHI.KENSHU_NO = KENSHU.KENSHU_NO
-                        JOIN COURSE ON SHUUSHI.COURSE_NO = COURSE.COURSE_NO
+                        LEFT JOIN KENSHU ON SHUUSHI.KENSHU_NO = KENSHU.KENSHU_NO
+                        LEFT JOIN COURSE ON SHUUSHI.COURSE_NO = COURSE.COURSE_NO
                         WHERE SHUUSHI.USER_NO = :userNo
                         AND DEL_FLG = :delFlg
                         """);

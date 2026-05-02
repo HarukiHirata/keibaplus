@@ -39,6 +39,12 @@ async function search() {
 
         data.forEach(row => {
         const tr = document.createElement("tr");
+        let raceNo;
+        if (row.raceNo === 0) {
+            raceNo = "";
+        } else {
+            raceNo = row.raceNo;
+        }
         tr.innerHTML = `
             <td>
             <a href="/shuushiedit/${row.shuushiNo}" class="btn btn-info">編集</a>
@@ -48,7 +54,7 @@ async function search() {
             </td>
             <td>${row.raceDate ?? ""}</td>
             <td>${row.courseName ?? ""}</td>
-            <td>${row.raceNo ?? ""}</td>
+            <td>${raceNo ?? ""}</td>
             <td>${row.kenshuName ?? ""}</td>
             <td>${row.kounyuuKingaku ?? ""}</td>
             <td>${row.haraimodoshi ?? ""}</td>

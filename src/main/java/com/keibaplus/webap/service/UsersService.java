@@ -118,6 +118,22 @@ public class UsersService {
                 }
         }
 
+        public boolean existsByUserIdAndUserNo(String userId, String userNo) {
+                if (usersRepository.existsByUserIdAndUserNo(userId, userNo)) {
+                        return true;
+                } else {
+                        return false;
+                }
+        }
+
+        public boolean existsByMailAddressAndUserNo(String mailAddress, String userNo) {
+                if (usersRepository.existsByMailAddressAndUserNo(mailAddress, userNo)) {
+                        return true;
+                } else {
+                        return false;
+                }
+        }
+
         public UsersUpdateDto getUserByUserNo(String userNo) {
                 Users user = usersRepository.findByUserNo(userNo)
                                 .orElseThrow(() -> new IllegalArgumentException("ユーザーテーブルの値が存在しません"));

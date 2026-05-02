@@ -67,8 +67,14 @@ public class UsersController {
             BindingResult bindingResult,
             Model model) {
         model.addAttribute("loginUserNo", usersService.getLoginUserNo());
+        if (usersService.existsByUserIdAndUserNo(dto.getUserId(), dto.getUserNo())) {
+            bindingResult.rejectValue("userId", "error.userId", "入力したユーザーIDは既に使用されています");
+        }
+        if (usersService.existsByMailAddressAndUserNo(dto.getMailAddress(), dto.getUserNo())) {
+            bindingResult.rejectValue("mailAddress", "error.mailAddress", "入力したメールアドレスは既に使用されています");
+        }
         if (bindingResult.hasErrors()) {
-            return "useredit?error";
+            return "useredit";
         }
         usersService.updateUser(dto);
         return "redirect:/top";

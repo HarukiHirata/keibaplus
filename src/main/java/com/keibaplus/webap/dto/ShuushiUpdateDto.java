@@ -1,10 +1,14 @@
 package com.keibaplus.webap.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class ShuushiUpdateDto {
     private Integer shuushiNo;
 
     private String userNo;
 
+    @NotBlank(message = "レース日を入力してください")
     private String raceDate;
 
     private Integer courseNo;
@@ -13,8 +17,10 @@ public class ShuushiUpdateDto {
 
     private Integer kenshuNo;
 
+    @NotNull(message = "購入金額を入力してください")
     private Integer kounyuuKingaku;
 
+    @NotNull(message = "払い戻しを入力してください")
     private Integer haraimodoshi;
 
     public ShuushiUpdateDto() {

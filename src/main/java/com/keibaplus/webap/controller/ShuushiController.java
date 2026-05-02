@@ -49,7 +49,7 @@ public class ShuushiController {
             Model model) {
         model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         if (bindingResult.hasErrors()) {
-            return "shuushiregister?error";
+            return "shuushiregister";
         }
         shuushiService.createShuushi(dto);
         return "redirect:/top";
@@ -84,7 +84,10 @@ public class ShuushiController {
             Model model) {
         model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         if (bindingResult.hasErrors()) {
-            return "shuushiedit?error";
+            model.addAttribute("shuushiNo", dto.getShuushiNo());
+            model.addAttribute("kenshuList", shuushiService.findAllKenshu());
+            model.addAttribute("courseList", shuushiService.findAllCourse());
+            return "shuushiedit";
         }
         shuushiService.updateShuushi(dto);
         return "redirect:/top";

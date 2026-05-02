@@ -1,6 +1,7 @@
 package com.keibaplus.webap.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,13 +58,14 @@ public class ShuushiService {
                         Saiban saiban = saibanRepository.findByTableName("SHUUSHI")
                                         .orElseThrow(() -> new IllegalArgumentException("採番テーブルの値が存在しません"));
                         int newShuushiNo = Integer.parseInt(saiban.getSaibanNo());
+
                         Shuushi shuushi = new Shuushi(
                                         newShuushiNo,
                                         dto.getUserNo(),
                                         dto.getRaceDate(),
-                                        dto.getCourseNo(),
-                                        dto.getRaceNo(),
-                                        dto.getKenshuNo(),
+                                        Optional.ofNullable(dto.getCourseNo()).orElse(0),
+                                        Optional.ofNullable(dto.getRaceNo()).orElse(0),
+                                        Optional.ofNullable(dto.getKenshuNo()).orElse(0),
                                         dto.getKounyuuKingaku(),
                                         dto.getHaraimodoshi(),
                                         "0",
@@ -116,12 +118,18 @@ public class ShuushiService {
                 Shuushi shuushi = shuushiRepository.findByShuushiNo(shuushiNo, "0")
                                 .orElseThrow(() -> new IllegalArgumentException("収支テーブルの値が存在しません"));
                 ShuushiUpdateDto dto = new ShuushiUpdateDto();
+                Integer raceNo;
+                if (shuushi.getRaceNo() == 0) {
+                        raceNo = null;
+                } else {
+                        raceNo = shuushi.getRaceNo();
+                }
                 dto.setShuushiNo(shuushi.getShuushiNo());
                 dto.setUserNo(shuushi.getUserNo());
-                dto.setKenshuNo(shuushi.getKenshuNo());
                 dto.setRaceDate(shuushi.getRaceDate());
                 dto.setCourseNo(shuushi.getCourseNo());
-                dto.setRaceNo(shuushi.getRaceNo());
+                dto.setRaceNo(raceNo);
+                dto.setKenshuNo(shuushi.getKenshuNo());
                 dto.setKounyuuKingaku(shuushi.getKounyuuKingaku());
                 dto.setHaraimodoshi(shuushi.getHaraimodoshi());
                 return dto;
@@ -134,9 +142,9 @@ public class ShuushiService {
                         shuushiRepository.updateShuushi(
                                         dto.getShuushiNo(),
                                         dto.getRaceDate(),
-                                        dto.getCourseNo(),
-                                        dto.getRaceNo(),
-                                        dto.getKenshuNo(),
+                                        Optional.ofNullable(dto.getCourseNo()).orElse(0),
+                                        Optional.ofNullable(dto.getRaceNo()).orElse(0),
+                                        Optional.ofNullable(dto.getKenshuNo()).orElse(0),
                                         dto.getKounyuuKingaku(),
                                         dto.getHaraimodoshi(),
                                         now);
