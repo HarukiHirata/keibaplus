@@ -36,6 +36,12 @@ public class LoginController {
         return "notlogin";
     }
 
+    @GetMapping("/unauthorizedAccess")
+    public String getUnauthorizedAccess(HttpServletRequest request) {
+        logger.info("無認可アクセス画面表示 uri={}", request.getRequestURI());
+        return "unauthorizedAccess";
+    }
+
     @GetMapping("/top")
     public String top(Model model, HttpServletRequest request) {
         logger.info("トップ画面表示 uri={} userNo={}", request.getRequestURI(), usersService.getLoginUserNo());

@@ -55,6 +55,9 @@ public class UsersController {
 
     @GetMapping("/useredit/{userNo}")
     public String userEditPage(@PathVariable String userNo, Model model, HttpServletRequest request) {
+        if (!userNo.equals(usersService.getLoginUserNo())) {
+            return "redirect:/unauthorizedAccess";
+        }
         UsersUpdateDto dto = usersService.getUserByUserNo(userNo);
         model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         model.addAttribute("form", dto);

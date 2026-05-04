@@ -70,6 +70,9 @@ public class ShuushiController {
     @GetMapping("/shuushiedit/{shuushiNo}")
     public String shuushiEditPage(@PathVariable Integer shuushiNo, Model model) {
         ShuushiUpdateDto dto = shuushiService.getShuushiByShuushiNo(shuushiNo);
+        if (!dto.getUserNo().equals(usersService.getLoginUserNo())) {
+            return "redirect:/unauthorizedAccess";
+        }
         model.addAttribute("form", dto);
         model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         model.addAttribute("kenshuList", shuushiService.findAllKenshu());
@@ -96,6 +99,9 @@ public class ShuushiController {
     @GetMapping("/shuushidelete/{shuushiNo}")
     public String shuushiDeletePage(@PathVariable Integer shuushiNo, Model model) {
         ShuushiKenshuCourseDto dto = shuushiService.getShuushiByShuushiNoForDelete(shuushiNo);
+        if (!dto.getUserNo().equals(usersService.getLoginUserNo())) {
+            return "redirect:/unauthorizedAccess";
+        }
         model.addAttribute("shuushi", dto);
         model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         logger.info("収支削除画面表示 userNo={} shuushiNo={}", usersService.getLoginUserNo(), shuushiNo);
