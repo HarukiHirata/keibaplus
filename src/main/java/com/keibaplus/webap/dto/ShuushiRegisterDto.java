@@ -5,8 +5,6 @@ import jakarta.validation.constraints.NotNull;
 
 public class ShuushiRegisterDto {
 
-    private String userNo;
-
     @NotBlank(message = "レース日を入力してください")
     private String raceDate;
 
@@ -23,14 +21,6 @@ public class ShuushiRegisterDto {
     private Integer haraimodoshi;
 
     public ShuushiRegisterDto() {
-    }
-
-    public String getUserNo() {
-        return userNo;
-    }
-
-    public void setUserNo(String userNo) {
-        this.userNo = userNo;
     }
 
     public String getRaceDate() {

@@ -61,7 +61,7 @@ public class ShuushiService {
 
                         Shuushi shuushi = new Shuushi(
                                         newShuushiNo,
-                                        dto.getUserNo(),
+                                        getLoginUserNo(),
                                         dto.getRaceDate(),
                                         Optional.ofNullable(dto.getCourseNo()).orElse(0),
                                         Optional.ofNullable(dto.getRaceNo()).orElse(0),

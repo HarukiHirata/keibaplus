@@ -36,7 +36,6 @@ public class ShuushiController {
     @GetMapping("/shuushiregister")
     public String shuushiRegisterPage(Model model) {
         model.addAttribute("form", new ShuushiRegisterDto());
-        model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         model.addAttribute("kenshuList", shuushiService.findAllKenshu());
         model.addAttribute("courseList", shuushiService.findAllCourse());
         logger.info("収支登録画面表示 userNo={}", usersService.getLoginUserNo());
@@ -47,7 +46,6 @@ public class ShuushiController {
     public String shuushiRegister(@ModelAttribute("form") @Valid ShuushiRegisterDto dto,
             BindingResult bindingResult,
             Model model) {
-        model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         if (bindingResult.hasErrors()) {
             return "shuushiregister";
         }
@@ -74,7 +72,6 @@ public class ShuushiController {
             return "redirect:/unauthorizedAccess";
         }
         model.addAttribute("form", dto);
-        model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         model.addAttribute("kenshuList", shuushiService.findAllKenshu());
         model.addAttribute("courseList", shuushiService.findAllCourse());
         logger.info("収支編集画面表示 userNo={} shuushiNo={}", usersService.getLoginUserNo(), shuushiNo);
@@ -85,7 +82,6 @@ public class ShuushiController {
     public String shuushiEdit(@ModelAttribute("form") @Valid ShuushiUpdateDto dto,
             BindingResult bindingResult,
             Model model) {
-        model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         if (bindingResult.hasErrors()) {
             model.addAttribute("shuushiNo", dto.getShuushiNo());
             model.addAttribute("kenshuList", shuushiService.findAllKenshu());
@@ -103,7 +99,6 @@ public class ShuushiController {
             return "redirect:/unauthorizedAccess";
         }
         model.addAttribute("shuushi", dto);
-        model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         logger.info("収支削除画面表示 userNo={} shuushiNo={}", usersService.getLoginUserNo(), shuushiNo);
         return "shuushidelete";
     }
