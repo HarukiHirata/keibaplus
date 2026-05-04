@@ -1,7 +1,5 @@
 package com.keibaplus.webap.service;
 
-import java.time.LocalDateTime;
-
 import org.springframework.security.core.userdetails.*;
 
 import org.springframework.security.core.GrantedAuthority;
