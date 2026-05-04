@@ -131,8 +131,8 @@ public class UsersService {
                 }
         }
 
-        public UsersUpdateDto getUserByUserNo(String userNo) {
-                Users user = usersRepository.findByUserNo(userNo)
+        public UsersUpdateDto getUserByUserNo() {
+                Users user = usersRepository.findByUserNo(getLoginUserNo())
                                 .orElseThrow(() -> new IllegalArgumentException("ユーザーテーブルの値が存在しません"));
                 UsersUpdateDto dto = new UsersUpdateDto();
                 dto.setUserNo(user.getUserNo());
@@ -146,13 +146,13 @@ public class UsersService {
                 try {
                         LocalDateTime now = LocalDateTime.now();
                         usersRepository.updateUser(
-                                        dto.getUserNo(),
+                                        getLoginUserNo(),
                                         dto.getUserId(),
                                         dto.getMailAddress(),
                                         now);
 
                         if (!(dto.getPassword().isBlank()) && !(dto.getPassword() == null)) {
-                                usersRepository.updatePassword(dto.getUserNo(),
+                                usersRepository.updatePassword(getLoginUserNo(),
                                                 passwordEncoder.encode(dto.getPassword()));
                         }
 

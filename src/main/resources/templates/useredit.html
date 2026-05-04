@@ -10,14 +10,13 @@
     <div th:replace="~{common/navbar :: navbar}"></div>
     <div class="container text-center">
       <h1 class="fs-2 fs-md-1 fw-bold m-2 m-md-4">ユーザー情報変更画面</h1>
-      <form th:action="@{/useredit/{userNo}(userNo=${loginUserNo})}" th:object="${form}" method="post">
+      <form th:action="@{/useredit}" th:object="${form}" method="post">
         <div class="alert alert-danger text-start fs-6 fs-md-5" role="alert" th:if="${#fields.hasErrors()}">
           <ul class="mb-0">
             <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
           </ul>
         </div>
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-        <input type="hidden" th:value="${loginUserNo}" th:field="*{userNo}" />
         <div class="row g-3 align-items-center my-1 my-md-3">
           <div class="col-12 col-md-3 text-start">
             <label class="form-label">ユーザーID</label>

@@ -53,27 +53,23 @@ public class UsersController {
         return "redirect:/login?registered";
     }
 
-    @GetMapping("/useredit/{userNo}")
-    public String userEditPage(@PathVariable String userNo, Model model, HttpServletRequest request) {
-        if (!userNo.equals(usersService.getLoginUserNo())) {
-            return "redirect:/unauthorizedAccess";
-        }
-        UsersUpdateDto dto = usersService.getUserByUserNo(userNo);
-        model.addAttribute("loginUserNo", usersService.getLoginUserNo());
+    @GetMapping("/useredit")
+    public String userEditPage(Model model, HttpServletRequest request) {
+        UsersUpdateDto dto = usersService.getUserByUserNo();
+        model.addAttribute("loginUserNo", dto.getUserNo());
         model.addAttribute("form", dto);
         logger.info("ユーザー情報変更画面表示 uri={} userNo={}", request.getRequestURI(), usersService.getLoginUserNo());
         return "useredit";
     }
 
-    @PostMapping("/useredit/{userNo}")
+    @PostMapping("/useredit")
     public String userEdit(@ModelAttribute("form") @Valid UsersUpdateDto dto,
             BindingResult bindingResult,
             Model model) {
-        model.addAttribute("loginUserNo", usersService.getLoginUserNo());
-        if (usersService.existsByUserIdAndUserNo(dto.getUserId(), dto.getUserNo())) {
+        if (usersService.existsByUserIdAndUserNo(dto.getUserId(), usersService.getLoginUserNo())) {
             bindingResult.rejectValue("userId", "error.userId", "入力したユーザーIDは既に使用されています");
         }
-        if (usersService.existsByMailAddressAndUserNo(dto.getMailAddress(), dto.getUserNo())) {
+        if (usersService.existsByMailAddressAndUserNo(dto.getMailAddress(), usersService.getLoginUserNo())) {
             bindingResult.rejectValue("mailAddress", "error.mailAddress", "入力したメールアドレスは既に使用されています");
         }
         if (bindingResult.hasErrors()) {
