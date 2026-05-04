@@ -23,7 +23,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         return new LoginUser(user.getUserNo(),
                 user.getUserId(),
                 user.getMailAddress(),
-                user.getLastLoginDate(),
                 user.getPassword(),
                 true,
                 true,

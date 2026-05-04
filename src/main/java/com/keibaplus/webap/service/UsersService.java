@@ -41,8 +41,7 @@ public class UsersService {
                                 .map(user -> new UsersResponseDto(
                                                 user.getUserNo(),
                                                 user.getUserId(),
-                                                user.getMailAddress(),
-                                                user.getLastLoginDate()))
+                                                user.getMailAddress()))
                                 .toList();
         }
 
@@ -78,7 +77,6 @@ public class UsersService {
                                         dto.getMailAddress(),
                                         "0",
                                         now,
-                                        now,
                                         now);
                         usersRepository.registerUser(
                                         user.getUserNo(),
@@ -86,7 +84,6 @@ public class UsersService {
                                         user.getPassword(),
                                         user.getMailAddress(),
                                         user.getDelFlg(),
-                                        user.getLastLoginDate(),
                                         user.getInsDate(),
                                         user.getUpdDate());
 
@@ -147,10 +144,12 @@ public class UsersService {
         @Transactional
         public void updateUser(UsersUpdateDto dto) {
                 try {
+                        LocalDateTime now = LocalDateTime.now();
                         usersRepository.updateUser(
                                         dto.getUserNo(),
                                         dto.getUserId(),
-                                        dto.getMailAddress());
+                                        dto.getMailAddress(),
+                                        now);
 
                         if (!(dto.getPassword().isBlank()) && !(dto.getPassword() == null)) {
                                 usersRepository.updatePassword(dto.getUserNo(),

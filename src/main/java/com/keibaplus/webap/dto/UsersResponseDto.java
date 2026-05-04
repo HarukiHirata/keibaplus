@@ -1,18 +1,14 @@
 package com.keibaplus.webap.dto;
 
-import java.time.LocalDateTime;
-
 public class UsersResponseDto {
     private String userNo;
     private String userId;
     private String mailAddress;
-    private LocalDateTime lastLoginDate;
 
-    public UsersResponseDto(String userNo, String userId, String mailAddress, LocalDateTime lastLoginDate) {
+    public UsersResponseDto(String userNo, String userId, String mailAddress) {
         this.userNo = userNo;
         this.userId = userId;
         this.mailAddress = mailAddress;
-        this.lastLoginDate = lastLoginDate;
     }
 
     public String getUserNo() {
@@ -37,13 +33,5 @@ public class UsersResponseDto {
 
     public void setMailAddress(String mailAddress) {
         this.mailAddress = mailAddress;
-    }
-
-    public LocalDateTime getLastLoginDate() {
-        return lastLoginDate;
-    }
-
-    public void setLastLoginDate(LocalDateTime lastLoginDate) {
-        this.lastLoginDate = lastLoginDate;
     }
 }

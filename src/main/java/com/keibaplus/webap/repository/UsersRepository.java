@@ -61,16 +61,15 @@ public interface UsersRepository extends ListCrudRepository<Users, String> {
         @Modifying
         @Query("""
                             INSERT INTO USERS
-                            (USER_NO, USER_ID, PASSWORD, MAIL_ADDRESS, DEL_FLG, LAST_LOGIN_DATE, INS_DATE, UPD_DATE)
+                            (USER_NO, USER_ID, PASSWORD, MAIL_ADDRESS, DEL_FLG, INS_DATE, UPD_DATE)
                             VALUES
-                            (:userNo, :userId, :password, :mailAddress, :delFlg, :lastLoginDate, :insDate, :updDate)
+                            (:userNo, :userId, :password, :mailAddress, :delFlg, :insDate, :updDate)
                         """)
         void registerUser(@Param("userNo") String userNo,
                         @Param("userId") String userId,
                         @Param("password") String password,
                         @Param("mailAddress") String mailAddress,
                         @Param("delFlg") String delFlg,
-                        @Param("lastLoginDate") LocalDateTime lastLoginDate,
                         @Param("insDate") LocalDateTime insDate,
                         @Param("updDate") LocalDateTime updDate);
 
@@ -78,12 +77,14 @@ public interface UsersRepository extends ListCrudRepository<Users, String> {
         @Query("""
                         UPDATE USERS
                         SET USER_ID = :userId,
-                        MAIL_ADDRESS = :mailAddress
+                        MAIL_ADDRESS = :mailAddress,
+                        UPD_DATE = :updDate
                         WHERE USER_NO = :userNo
                         """)
         void updateUser(@Param("userNo") String userNo,
                         @Param("userId") String userId,
-                        @Param("mailAddress") String mailAddress);
+                        @Param("mailAddress") String mailAddress,
+                        @Param("updDate") LocalDateTime updDate);
 
         @Modifying
         @Query("""

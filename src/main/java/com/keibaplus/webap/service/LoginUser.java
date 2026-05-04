@@ -12,13 +12,11 @@ public class LoginUser implements UserDetails {
     private String userNo;
     private String userId;
     private String mailAddress;
-    private LocalDateTime lastLoginDate;
     private String password;
 
     public LoginUser(String userNo,
             String userId,
             String mailAddress,
-            LocalDateTime lastLoginDate,
             String password,
             boolean enabled,
             boolean accountNonExpired,
@@ -28,7 +26,6 @@ public class LoginUser implements UserDetails {
         this.userNo = userNo;
         this.userId = userId;
         this.mailAddress = mailAddress;
-        this.lastLoginDate = lastLoginDate;
         this.password = password;
     }
 
@@ -54,14 +51,6 @@ public class LoginUser implements UserDetails {
 
     public void setMailAddress(String mailAddress) {
         this.mailAddress = mailAddress;
-    }
-
-    public LocalDateTime getLastLoginDate() {
-        return lastLoginDate;
-    }
-
-    public void setLastLoginDate(LocalDateTime lastLoginDate) {
-        this.lastLoginDate = lastLoginDate;
     }
 
     @Override

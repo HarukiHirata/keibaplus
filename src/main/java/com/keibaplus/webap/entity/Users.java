@@ -25,9 +25,6 @@ public class Users {
     @Column("DEL_FLG")
     private String delFlg;
 
-    @Column("LAST_LOGIN_DATE")
-    private LocalDateTime lastLoginDate;
-
     @Column("INS_DATE")
     private LocalDateTime insDate;
 
@@ -35,13 +32,12 @@ public class Users {
     private LocalDateTime updDate;
 
     public Users(String userNo, String userId, String password, String mailAddress, String delFlg,
-            LocalDateTime lastLoginDate, LocalDateTime insDate, LocalDateTime updDate) {
+            LocalDateTime insDate, LocalDateTime updDate) {
         this.userNo = userNo;
         this.userId = userId;
         this.password = password;
         this.mailAddress = mailAddress;
         this.delFlg = delFlg;
-        this.lastLoginDate = lastLoginDate;
         this.insDate = insDate;
         this.updDate = updDate;
     }
@@ -84,14 +80,6 @@ public class Users {
 
     public void setDelFlg(String delFlg) {
         this.delFlg = delFlg;
-    }
-
-    public LocalDateTime getLastLoginDate() {
-        return lastLoginDate;
-    }
-
-    public void setLastLoginDate(LocalDateTime lastLoginDate) {
-        this.lastLoginDate = lastLoginDate;
     }
 
     public LocalDateTime getInsDate() {
