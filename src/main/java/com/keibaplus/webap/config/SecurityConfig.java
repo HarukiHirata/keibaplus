@@ -33,7 +33,9 @@ public class SecurityConfig {
         @Bean
         SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 http.authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/notlogin", "/welcome", "/login", "/register", "/error", "/css/**",
+                                .requestMatchers("/notlogin", "/welcome", "/login", "/register", "/error",
+                                                "/userdeletesuccess",
+                                                "/css/**",
                                                 "/api/**",
                                                 "/js/**",
                                                 "/images/**", "**/favicon**")

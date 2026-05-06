@@ -3,12 +3,16 @@ package com.keibaplus.webap.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.validation.BindingResult;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 import org.slf4j.Logger;
@@ -76,6 +80,29 @@ public class UsersController {
         }
         usersService.updateUser(dto);
         return "redirect:/top";
+    }
+
+    @GetMapping("/userdelete")
+    public String userDeletePage(Model model, HttpServletRequest request) {
+        model.addAttribute("loginUserId", usersService.getLoginUserId());
+        logger.info("ユーザー削除画面表示 uri={} userNo={}", request.getRequestURI(), usersService.getLoginUserNo());
+        return "userdelete";
+    }
+
+    @PostMapping("/userdelete")
+    public String userDelete(HttpServletRequest request, HttpServletResponse response) {
+        usersService.deleteUser(usersService.getLoginUserNo());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        }
+        return "redirect:/userdeletesuccess";
+    }
+
+    @GetMapping("/userdeletesuccess")
+    public String userDeleteSuccessPage(HttpServletRequest request) {
+        logger.info("ユーザー削除成功画面表示 uri={}", request.getRequestURI());
+        return "userdeletesuccess";
     }
 
 }

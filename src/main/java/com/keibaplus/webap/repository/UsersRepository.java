@@ -94,4 +94,16 @@ public interface UsersRepository extends ListCrudRepository<Users, String> {
                         """)
         void updatePassword(@Param("userNo") String userNo,
                         @Param("password") String password);
+
+        @Modifying
+        @Query("""
+                        UPDATE USERS
+                        SET DEL_FLG = :delFlg,
+                        UPD_DATE = :updDate
+                        WHERE USER_NO = :userNo
+                        """)
+        void deleteUser(@Param("userNo") String userNo,
+                        @Param("delFlg") String delFlg,
+                        @Param("updDate") LocalDateTime updDate);
+
 }

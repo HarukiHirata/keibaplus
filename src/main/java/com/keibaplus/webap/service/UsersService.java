@@ -59,7 +59,7 @@ public class UsersService {
                 return getLoginUser().getUserId();
         }
 
-        public String getLoginUserMailaddress() {
+        public String getLoginUserMailAddress() {
                 return getLoginUser().getMailAddress();
         }
 
@@ -162,4 +162,17 @@ public class UsersService {
                         throw new RuntimeException("ユーザー登録処理でエラーが発生しました", e);
                 }
         }
+
+        @Transactional
+        public void deleteUser(String userNo) {
+                try {
+                        LocalDateTime now = LocalDateTime.now();
+                        usersRepository.deleteUser(userNo, "1", now);
+                        logger.info("ユーザー削除成功 userNo={}", userNo);
+                } catch (Exception e) {
+                        logger.error("ユーザー削除失敗", e);
+                        throw new RuntimeException("ユーザー削除処理でエラーが発生しました", e);
+                }
+        }
+
 }

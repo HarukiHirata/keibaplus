@@ -47,7 +47,6 @@ public class LoginController {
         logger.info("トップ画面表示 uri={} userNo={}", request.getRequestURI(), usersService.getLoginUserNo());
         model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         model.addAttribute("loginUserId", usersService.getLoginUserId());
-        model.addAttribute("loginUserMailaddress", usersService.getLoginUserMailaddress());
         model.addAttribute("form", new ShuushiSearchDto());
         model.addAttribute("kenshuList", shuushiService.findAllKenshu());
         model.addAttribute("courseList", shuushiService.findAllCourse());
