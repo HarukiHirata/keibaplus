@@ -33,13 +33,19 @@ public class SecurityConfig {
         @Bean
         SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 http.authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/notlogin", "/welcome", "/login", "/register", "/error",
+                                .requestMatchers("/notlogin",
+                                                "/welcome",
+                                                "/login",
+                                                "/register",
+                                                "/error",
+                                                "/termsOfUse",
                                                 "/privacyPolicy",
                                                 "/userdeletesuccess",
                                                 "/css/**",
                                                 "/api/**",
                                                 "/js/**",
-                                                "/images/**", "**/favicon**")
+                                                "/images/**",
+                                                "**/favicon**")
                                 .permitAll()
                                 .anyRequest().authenticated())
                                 .formLogin(login -> login

@@ -10,4 +10,9 @@ public class TermsController {
     public String privacyPolicy() {
         return "privacyPolicy";
     }
+
+    @GetMapping("/termsOfUse")
+    public String termsOfUse() {
+        return "termsOfUse";
+    }
 }
