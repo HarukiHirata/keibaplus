@@ -1,6 +1,7 @@
 <nav th:fragment="navbar" class="navbar navbar-expand-md bg-body-tertiary bg-dark border-bottom border-body" data-bs-theme="dark">
   <div class="container-fluid">
-    <a class="navbar-brand" th:href="@{/top}">keibaplus</a>
+    <a class="navbar-brand" th:href="@{/welcome}" sec:authorize="!isAuthenticated()">keibaplus</a>
+    <a class="navbar-brand" th:href="@{/top}" sec:authorize="isAuthenticated()">keibaplus</a>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarKeiba"
       aria-controls="navbarKeiba" aria-expanded="false" aria-label="ナビゲーション切替">
@@ -9,22 +10,22 @@
 
     <div class="collapse navbar-collapse" id="navbarKeiba">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
+        <li class="nav-item" sec:authorize="isAuthenticated()">
           <a class="nav-link" th:href="@{/top}">トップページへ</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" sec:authorize="isAuthenticated()">
           <a class="nav-link" th:href="@{/shuushiregister}">収支登録</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" sec:authorize="isAuthenticated()">
           <a class="nav-link" th:href="@{/shuushilist}">収支一覧</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" sec:authorize="isAuthenticated()">
           <a class="nav-link" th:href="@{/useredit}">ユーザー情報変更</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" sec:authorize="isAuthenticated()">
           <a class="nav-link" th:href="@{/userdelete}">アカウント削除</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" sec:authorize="isAuthenticated()">
           <form th:action="@{/logout}" method="post" class="d-inline">
             <button class="btn btn-link nav-link" type="submit">ログアウト</button>
           </form>
