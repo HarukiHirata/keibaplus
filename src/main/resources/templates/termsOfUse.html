@@ -7,12 +7,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link th:href="@{/css/style.css}" rel="stylesheet">
   </head>
-  <body>
+  <body class="d-flex flex-column min-vh-100">
     <div th:replace="~{common/navbar :: navbar}"></div>
-    <div class="container text-center my-3 my-md-5">
+    <div class="container text-center my-3 my-md-5 flex-grow-1">
       <h1 class="fs-2 fs-md-1 fw-bold m-2 m-md-4">利用規約</h1>
-    </div>
-    <div class="container">
         <div class="m-3 m-md-6">
             <p class="fs-6 fs-md-5">この利用規約（以下「本規約」といいます。）は、keibaplus（以下「本サービス」といいます。）の利用条件を定めるものです。</p>
             <p class="fs-6 fs-md-5">ユーザーは、本サービスを利用することにより、本規約に同意したものとみなされます。</p>
@@ -80,6 +78,7 @@
             <p class="fs-6 fs-md-5">制定日：2026年〇月〇日</p>
         </div>
     </div>
+    <div th:replace="~{common/footer :: footer}"></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
   </body>
 </html>
