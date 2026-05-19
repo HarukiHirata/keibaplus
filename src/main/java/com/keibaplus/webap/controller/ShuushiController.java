@@ -8,6 +8,8 @@ import org.springframework.validation.BindingResult;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 import org.slf4j.Logger;
@@ -48,14 +50,14 @@ public class ShuushiController {
      * @return 収支登録画面のテンプレート
      */
     @GetMapping("/shuushiregister")
-    public String shuushiRegisterPage(Model model) {
+    public String shuushiRegisterPage(Model model, HttpServletRequest request) {
         // modelに必要な値を設定（ログインユーザー情報・収支登録用DTO・券種一覧・コース一覧）
         model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         model.addAttribute("form", new ShuushiRegisterDto());
         model.addAttribute("kenshuList", shuushiService.findAllKenshu());
         model.addAttribute("courseList", shuushiService.findAllCourse());
         // ログ出力・テンプレートをreturn
-        logger.info("収支登録画面表示 userNo={}", usersService.getLoginUserNo());
+        logger.info("収支登録画面表示 uri={} userNo={}", request.getRequestURI(), usersService.getLoginUserNo());
         return "shuushiregister";
     }
 
@@ -88,7 +90,7 @@ public class ShuushiController {
      * @return 収支一覧画面のテンプレート
      */
     @GetMapping("/shuushilist")
-    public String shuushiList(Model model) {
+    public String shuushiList(Model model, HttpServletRequest request) {
         // modelに必要な値を設定（ログインユーザー情報・収支検索用DTO・券種一覧・コース一覧）
         model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         model.addAttribute("loginUserId", usersService.getLoginUserId());
@@ -96,7 +98,7 @@ public class ShuushiController {
         model.addAttribute("kenshuList", shuushiService.findAllKenshu());
         model.addAttribute("courseList", shuushiService.findAllCourse());
         // ログ出力・テンプレートをreturn
-        logger.info("収支一覧画面表示 userNo={}", usersService.getLoginUserNo());
+        logger.info("収支一覧画面表示 uri={} userNo={}", request.getRequestURI(), usersService.getLoginUserNo());
         return "shuushilist";
     }
 
@@ -108,7 +110,7 @@ public class ShuushiController {
      * @return 収支編集画面のテンプレート
      */
     @GetMapping("/shuushiedit/{shuushiNo}")
-    public String shuushiEditPage(@PathVariable Integer shuushiNo, Model model) {
+    public String shuushiEditPage(@PathVariable Integer shuushiNo, Model model, HttpServletRequest request) {
         // 元データを表示するために収支更新用DTOに更新対象の収支データを格納
         ShuushiUpdateDto dto = shuushiService.getShuushiByShuushiNo(shuushiNo);
         // 仮にURLを直接打ち込まれてアクセスされた場合に他人のデータが見えてしまわないように更新対象の収支データとログインユーザーの番号を照合
@@ -120,7 +122,8 @@ public class ShuushiController {
         model.addAttribute("kenshuList", shuushiService.findAllKenshu());
         model.addAttribute("courseList", shuushiService.findAllCourse());
         // ログ出力・テンプレートをreturn
-        logger.info("収支編集画面表示 userNo={} shuushiNo={}", usersService.getLoginUserNo(), shuushiNo);
+        logger.info("収支編集画面表示 uri={} userNo={} shuushiNo={}", request.getRequestURI(), usersService.getLoginUserNo(),
+                shuushiNo);
         return "shuushiedit";
     }
 
@@ -158,7 +161,7 @@ public class ShuushiController {
      * @return 収支削除画面のテンプレート
      */
     @GetMapping("/shuushidelete/{shuushiNo}")
-    public String shuushiDeletePage(@PathVariable Integer shuushiNo, Model model) {
+    public String shuushiDeletePage(@PathVariable Integer shuushiNo, Model model, HttpServletRequest request) {
         // 元データを表示するために収支削除用DTOに削除対象の収支データを格納
         ShuushiKenshuCourseDto dto = shuushiService.getShuushiByShuushiNoForDelete(shuushiNo);
         // 仮にURLを直接打ち込まれてアクセスされた場合に他人のデータが見えてしまわないように削除対象の収支データとログインユーザーの番号を照合
@@ -168,7 +171,8 @@ public class ShuushiController {
         // modelに必要な値を設定（収支データ）
         model.addAttribute("shuushi", dto);
         // ログ出力・テンプレートをreturn
-        logger.info("収支削除画面表示 userNo={} shuushiNo={}", usersService.getLoginUserNo(), shuushiNo);
+        logger.info("収支削除画面表示 uri={} userNo={} shuushiNo={}", request.getRequestURI(), usersService.getLoginUserNo(),
+                shuushiNo);
         return "shuushidelete";
     }
 
