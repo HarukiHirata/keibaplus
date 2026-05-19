@@ -20,92 +20,169 @@ import com.keibaplus.webap.dto.ShuushiKenshuCourseDto;
 import com.keibaplus.webap.service.ShuushiService;
 import com.keibaplus.webap.service.UsersService;
 
+/**
+ * 収支管理処理関係のコントローラー
+ */
 @Controller
 public class ShuushiController {
 
+    // ログインユーザー番号などを取得するためにUsersServiceのインスタンスを使用
     private final UsersService usersService;
+
+    // 収支管理処理のためにShuushiServiceのインスタンスを使用
     private final ShuushiService shuushiService;
 
+    // ロガーの定義
     private static final Logger logger = LoggerFactory.getLogger(ShuushiController.class);
 
+    // コンストラクタ
     public ShuushiController(UsersService usersService, ShuushiService shuushiService) {
         this.usersService = usersService;
         this.shuushiService = shuushiService;
     }
 
+    /**
+     * 収支登録画面の表示
+     * 
+     * @param model Modelインスタンス
+     * @return 収支登録画面のテンプレート
+     */
     @GetMapping("/shuushiregister")
     public String shuushiRegisterPage(Model model) {
+        // modelに必要な値を設定（ログインユーザー情報・収支登録用DTO・券種一覧・コース一覧）
+        model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         model.addAttribute("form", new ShuushiRegisterDto());
         model.addAttribute("kenshuList", shuushiService.findAllKenshu());
         model.addAttribute("courseList", shuushiService.findAllCourse());
+        // ログ出力・テンプレートをreturn
         logger.info("収支登録画面表示 userNo={}", usersService.getLoginUserNo());
         return "shuushiregister";
     }
 
+    /**
+     * 収支登録処理
+     * 
+     * @param dto           収支登録用DTO
+     * @param bindingResult バリデーション結果
+     * @param model         Modelインスタンス
+     * @return 収支登録画面のテンプレートかトップページ画面へのリダイレクト
+     */
     @PostMapping("/shuushiregister")
     public String shuushiRegister(@ModelAttribute("form") @Valid ShuushiRegisterDto dto,
             BindingResult bindingResult,
             Model model) {
+        // バリデーションエラーがあった場合に収支登録画面をもう一度表示
         if (bindingResult.hasErrors()) {
             return "shuushiregister";
         }
+        // バリデーションエラーがなければShuushiServiceの登録処理
         shuushiService.createShuushi(dto);
+        // 登録処理が無事完了すればトップページ画面へリダイレクト
         return "redirect:/top";
     }
 
+    /**
+     * 収支一覧画面の表示
+     * 
+     * @param model Modelインスタンス
+     * @return 収支一覧画面のテンプレート
+     */
     @GetMapping("/shuushilist")
     public String shuushiList(Model model) {
+        // modelに必要な値を設定（ログインユーザー情報・収支検索用DTO・券種一覧・コース一覧）
         model.addAttribute("loginUserNo", usersService.getLoginUserNo());
         model.addAttribute("loginUserId", usersService.getLoginUserId());
         model.addAttribute("form", new ShuushiSearchDto());
         model.addAttribute("kenshuList", shuushiService.findAllKenshu());
         model.addAttribute("courseList", shuushiService.findAllCourse());
+        // ログ出力・テンプレートをreturn
         logger.info("収支一覧画面表示 userNo={}", usersService.getLoginUserNo());
-        // model.addAttribute("shuushiList", shuushiService.findAllShushiByLoginUser());
         return "shuushilist";
     }
 
+    /**
+     * 収支編集画面の表示
+     * 
+     * @param shuushiNo 収支No
+     * @param model     Modelインスタンス
+     * @return 収支編集画面のテンプレート
+     */
     @GetMapping("/shuushiedit/{shuushiNo}")
     public String shuushiEditPage(@PathVariable Integer shuushiNo, Model model) {
+        // 元データを表示するために収支更新用DTOに更新対象の収支データを格納
         ShuushiUpdateDto dto = shuushiService.getShuushiByShuushiNo(shuushiNo);
+        // 仮にURLを直接打ち込まれてアクセスされた場合に他人のデータが見えてしまわないように更新対象の収支データとログインユーザーの番号を照合
         if (!dto.getUserNo().equals(usersService.getLoginUserNo())) {
             return "redirect:/unauthorizedAccess";
         }
+        // modelに必要な値を設定（収支更新用DTO・券種一覧・コース一覧）
         model.addAttribute("form", dto);
         model.addAttribute("kenshuList", shuushiService.findAllKenshu());
         model.addAttribute("courseList", shuushiService.findAllCourse());
+        // ログ出力・テンプレートをreturn
         logger.info("収支編集画面表示 userNo={} shuushiNo={}", usersService.getLoginUserNo(), shuushiNo);
         return "shuushiedit";
     }
 
+    /**
+     * 収支更新処理
+     * 
+     * @param dto           収支更新用DTO
+     * @param bindingResult バリデーション結果
+     * @param model         Modelインスタンス
+     * @return 収支編集画面のテンプレートかトップページ画面へのリダイレクト
+     */
     @PostMapping("/shuushiedit/{shuushiNo}")
     public String shuushiEdit(@ModelAttribute("form") @Valid ShuushiUpdateDto dto,
             BindingResult bindingResult,
             Model model) {
+        // バリデーションエラーがあった場合に収支更新画面をもう一度表示
         if (bindingResult.hasErrors()) {
+            // 再表示のためmodelに必要な値を設定（収支No・券種一覧・コース一覧）
             model.addAttribute("shuushiNo", dto.getShuushiNo());
             model.addAttribute("kenshuList", shuushiService.findAllKenshu());
             model.addAttribute("courseList", shuushiService.findAllCourse());
             return "shuushiedit";
         }
+        // バリデーションエラーがなければShuushiServiceの更新処理
         shuushiService.updateShuushi(dto);
+        // 更新処理が無事完了すればトップページ画面へリダイレクト
         return "redirect:/top";
     }
 
+    /**
+     * 収支削除画面の表示
+     * 
+     * @param shuushiNo 収支No
+     * @param model     Modelインスタンス
+     * @return 収支削除画面のテンプレート
+     */
     @GetMapping("/shuushidelete/{shuushiNo}")
     public String shuushiDeletePage(@PathVariable Integer shuushiNo, Model model) {
+        // 元データを表示するために収支削除用DTOに削除対象の収支データを格納
         ShuushiKenshuCourseDto dto = shuushiService.getShuushiByShuushiNoForDelete(shuushiNo);
+        // 仮にURLを直接打ち込まれてアクセスされた場合に他人のデータが見えてしまわないように削除対象の収支データとログインユーザーの番号を照合
         if (!dto.getUserNo().equals(usersService.getLoginUserNo())) {
             return "redirect:/unauthorizedAccess";
         }
+        // modelに必要な値を設定（収支データ）
         model.addAttribute("shuushi", dto);
+        // ログ出力・テンプレートをreturn
         logger.info("収支削除画面表示 userNo={} shuushiNo={}", usersService.getLoginUserNo(), shuushiNo);
         return "shuushidelete";
     }
 
+    /**
+     * 収支削除処理
+     * 
+     * @param shuushiNo 収支No
+     * @return 収支一覧画面へのリダイレクト
+     */
     @PostMapping("/shuushidelete/{shuushiNo}")
     public String shuushiDelete(@PathVariable Integer shuushiNo) {
+        // ShuushiServiceの削除処理
         shuushiService.deleteShuushi(shuushiNo);
+        // 収支一覧画面へのリダイレクトをreturn
         return "redirect:/shuushilist";
     }
 
