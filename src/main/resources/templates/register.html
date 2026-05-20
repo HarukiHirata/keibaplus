@@ -37,6 +37,12 @@
           <div class="col-12 col-md-8">
             <input type="password" class="form-control" th:field="*{password}" />
           </div>
+          <div class="col-12 col-md-4 text-start">
+            <label class="form-label">確認用パスワード（パスワードをもう一度入力）</label>
+          </div>
+          <div class="col-12 col-md-8">
+            <input type="password" class="form-control" th:field="*{passwordConfirm}" />
+          </div>
         </div>
         <div class="m-3 m-md-6">
           <a th:href="@{/termsOfUse}" target="_blank" rel="noopener noreferrer">利用規約</a>と<a th:href="@{/privacyPolicy}" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a>に同意する

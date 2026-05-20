@@ -1,5 +1,6 @@
 package com.keibaplus.webap.dto;
 
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -19,6 +20,10 @@ public class UsersRegisterDto {
     @NotBlank(message = "パスワードを入力してください")
     @Size(min = 8, max = 20, message = "パスワードは8文字以上20文字以内で入力してください")
     private String password;
+
+    @NotBlank(message = "確認用パスワードを入力してください")
+    @Size(min = 8, max = 20, message = "パスワードは8文字以上20文字以内で入力してください")
+    private String passwordConfirm;
 
     public UsersRegisterDto() {
 
@@ -46,5 +51,18 @@ public class UsersRegisterDto {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPasswordConfirm() {
+        return passwordConfirm;
+    }
+
+    public void setPasswordConfirm(String passwordConfirm) {
+        this.passwordConfirm = passwordConfirm;
+    }
+
+    @AssertTrue(message = "パスワードと確認用パスワードが一致していません")
+    public boolean isPasswordMatch() {
+        return getPassword().equals(getPasswordConfirm());
     }
 }
