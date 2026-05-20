@@ -72,9 +72,13 @@ public class ShuushiController {
     @PostMapping("/shuushiregister")
     public String shuushiRegister(@ModelAttribute("form") @Valid ShuushiRegisterDto dto,
             BindingResult bindingResult,
-            Model model) {
+            Model model,
+            HttpServletRequest request) {
         // バリデーションエラーがあった場合に収支登録画面をもう一度表示
         if (bindingResult.hasErrors()) {
+            model.addAttribute("kenshuList", shuushiService.findAllKenshu());
+            model.addAttribute("courseList", shuushiService.findAllCourse());
+            logger.info("収支登録画面表示 uri={} userNo={}", request.getRequestURI(), usersService.getLoginUserNo());
             return "shuushiregister";
         }
         // バリデーションエラーがなければShuushiServiceの登録処理
@@ -138,13 +142,17 @@ public class ShuushiController {
     @PostMapping("/shuushiedit/{shuushiNo}")
     public String shuushiEdit(@ModelAttribute("form") @Valid ShuushiUpdateDto dto,
             BindingResult bindingResult,
-            Model model) {
+            Model model,
+            HttpServletRequest request) {
         // バリデーションエラーがあった場合に収支更新画面をもう一度表示
         if (bindingResult.hasErrors()) {
             // 再表示のためmodelに必要な値を設定（収支No・券種一覧・コース一覧）
             model.addAttribute("shuushiNo", dto.getShuushiNo());
             model.addAttribute("kenshuList", shuushiService.findAllKenshu());
             model.addAttribute("courseList", shuushiService.findAllCourse());
+            logger.info("収支編集画面表示 uri={} userNo={} shuushiNo={}", request.getRequestURI(),
+                    usersService.getLoginUserNo(),
+                    dto.getShuushiNo());
             return "shuushiedit";
         }
         // バリデーションエラーがなければShuushiServiceの更新処理

@@ -65,7 +65,8 @@ public class UsersController {
     @PostMapping("/register")
     public String register(@ModelAttribute("form") @Valid UsersRegisterDto dto,
             BindingResult bindingResult,
-            Model model) {
+            Model model,
+            HttpServletRequest request) {
         // ユーザーIDとメールアドレスはUNIQUEであるかチェック
         if (usersService.existsByUserId(dto.getUserId())) {
             bindingResult.rejectValue("userId", "error.userId", "入力したユーザーIDは既に使用されています");
@@ -75,6 +76,7 @@ public class UsersController {
         }
         // バリデーションエラーがあった場合にユーザー登録画面をもう一度表示
         if (bindingResult.hasErrors()) {
+            logger.info("新規登録画面表示 uri={}", request.getRequestURI());
             return "register";
         }
         // バリデーションエラーがなければUsersServiceの登録処理
@@ -113,7 +115,8 @@ public class UsersController {
     @PostMapping("/useredit")
     public String userEdit(@ModelAttribute("form") @Valid UsersUpdateDto dto,
             BindingResult bindingResult,
-            Model model) {
+            Model model,
+            HttpServletRequest request) {
         // ユーザーIDとメールアドレスはUNIQUEであるかチェック
         if (usersService.existsByUserIdAndUserNo(dto.getUserId(), usersService.getLoginUserNo())) {
             bindingResult.rejectValue("userId", "error.userId", "入力したユーザーIDは既に使用されています");
@@ -123,6 +126,7 @@ public class UsersController {
         }
         // バリデーションエラーがあった場合にユーザー情報更新画面をもう一度表示
         if (bindingResult.hasErrors()) {
+            logger.info("ユーザー情報変更画面表示 uri={} userNo={}", request.getRequestURI(), usersService.getLoginUserNo());
             return "useredit";
         }
         // バリデーションエラーがなければUsersServiceの更新処理
