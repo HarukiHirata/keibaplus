@@ -1,5 +1,8 @@
 package com.keibaplus.webap.dto;
 
+/**
+ * 収支集計用DTO
+ */
 public class ShuushiSummaryDto {
     private Integer totalKounyuuKingaku;
 

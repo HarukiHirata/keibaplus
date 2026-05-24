@@ -4,6 +4,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
+/**
+ * 券種テーブル用エンティティ
+ */
 @Table("KENSHU")
 public class Kenshu {
     @Id

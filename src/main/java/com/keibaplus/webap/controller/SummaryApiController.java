@@ -16,28 +16,52 @@ import com.keibaplus.webap.service.UsersService;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * 収支集計処理関係のコントローラー
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/shuushisummary")
 public class SummaryApiController {
 
+    // 収支集計処理のためにShuushiSummaryServiceのインスタンスを使用
     private final ShuushiSummaryService shuushiSummaryService;
 
+    // 収支集計処理のためにUsersServiceのインスタンスを使用
     private final UsersService usersService;
 
+    // 収支集計処理のためにShuushiServiceのインスタンスを使用
     private final ShuushiService shuushiService;
 
+    /**
+     * 収支集計処理
+     * 
+     * @param dto 収支検索用DTO
+     * @return ShuushiSummaryServiceの収支集計結果
+     */
     @PostMapping("/search")
     public ShuushiSummaryDto search(@RequestBody ShuushiSearchDto dto) {
+        // セキュリティの関係上controllerで収支集計対象のUserNoを指定
         dto.setUserNo(usersService.getLoginUserNo());
-        dto.setDelFLg("0");
+        // 削除されていないレコードを対象
+        dto.setDelFlg("0");
+        // ShuushiSummaryServiceの収支集計処理の結果をreturn
         return shuushiSummaryService.searchSummary(dto);
     }
 
+    /**
+     * 収支一覧取得処理
+     * 
+     * @param dto 収支検索用DTO
+     * @return ShuushiServiceの収支一覧取得結果
+     */
     @PostMapping("/itiran")
     public List<ShuushiKenshuCourseDto> itiran(@RequestBody ShuushiSearchDto dto) {
+        // セキュリティの関係上controllerで収支一覧取得対象のUserNoを指定
         dto.setUserNo(usersService.getLoginUserNo());
-        dto.setDelFLg("0");
+        // 削除されていないレコードを対象
+        dto.setDelFlg("0");
+        // ShuushiServiceの収支一覧取得処理の結果をreturn
         return shuushiService.findAllShushiByLoginUser(dto);
     }
 }

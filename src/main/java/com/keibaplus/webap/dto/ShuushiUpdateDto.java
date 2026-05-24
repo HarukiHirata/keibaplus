@@ -3,6 +3,9 @@ package com.keibaplus.webap.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+/**
+ * 収支更新用DTO
+ */
 public class ShuushiUpdateDto {
     private Integer shuushiNo;
 

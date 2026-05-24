@@ -6,6 +6,9 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
 
+/**
+ * 収支テーブル用エンティティ
+ */
 @Table("SHUUSHI")
 public class Shuushi {
 

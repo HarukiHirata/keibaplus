@@ -6,6 +6,9 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
 
+/**
+ * ユーザーテーブル用エンティティ
+ */
 @Table("USERS")
 public class Users {
 

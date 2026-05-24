@@ -3,6 +3,9 @@ package com.keibaplus.webap.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+/**
+ * 収支登録用DTO
+ */
 public class ShuushiRegisterDto {
 
     @NotBlank(message = "レース日を入力してください")

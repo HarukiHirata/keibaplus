@@ -1,5 +1,8 @@
 package com.keibaplus.webap.dto;
 
+/**
+ * 収支表示用DTO（収支テーブル・コーステーブル・券種テーブルを結合して取得）
+ */
 public class ShuushiKenshuCourseDto {
     private Integer shuushiNo;
 

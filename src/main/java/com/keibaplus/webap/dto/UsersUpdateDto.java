@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+/**
+ * ユーザー情報更新用DTO
+ */
 public class UsersUpdateDto {
     private String userNo;
 

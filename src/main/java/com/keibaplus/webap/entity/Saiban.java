@@ -4,6 +4,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
+/**
+ * 採番テーブル用エンティティ
+ */
 @Table("SAIBAN")
 public class Saiban {
 

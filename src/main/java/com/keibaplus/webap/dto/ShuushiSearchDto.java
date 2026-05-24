@@ -25,7 +25,7 @@ public class ShuushiSearchDto {
         return delFlg;
     }
 
-    public void setDelFLg(String delFlg) {
+    public void setDelFlg(String delFlg) {
         this.delFlg = delFlg;
     }
 

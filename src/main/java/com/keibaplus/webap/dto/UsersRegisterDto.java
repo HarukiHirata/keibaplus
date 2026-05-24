@@ -6,6 +6,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+/**
+ * ユーザー登録用DTO
+ */
 public class UsersRegisterDto {
 
     @NotBlank(message = "ユーザーIDを入力してください")

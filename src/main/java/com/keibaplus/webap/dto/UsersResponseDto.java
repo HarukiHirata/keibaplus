@@ -1,5 +1,8 @@
 package com.keibaplus.webap.dto;
 
+/**
+ * ユーザー取得用DTO
+ */
 public class UsersResponseDto {
     private String userNo;
     private String userId;
