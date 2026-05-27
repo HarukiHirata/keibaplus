@@ -6,6 +6,9 @@ import org.springframework.security.core.GrantedAuthority;
 import java.util.Collection;
 import java.util.Collections;
 
+/**
+ * ログインユーザーのデータを取得するためのUserDetailsを独自で実装したクラス
+ */
 public class LoginUser implements UserDetails {
     private String userNo;
     private String userId;

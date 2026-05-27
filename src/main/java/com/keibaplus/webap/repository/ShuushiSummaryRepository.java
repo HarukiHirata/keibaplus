@@ -13,14 +13,26 @@ import java.util.List;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
+/**
+ * 収支テーブル検索用リポジトリ
+ */
 @Repository
 @RequiredArgsConstructor
 public class ShuushiSummaryRepository {
+    // 検索条件が複数ありユーザーの入力により変わるためNamedParameterJdbcTemplateのインスタンスを使用
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    /**
+     * ユーザーが入力した条件に当てはまる回収率を表示するため、条件による購入金額と払い戻しの合計を取得
+     * 
+     * @param dto 収支検索用DTO
+     * @return 購入金額・払い戻し合計
+     */
     public ShuushiSummaryDto searchSummary(ShuushiSearchDto dto) {
+        // sqlを組み立てるためStringBuilderのインスタンスを使用
         StringBuilder sql = new StringBuilder();
 
+        // どの条件にも当てはまるようなsql
         sql.append("""
                 SELECT
                 COALESCE(SUM(KOUNYUU_KINGAKU),0) AS "totalKounyuuKingaku",
@@ -30,30 +42,37 @@ public class ShuushiSummaryRepository {
                 AND DEL_FLG = :delFlg
                 """);
 
+        // sqlのパラメータを設定するためにMapSqlParameterSourceのインスタンスを使用
         MapSqlParameterSource params = new MapSqlParameterSource();
+        // ユーザー番号と削除フラグをパラメータに設定
         params.addValue("userNo", dto.getUserNo());
         params.addValue("delFlg", dto.getDelFlg());
 
+        // 開始日をSQLとパラメータに設定
         if (dto.getRaceDateFrom() != null && !dto.getRaceDateFrom().isBlank()) {
             sql.append(" AND RACE_DATE >= :raceDateFrom");
             params.addValue("raceDateFrom", dto.getRaceDateFrom());
         }
 
+        // 終了日をSQLとパラメータに設定
         if (dto.getRaceDateTo() != null && !dto.getRaceDateTo().isBlank()) {
             sql.append(" AND RACE_DATE <= :raceDateTo");
             params.addValue("raceDateTo", dto.getRaceDateTo());
         }
 
+        // 券種をSQLとパラメータに設定
         if (dto.getKenshuNo() != null) {
             sql.append(" AND KENSHU_NO = :kenshuNo");
             params.addValue("kenshuNo", dto.getKenshuNo());
         }
 
+        // コースをSQLとパラメータに設定
         if (dto.getCourseNo() != null) {
             sql.append(" AND COURSE_NO = :courseNo");
             params.addValue("courseNo", dto.getCourseNo());
         }
 
+        // 上記で組み立てたSQLによって取得したデータをreturn（単一業の想定なのでqueryForObjectを使用）
         return namedParameterJdbcTemplate.queryForObject(sql.toString(), params, (rs,
                 rowNum) -> {
             int totalKounyuuKingaku = rs.getInt("totalKounyuuKingaku");
@@ -64,8 +83,16 @@ public class ShuushiSummaryRepository {
         });
     }
 
+    /**
+     * ユーザーが入力した条件に当てはまる収支を表示するため、条件による収支のデータを取得
+     * 
+     * @param dto 収支検索用DTO
+     * @return 収支データ取得結果
+     */
     public List<ShuushiKenshuCourseDto> findByUserNo(ShuushiSearchDto dto) {
+        // sqlを組み立てるためStringBuilderのインスタンスを使用
         StringBuilder sql = new StringBuilder();
+        // どの条件にも当てはまるようなsql
         sql.append(
                 """
                         SELECT
@@ -84,7 +111,9 @@ public class ShuushiSummaryRepository {
                         AND DEL_FLG = :delFlg
                         """);
 
+        // sqlのパラメータを設定するためにMapSqlParameterSourceのインスタンスを使用
         MapSqlParameterSource params = new MapSqlParameterSource();
+        // ユーザー番号と削除フラグをパラメータに設定
         params.addValue("userNo", dto.getUserNo());
         params.addValue("delFlg", dto.getDelFlg());
 
@@ -108,8 +137,10 @@ public class ShuushiSummaryRepository {
             params.addValue("courseNo", dto.getCourseNo());
         }
 
+        // 収支一覧画面で表示する際に収支Noの順で表示するためにソート
         sql.append(" ORDER BY SHUUSHI.SHUUSHI_NO");
 
+        // 上記で組み立てたSQLによって取得したデータをreturn（複数行の可能性があるのでqueryを使用）
         return namedParameterJdbcTemplate.query(sql.toString(), params, (rs,
                 rowNum) -> {
             return new ShuushiKenshuCourseDto(
