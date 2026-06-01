@@ -196,7 +196,7 @@ public class ShuushiService {
         @Transactional
         public void updateShuushi(ShuushiUpdateDto dto) {
                 try {
-                        // 収支の登録日時を登録するために現在日時を取得
+                        // 収支の更新日時を登録するために現在日時を取得
                         LocalDateTime now = LocalDateTime.now();
                         // 収支更新用DTOを用いてユーザーの入力値を登録
                         // （コース・レース番号・券種に関してはユーザーが登録しない可能性を考慮してOptional.ofNullable.orElseを使用）
