@@ -58,7 +58,8 @@ public class SecurityConfig {
                                                 "/api/**",
                                                 "/js/**",
                                                 "/images/**",
-                                                "**/favicon**")
+                                                "**/favicon**",
+                                                "/site.webmanifest")
                                 .permitAll()
                                 .anyRequest().authenticated())
                                 // ログイン機能の設定
