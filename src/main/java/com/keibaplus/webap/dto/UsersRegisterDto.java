@@ -12,7 +12,7 @@ import jakarta.validation.constraints.Size;
 public class UsersRegisterDto {
 
     @NotBlank(message = "ユーザーIDを入力してください")
-    @Size(min = 8, max = 20, message = "ユーザーIDは8文字以上20文字以内で入力してください")
+    @Size(min = 8, max = 30, message = "ユーザーIDは8文字以上30文字以内で入力してください")
     @Pattern(regexp = "^[a-zA-Z0-9]+$", message = "ユーザーIDは半角英数字で入力してください")
     private String userId;
 
@@ -21,11 +21,11 @@ public class UsersRegisterDto {
     private String mailAddress;
 
     @NotBlank(message = "パスワードを入力してください")
-    @Size(min = 8, max = 20, message = "パスワードは8文字以上20文字以内で入力してください")
+    @Size(min = 8, max = 64, message = "パスワードは8文字以上64文字以内で入力してください")
     private String password;
 
     @NotBlank(message = "確認用パスワードを入力してください")
-    @Size(min = 8, max = 20, message = "パスワードは8文字以上20文字以内で入力してください")
+    @Size(min = 8, max = 64, message = "パスワードは8文字以上64文字以内で入力してください")
     private String passwordConfirm;
 
     public UsersRegisterDto() {
