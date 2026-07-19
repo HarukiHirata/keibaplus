@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,15 +32,17 @@ public class UsersService {
         private final UsersRepository usersRepository;
         private final SaibanRepository saibanRepository;
         private final PasswordEncoder passwordEncoder;
+        private final CustomUserDetailsService customUserDetailsService;
         // ロガーの定義
         private static final Logger logger = LoggerFactory.getLogger(UsersService.class);
 
         // コンストラクタ
         public UsersService(UsersRepository usersRepository, SaibanRepository saibanRepository,
-                        PasswordEncoder passwordEncoder) {
+                        PasswordEncoder passwordEncoder, CustomUserDetailsService customUserDetailsService) {
                 this.usersRepository = usersRepository;
                 this.saibanRepository = saibanRepository;
                 this.passwordEncoder = passwordEncoder;
+                this.customUserDetailsService = customUserDetailsService;
         }
 
         /**
@@ -225,10 +228,13 @@ public class UsersService {
                                         now);
 
                         // パスワードだけは変更しない場合は入力しないように画面上で記載しているためパスワードは入力された場合に専用のメソッドを使用
-                        if (!(dto.getPassword().isBlank()) && !(dto.getPassword() == null)) {
+                        if (!(dto.getPassword() == null) && !(dto.getPassword().isBlank())) {
                                 usersRepository.updatePassword(getLoginUserNo(),
                                                 passwordEncoder.encode(dto.getPassword()));
                         }
+
+                        // 画面などに表示するログインユーザー情報を更新するためPrincipalを再作成
+                        refreshLoginUser(getLoginUserNo());
 
                         // ログ出力
                         logger.info("ユーザー情報変更成功 userNo={}", getLoginUserNo());
@@ -258,6 +264,30 @@ public class UsersService {
                         logger.error("ユーザー削除失敗", e);
                         throw new RuntimeException("ユーザー削除処理でエラーが発生しました", e);
                 }
+        }
+
+        private void refreshLoginUser(String userNo) {
+
+                Authentication currentAuthentication = SecurityContextHolder.getContext().getAuthentication();
+
+                // DBから更新後の情報を取得
+                LoginUser updatedLoginUser = (LoginUser) customUserDetailsService.loadUserByUserNo(userNo);
+
+                // 認証済みのAuthenticationを作成
+                UsernamePasswordAuthenticationToken newAuthentication = UsernamePasswordAuthenticationToken
+                                .authenticated(
+                                                updatedLoginUser,
+                                                null,
+                                                updatedLoginUser.getAuthorities());
+
+                // IPアドレスなどの認証詳細情報を引き継ぐ
+                if (currentAuthentication != null) {
+                        newAuthentication.setDetails(currentAuthentication.getDetails());
+                }
+
+                // 現在の認証情報を差し替える
+                SecurityContextHolder.getContext()
+                                .setAuthentication(newAuthentication);
         }
 
 }

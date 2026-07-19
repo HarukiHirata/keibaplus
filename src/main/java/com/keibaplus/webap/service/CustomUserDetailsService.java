@@ -32,8 +32,31 @@ public class CustomUserDetailsService implements UserDetailsService {
         Users user = usersRepository.findByUserId(username)
                 .orElseThrow(() -> new UsernameNotFoundException("ユーザーが存在しません"));
 
-        // 取得したデータを使用できるようにするためUserDetailsを独自で実装したLoginUserのインスタンスに格納
-        return new LoginUser(user.getUserNo(),
+        // // 取得したデータを使用できるようにするためUserDetailsを独自で実装したLoginUserのインスタンスに格納
+        // return new LoginUser(user.getUserNo(),
+        // user.getUserId(),
+        // user.getMailAddress(),
+        // user.getPassword(),
+        // true,
+        // true,
+        // true,
+        // true,
+        // AuthorityUtils.createAuthorityList("ROLE_USER"));
+        return createLoginUser(user);
+    }
+
+    public UserDetails loadUserByUserNo(String userNo)
+            throws UsernameNotFoundException {
+        // ユーザーIDで検索したデータをusersエンティティに格納
+        Users user = usersRepository.findByUserNo(userNo)
+                .orElseThrow(() -> new UsernameNotFoundException("ユーザーが存在しません"));
+
+        return createLoginUser(user);
+    }
+
+    private LoginUser createLoginUser(Users user) {
+        return new LoginUser(
+                user.getUserNo(),
                 user.getUserId(),
                 user.getMailAddress(),
                 user.getPassword(),
