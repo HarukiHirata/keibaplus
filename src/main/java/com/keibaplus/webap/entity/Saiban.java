@@ -7,17 +7,17 @@ import org.springframework.data.relational.core.mapping.Table;
 /**
  * 採番テーブル用エンティティ
  */
-@Table("SAIBAN")
+@Table("saiban")
 public class Saiban {
 
     @Id
-    @Column("TABLE_NAME")
+    @Column("table_name")
     private String tableName;
 
-    @Column("PREFIX")
+    @Column("prefix")
     private String prefix;
 
-    @Column("SAIBAN_NO")
+    @Column("saiban_no")
     private String saibanNo;
 
     public Saiban(String tableName, String prefix, String saibanNo) {

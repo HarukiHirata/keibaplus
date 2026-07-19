@@ -96,19 +96,19 @@ public class ShuushiSummaryRepository {
         sql.append(
                 """
                         SELECT
-                        SHUUSHI.SHUUSHI_NO AS "shuushiNo",
-                        SHUUSHI.USER_NO AS "userNo",
-                        SHUUSHI.RACE_DATE AS "raceDate",
-                        COURSE.COURSE_NAME AS "courseName",
-                        SHUUSHI.RACE_NO AS "raceNo",
-                        KENSHU.KENSHU_NAME AS "kenshuName",
-                        SHUUSHI.KOUNYUU_KINGAKU AS "kounyuuKingaku",
-                        SHUUSHI.HARAIMODOSHI AS "haraimodoshi"
-                        FROM SHUUSHI
-                        LEFT JOIN KENSHU ON SHUUSHI.KENSHU_NO = KENSHU.KENSHU_NO
-                        LEFT JOIN COURSE ON SHUUSHI.COURSE_NO = COURSE.COURSE_NO
-                        WHERE SHUUSHI.USER_NO = :userNo
-                        AND DEL_FLG = :delFlg
+                        s.shuushi_no AS "shuushiNo",
+                        s.user_no AS "userNo",
+                        s.race_date AS "raceDate",
+                        c.course_name AS "courseName",
+                        s.race_no AS "raceNo",
+                        k.kenshu_name AS "kenshuName",
+                        s.kounyuu_kingaku AS "kounyuuKingaku",
+                        s.haraimodoshi AS "haraimodoshi"
+                        FROM shuushi s
+                        LEFT JOIN kenshu k ON s.kenshu_no = k.kenshu_no
+                        LEFT JOIN course c ON s.course_no = c.course_no
+                        WHERE s.user_no = :userNo
+                        AND s.del_flg = :delFlg
                         """);
 
         // sqlのパラメータを設定するためにMapSqlParameterSourceのインスタンスを使用
@@ -118,27 +118,27 @@ public class ShuushiSummaryRepository {
         params.addValue("delFlg", dto.getDelFlg());
 
         if (dto.getRaceDateFrom() != null && !dto.getRaceDateFrom().isBlank()) {
-            sql.append(" AND SHUUSHI.RACE_DATE >= :raceDateFrom");
+            sql.append(" AND s.race_date >= :raceDateFrom");
             params.addValue("raceDateFrom", dto.getRaceDateFrom());
         }
 
         if (dto.getRaceDateTo() != null && !dto.getRaceDateTo().isBlank()) {
-            sql.append(" AND SHUUSHI.RACE_DATE <= :raceDateTo");
+            sql.append(" AND s.race_date <= :raceDateTo");
             params.addValue("raceDateTo", dto.getRaceDateTo());
         }
 
         if (dto.getKenshuNo() != null) {
-            sql.append(" AND SHUUSHI.KENSHU_NO = :kenshuNo");
+            sql.append(" AND s.kenshu_no = :kenshuNo");
             params.addValue("kenshuNo", dto.getKenshuNo());
         }
 
         if (dto.getCourseNo() != null) {
-            sql.append(" AND SHUUSHI.COURSE_NO = :courseNo");
+            sql.append(" AND s.course_no = :courseNo");
             params.addValue("courseNo", dto.getCourseNo());
         }
 
         // 収支一覧画面で表示する際に収支Noの順で表示するためにソート
-        sql.append(" ORDER BY SHUUSHI.SHUUSHI_NO");
+        sql.append(" ORDER BY s.shuushi_no");
 
         // 上記で組み立てたSQLによって取得したデータをreturn（複数行の可能性があるのでqueryを使用）
         return namedParameterJdbcTemplate.query(sql.toString(), params, (rs,

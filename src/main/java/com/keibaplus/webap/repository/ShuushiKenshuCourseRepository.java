@@ -21,18 +21,18 @@ public interface ShuushiKenshuCourseRepository extends ListCrudRepository<Shuush
          */
         @Query("""
                         SELECT
-                        SHUUSHI.SHUUSHI_NO,
-                        SHUUSHI.USER_NO,
-                        KENSHU.KENSHU_NAME,
-                        SHUUSHI.RACE_DATE,
-                        COURSE.COURSE_NAME,
-                        SHUUSHI.RACE_NO,
-                        SHUUSHI.KOUNYUU_KINGAKU,
-                        SHUUSHI.HARAIMODOSHI
-                        FROM SHUUSHI
-                        JOIN KENSHU ON SHUUSHI.KENSHU_NO = KENSHU.KENSHU_NO
-                        JOIN COURSE ON SHUUSHI.COURSE_NO = COURSE.COURSE_NO
-                        WHERE SHUUSHI_NO = :shuushiNo
+                        s.shuushi_no,
+                        s.user_no,
+                        k.kenshu_name,
+                        s.race_date,
+                        c.course_name,
+                        s.race_no,
+                        s.kounyuu_kingaku,
+                        s.haraimodoshi
+                        FROM shuushi s
+                        JOIN kenshu k ON s.kenshu_no = k.kenshu_no
+                        JOIN course c ON s.course_no = c.course_no
+                        WHERE s.shuushi_no = :shuushiNo
                         """)
         Optional<ShuushiKenshuCourseDto> findByShuushiNo(@Param("shuushiNo") Integer shuushiNo);
 }

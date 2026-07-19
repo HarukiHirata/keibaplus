@@ -7,13 +7,13 @@ import org.springframework.data.relational.core.mapping.Table;
 /**
  * 券種テーブル用エンティティ
  */
-@Table("KENSHU")
+@Table("kenshu")
 public class Kenshu {
     @Id
-    @Column("KENSHU_NO")
+    @Column("kenshu_no")
     private Integer kenshuNo;
 
-    @Column("KENSHU_NAME")
+    @Column("kenshu_name")
     private String kenshuName;
 
     public Kenshu(int kenshuNo, String kenshuName) {

@@ -9,29 +9,29 @@ import java.time.LocalDateTime;
 /**
  * ユーザーテーブル用エンティティ
  */
-@Table("USERS")
+@Table("users")
 public class Users {
 
     @Id
-    @Column("USER_NO")
+    @Column("user_no")
     private String userNo;
 
-    @Column("USER_ID")
+    @Column("user_id")
     private String userId;
 
-    @Column("PASSWORD")
+    @Column("password")
     private String password;
 
-    @Column("MAIL_ADDRESS")
+    @Column("mail_address")
     private String mailAddress;
 
-    @Column("DEL_FLG")
+    @Column("del_flg")
     private String delFlg;
 
-    @Column("INS_DATE")
+    @Column("ins_date")
     private LocalDateTime insDate;
 
-    @Column("UPD_DATE")
+    @Column("upd_date")
     private LocalDateTime updDate;
 
     public Users(String userNo, String userId, String password, String mailAddress, String delFlg,

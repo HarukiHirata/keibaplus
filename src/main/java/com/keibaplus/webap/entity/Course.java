@@ -7,13 +7,13 @@ import org.springframework.data.relational.core.mapping.Table;
 /**
  * コーステーブル用エンティティ
  */
-@Table("COURSE")
+@Table("course")
 public class Course {
     @Id
-    @Column("COURSE_NO")
+    @Column("course_no")
     private Integer courseNo;
 
-    @Column("COURSE_NAME")
+    @Column("course_name")
     private String courseName;
 
     public Course(int courseNo, String courseName) {

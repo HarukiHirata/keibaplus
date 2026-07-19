@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 /**
  * 収支テーブル用エンティティ
  */
-@Table("SHUUSHI")
+@Table("shuushi")
 public class Shuushi {
 
     @Id
