@@ -260,8 +260,10 @@ public class ShuushiService {
         @Transactional
         public void deleteShuushi(Integer shuushiNo) {
                 try {
+                        // 収支の更新日時を登録するために現在日時を取得
+                        LocalDateTime now = LocalDateTime.now();
                         // 収支削除処理・ログ出力
-                        int deleted = shuushiRepository.deleteShuushi(CommonConst.DEL_FLG_DELETED, shuushiNo,
+                        int deleted = shuushiRepository.deleteShuushi(CommonConst.DEL_FLG_DELETED, now, shuushiNo,
                                         getLoginUserNo(), CommonConst.DEL_FLG_ACTIVE);
                         if (deleted != CommonConst.SINGLE_ROW_UPDATE_COUNT) {
                                 throw new IllegalArgumentException("削除対象の収支が存在しないか、権限がありません");
