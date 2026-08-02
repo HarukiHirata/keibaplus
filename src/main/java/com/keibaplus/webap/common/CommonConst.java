@@ -16,6 +16,6 @@ public final class CommonConst {
     public static final String USERS_TABLE_NAME = "USERS";
     public static final String SHUUSHI_TABLE_NAME = "SHUUSHI";
 
-    public static final int UPDATE_SUCCESS_FLG = 1;
+    public static final int SINGLE_ROW_UPDATE_COUNT = 1;
 
 }

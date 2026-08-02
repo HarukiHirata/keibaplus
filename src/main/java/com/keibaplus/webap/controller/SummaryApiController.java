@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.keibaplus.webap.dto.ShuushiSummaryDto;
+import com.keibaplus.webap.common.CommonConst;
 import com.keibaplus.webap.dto.ShuushiKenshuCourseDto;
 import com.keibaplus.webap.dto.ShuushiSearchDto;
 import com.keibaplus.webap.service.ShuushiService;
@@ -44,7 +45,7 @@ public class SummaryApiController {
         // セキュリティの関係上controllerで収支集計対象のUserNoを指定
         dto.setUserNo(usersService.getLoginUserNo());
         // 削除されていないレコードを対象
-        dto.setDelFlg("0");
+        dto.setDelFlg(CommonConst.DEL_FLG_ACTIVE);
         // ShuushiSummaryServiceの収支集計処理の結果をreturn
         return shuushiSummaryService.searchSummary(dto);
     }
@@ -60,7 +61,7 @@ public class SummaryApiController {
         // セキュリティの関係上controllerで収支一覧取得対象のUserNoを指定
         dto.setUserNo(usersService.getLoginUserNo());
         // 削除されていないレコードを対象
-        dto.setDelFlg("0");
+        dto.setDelFlg(CommonConst.DEL_FLG_ACTIVE);
         // ShuushiServiceの収支一覧取得処理の結果をreturn
         return shuushiService.findAllShushiByLoginUser(dto);
     }

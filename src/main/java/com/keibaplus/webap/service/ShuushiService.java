@@ -28,6 +28,7 @@ import com.keibaplus.webap.dto.ShuushiKenshuCourseDto;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.Authentication;
 
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 
 /**
@@ -164,30 +165,37 @@ public class ShuushiService {
          */
         public ShuushiUpdateDto getShuushiByShuushiNo(Integer shuushiNo) {
                 // 収支データ取得
-                Shuushi shuushi = shuushiRepository
-                                .findByShuushiNo(shuushiNo, getLoginUserNo(), CommonConst.DEL_FLG_ACTIVE)
-                                .orElseThrow(() -> new IllegalArgumentException("収支テーブルの値が存在しません"));
-                // 収支更新用DTOのインスタンス作成
-                ShuushiUpdateDto dto = new ShuushiUpdateDto();
+                Shuushi shuushi;
+                try {
+                        shuushi = shuushiRepository
+                                        .findByShuushiNo(shuushiNo, getLoginUserNo(), CommonConst.DEL_FLG_ACTIVE)
+                                        .orElseThrow(() -> new AccessDeniedException("収支テーブルの値が存在しません"));
+                        // 収支更新用DTOのインスタンス作成
+                        ShuushiUpdateDto dto = new ShuushiUpdateDto();
 
-                // レース番号をユーザーが未登録の場合は収支テーブルは0で格納している。
-                // 上記理由によりレース番号だけ直接ではなく別の変数に格納してからDTOへセット
-                Integer raceNo;
-                if (shuushi.getRaceNo() == 0) {
-                        raceNo = null;
-                } else {
-                        raceNo = shuushi.getRaceNo();
+                        // レース番号をユーザーが未登録の場合は収支テーブルは0で格納している。
+                        // 上記理由によりレース番号だけ直接ではなく別の変数に格納してからDTOへセット
+                        Integer raceNo;
+                        if (shuushi.getRaceNo() == 0) {
+                                raceNo = null;
+                        } else {
+                                raceNo = shuushi.getRaceNo();
+                        }
+                        // 収支編集画面で表示できるように、取得したデータを収支更新用DTOへセットしてDTOをreturn
+                        dto.setShuushiNo(shuushi.getShuushiNo());
+                        dto.setUserNo(shuushi.getUserNo());
+                        dto.setRaceDate(shuushi.getRaceDate());
+                        dto.setCourseNo(shuushi.getCourseNo());
+                        dto.setRaceNo(raceNo);
+                        dto.setKenshuNo(shuushi.getKenshuNo());
+                        dto.setKounyuuKingaku(shuushi.getKounyuuKingaku());
+                        dto.setHaraimodoshi(shuushi.getHaraimodoshi());
+                        return dto;
+
+                } catch (Exception e) {
+                        logger.error("収支取得失敗", e);
+                        throw new RuntimeException("収支取得処理でエラーが発生しました", e);
                 }
-                // 収支編集画面で表示できるように、取得したデータを収支更新用DTOへセットしてDTOをreturn
-                dto.setShuushiNo(shuushi.getShuushiNo());
-                dto.setUserNo(shuushi.getUserNo());
-                dto.setRaceDate(shuushi.getRaceDate());
-                dto.setCourseNo(shuushi.getCourseNo());
-                dto.setRaceNo(raceNo);
-                dto.setKenshuNo(shuushi.getKenshuNo());
-                dto.setKounyuuKingaku(shuushi.getKounyuuKingaku());
-                dto.setHaraimodoshi(shuushi.getHaraimodoshi());
-                return dto;
         }
 
         /**
@@ -214,7 +222,7 @@ public class ShuushiService {
                                         getLoginUserNo(),
                                         CommonConst.DEL_FLG_ACTIVE);
 
-                        if (updated != CommonConst.UPDATE_SUCCESS_FLG) {
+                        if (updated != CommonConst.SINGLE_ROW_UPDATE_COUNT) {
                                 throw new IllegalArgumentException("更新対象の収支が存在しないか、権限がありません");
                         }
                         // ログ出力
@@ -234,9 +242,14 @@ public class ShuushiService {
          * @return 収支テーブル取得結果
          */
         public ShuushiKenshuCourseDto getShuushiByShuushiNoForDelete(Integer shuushiNo) {
-                return shuushiKenshuCourseRepository
-                                .findByShuushiNo(shuushiNo, getLoginUserNo(), CommonConst.DEL_FLG_ACTIVE)
-                                .orElseThrow(() -> new IllegalArgumentException("収支テーブルの値が存在しません"));
+                try {
+                        return shuushiKenshuCourseRepository
+                                        .findByShuushiNo(shuushiNo, getLoginUserNo(), CommonConst.DEL_FLG_ACTIVE)
+                                        .orElseThrow(() -> new AccessDeniedException("収支テーブルの値が存在しません"));
+                } catch (Exception e) {
+                        logger.error("収支取得失敗", e);
+                        throw new RuntimeException("収支取得処理でエラーが発生しました", e);
+                }
         }
 
         /**
@@ -250,7 +263,7 @@ public class ShuushiService {
                         // 収支削除処理・ログ出力
                         int deleted = shuushiRepository.deleteShuushi(CommonConst.DEL_FLG_DELETED, shuushiNo,
                                         getLoginUserNo(), CommonConst.DEL_FLG_ACTIVE);
-                        if (deleted != CommonConst.UPDATE_SUCCESS_FLG) {
+                        if (deleted != CommonConst.SINGLE_ROW_UPDATE_COUNT) {
                                 throw new IllegalArgumentException("削除対象の収支が存在しないか、権限がありません");
                         }
                         logger.info("収支削除成功 userNo={} shuushiNo={}", getLoginUserNo(), shuushiNo);
