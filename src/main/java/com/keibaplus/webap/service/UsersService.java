@@ -106,7 +106,7 @@ public class UsersService {
                                         dto.getUserId(),
                                         passwordEncoder.encode(dto.getPassword()),
                                         dto.getMailAddress(),
-                                        CommonConst.DEL_FLG_BEFORE_DELETE,
+                                        CommonConst.DEL_FLG_ACTIVE,
                                         now,
                                         now);
                         usersRepository.registerUser(
@@ -121,7 +121,7 @@ public class UsersService {
                         // 次のユーザーの登録に使用するため採番テーブルの値をインクリメント
                         String newSaibanNo = String.format("%08d", (Integer.parseInt(saiban.getSaibanNo()) + 1));
 
-                        saibanRepository.updateSaibanNo(newSaibanNo, "USERS");
+                        saibanRepository.updateSaibanNo(newSaibanNo, CommonConst.USERS_TABLE_NAME);
 
                         // ログ出力
                         logger.info("ユーザー登録成功 userNo={}", user.getUserNo());
@@ -141,7 +141,7 @@ public class UsersService {
          */
         public boolean existsByUserId(String userId) {
                 // ユーザーIDの重複がないようにするために入力されたユーザーIDが既にある場合はtrueを返却
-                if (usersRepository.existsByUserId(userId, CommonConst.DEL_FLG_BEFORE_DELETE)) {
+                if (usersRepository.existsByUserId(userId, CommonConst.DEL_FLG_ACTIVE)) {
                         return true;
                 } else {
                         return false;
@@ -156,7 +156,7 @@ public class UsersService {
          */
         public boolean existsByMailAddress(String mailAddress) {
                 // メールアドレスの重複がないようにするために入力されたメールアドレスが既にある場合はtrueを返却
-                if (usersRepository.existsByMailAddress(mailAddress, CommonConst.DEL_FLG_BEFORE_DELETE)) {
+                if (usersRepository.existsByMailAddress(mailAddress, CommonConst.DEL_FLG_ACTIVE)) {
                         return true;
                 } else {
                         return false;
@@ -171,7 +171,7 @@ public class UsersService {
          * @return 自身以外で入力されたユーザーIDがある場合はtrue、そうでない場合はfalse
          */
         public boolean existsByUserIdAndUserNo(String userId, String userNo) {
-                if (usersRepository.existsByUserIdAndUserNo(userId, CommonConst.DEL_FLG_BEFORE_DELETE, userNo)) {
+                if (usersRepository.existsByUserIdAndUserNo(userId, CommonConst.DEL_FLG_ACTIVE, userNo)) {
                         return true;
                 } else {
                         return false;
@@ -186,7 +186,7 @@ public class UsersService {
          * @return 自身以外で入力されたメールアドレスがある場合はtrue、そうでない場合はfalse
          */
         public boolean existsByMailAddressAndUserNo(String mailAddress, String userNo) {
-                if (usersRepository.existsByMailAddressAndUserNo(mailAddress, CommonConst.DEL_FLG_BEFORE_DELETE,
+                if (usersRepository.existsByMailAddressAndUserNo(mailAddress, CommonConst.DEL_FLG_ACTIVE,
                                 userNo)) {
                         return true;
                 } else {
@@ -201,7 +201,7 @@ public class UsersService {
          */
         public UsersUpdateDto getUserByUserNo() {
                 // ユーザーデータ取得
-                Users user = usersRepository.findByUserNo(getLoginUserNo(), CommonConst.DEL_FLG_BEFORE_DELETE)
+                Users user = usersRepository.findByUserNo(getLoginUserNo(), CommonConst.DEL_FLG_ACTIVE)
                                 .orElseThrow(() -> new IllegalArgumentException("ユーザーテーブルの値が存在しません"));
                 // ユーザー情報更新用DTOのインスタンス作成
                 UsersUpdateDto dto = new UsersUpdateDto();
@@ -258,7 +258,7 @@ public class UsersService {
                         // ユーザー情報の更新日時を登録するために現在日時を取得
                         LocalDateTime now = LocalDateTime.now();
                         // 引数のユーザー番号を用いてユーザー削除
-                        usersRepository.deleteUser(userNo, CommonConst.DEL_FLG_AFTER_DELETE, now);
+                        usersRepository.deleteUser(userNo, CommonConst.DEL_FLG_DELETED, now);
                         // ログ出力
                         logger.info("ユーザー削除成功 userNo={}", userNo);
                 } catch (Exception e) {

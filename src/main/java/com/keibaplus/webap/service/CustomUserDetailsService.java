@@ -30,7 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
         // ユーザーIDで検索したデータをusersエンティティに格納
-        Users user = usersRepository.findByUserId(username, CommonConst.DEL_FLG_BEFORE_DELETE)
+        Users user = usersRepository.findByUserId(username, CommonConst.DEL_FLG_ACTIVE)
                 .orElseThrow(() -> new UsernameNotFoundException("ユーザーが存在しません"));
 
         // // 取得したデータを使用できるようにするためUserDetailsを独自で実装したLoginUserのインスタンスに格納
@@ -49,7 +49,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUserNo(String userNo)
             throws UsernameNotFoundException {
         // ユーザーIDで検索したデータをusersエンティティに格納
-        Users user = usersRepository.findByUserNo(userNo, CommonConst.DEL_FLG_BEFORE_DELETE)
+        Users user = usersRepository.findByUserNo(userNo, CommonConst.DEL_FLG_ACTIVE)
                 .orElseThrow(() -> new UsernameNotFoundException("ユーザーが存在しません"));
 
         return createLoginUser(user);

@@ -33,6 +33,10 @@ public interface ShuushiKenshuCourseRepository extends ListCrudRepository<Shuush
                         JOIN kenshu k ON s.kenshu_no = k.kenshu_no
                         JOIN course c ON s.course_no = c.course_no
                         WHERE s.shuushi_no = :shuushiNo
+                        AND s.user_no = :userNo
+                        AND s.del_flg = :delFlg
                         """)
-        Optional<ShuushiKenshuCourseDto> findByShuushiNo(@Param("shuushiNo") Integer shuushiNo);
+        Optional<ShuushiKenshuCourseDto> findByShuushiNo(@Param("shuushiNo") Integer shuushiNo,
+                        @Param("userNo") String userNo,
+                        @Param("delFlg") String delFlg);
 }

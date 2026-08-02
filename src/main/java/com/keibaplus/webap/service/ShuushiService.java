@@ -84,7 +84,7 @@ public class ShuushiService {
                                         Optional.ofNullable(dto.getKenshuNo()).orElse(0),
                                         dto.getKounyuuKingaku(),
                                         dto.getHaraimodoshi(),
-                                        CommonConst.DEL_FLG_BEFORE_DELETE,
+                                        CommonConst.DEL_FLG_ACTIVE,
                                         now,
                                         now);
                         shuushiRepository.registerShuushi(
@@ -103,7 +103,7 @@ public class ShuushiService {
                         // 次の収支の登録に使用するため採番テーブルの値をインクリメント
                         String newSaibanNo = Integer.toString(newShuushiNo + 1);
 
-                        saibanRepository.updateSaibanNo(newSaibanNo, "SHUUSHI");
+                        saibanRepository.updateSaibanNo(newSaibanNo, CommonConst.SHUUSHI_TABLE_NAME);
 
                         // ログ出力
                         logger.info("収支登録成功 userNo={} shuushiNo={}", getLoginUserNo(), shuushi.getShuushiNo());
@@ -164,7 +164,8 @@ public class ShuushiService {
          */
         public ShuushiUpdateDto getShuushiByShuushiNo(Integer shuushiNo) {
                 // 収支データ取得
-                Shuushi shuushi = shuushiRepository.findByShuushiNo(shuushiNo, "0")
+                Shuushi shuushi = shuushiRepository
+                                .findByShuushiNo(shuushiNo, getLoginUserNo(), CommonConst.DEL_FLG_ACTIVE)
                                 .orElseThrow(() -> new IllegalArgumentException("収支テーブルの値が存在しません"));
                 // 収支更新用DTOのインスタンス作成
                 ShuushiUpdateDto dto = new ShuushiUpdateDto();
@@ -201,7 +202,7 @@ public class ShuushiService {
                         LocalDateTime now = LocalDateTime.now();
                         // 収支更新用DTOを用いてユーザーの入力値を登録
                         // （コース・レース番号・券種に関してはユーザーが登録しない可能性を考慮してOptional.ofNullable.orElseを使用）
-                        shuushiRepository.updateShuushi(
+                        int updated = shuushiRepository.updateShuushi(
                                         dto.getShuushiNo(),
                                         dto.getRaceDate(),
                                         Optional.ofNullable(dto.getCourseNo()).orElse(0),
@@ -211,7 +212,11 @@ public class ShuushiService {
                                         dto.getHaraimodoshi(),
                                         now,
                                         getLoginUserNo(),
-                                        CommonConst.DEL_FLG_BEFORE_DELETE);
+                                        CommonConst.DEL_FLG_ACTIVE);
+
+                        if (updated != CommonConst.UPDATE_SUCCESS_FLG) {
+                                throw new IllegalArgumentException("更新対象の収支が存在しないか、権限がありません");
+                        }
                         // ログ出力
                         logger.info("収支更新成功 userNo={} shuushiNo={}", getLoginUserNo(), dto.getShuushiNo());
                 } catch (Exception e) {
@@ -229,7 +234,8 @@ public class ShuushiService {
          * @return 収支テーブル取得結果
          */
         public ShuushiKenshuCourseDto getShuushiByShuushiNoForDelete(Integer shuushiNo) {
-                return shuushiKenshuCourseRepository.findByShuushiNo(shuushiNo)
+                return shuushiKenshuCourseRepository
+                                .findByShuushiNo(shuushiNo, getLoginUserNo(), CommonConst.DEL_FLG_ACTIVE)
                                 .orElseThrow(() -> new IllegalArgumentException("収支テーブルの値が存在しません"));
         }
 
@@ -242,7 +248,11 @@ public class ShuushiService {
         public void deleteShuushi(Integer shuushiNo) {
                 try {
                         // 収支削除処理・ログ出力
-                        shuushiRepository.deleteShuushi(CommonConst.DEL_FLG_AFTER_DELETE, shuushiNo, getLoginUserNo());
+                        int deleted = shuushiRepository.deleteShuushi(CommonConst.DEL_FLG_DELETED, shuushiNo,
+                                        getLoginUserNo(), CommonConst.DEL_FLG_ACTIVE);
+                        if (deleted != CommonConst.UPDATE_SUCCESS_FLG) {
+                                throw new IllegalArgumentException("削除対象の収支が存在しないか、権限がありません");
+                        }
                         logger.info("収支削除成功 userNo={} shuushiNo={}", getLoginUserNo(), shuushiNo);
                 } catch (Exception e) {
                         // 失敗した場合はログ出力・exceptionをthrow

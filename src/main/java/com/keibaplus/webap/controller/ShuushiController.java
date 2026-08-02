@@ -117,10 +117,6 @@ public class ShuushiController {
     public String shuushiEditPage(@PathVariable Integer shuushiNo, Model model, HttpServletRequest request) {
         // 元データを表示するために収支更新用DTOに更新対象の収支データを格納
         ShuushiUpdateDto dto = shuushiService.getShuushiByShuushiNo(shuushiNo);
-        // 仮にURLを直接打ち込まれてアクセスされた場合に他人のデータが見えてしまわないように更新対象の収支データとログインユーザーの番号を照合
-        if (!dto.getUserNo().equals(usersService.getLoginUserNo())) {
-            return "redirect:/unauthorizedAccess";
-        }
         // modelに必要な値を設定（収支更新用DTO・券種一覧・コース一覧）
         model.addAttribute("form", dto);
         model.addAttribute("kenshuList", shuushiService.findAllKenshu());
@@ -172,10 +168,6 @@ public class ShuushiController {
     public String shuushiDeletePage(@PathVariable Integer shuushiNo, Model model, HttpServletRequest request) {
         // 元データを表示するために収支削除用DTOに削除対象の収支データを格納
         ShuushiKenshuCourseDto dto = shuushiService.getShuushiByShuushiNoForDelete(shuushiNo);
-        // 仮にURLを直接打ち込まれてアクセスされた場合に他人のデータが見えてしまわないように削除対象の収支データとログインユーザーの番号を照合
-        if (!dto.getUserNo().equals(usersService.getLoginUserNo())) {
-            return "redirect:/unauthorizedAccess";
-        }
         // modelに必要な値を設定（収支データ）
         model.addAttribute("shuushi", dto);
         // ログ出力・テンプレートをreturn
