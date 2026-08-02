@@ -20,7 +20,7 @@ public interface SaibanRepository extends ListCrudRepository<Saiban, String> {
      * @param tableName テーブル名
      * @return 採番テーブル取得結果
      */
-    @Query("SELECT * FROM SAIBAN WHERE TABLE_NAME = :tableName")
+    @Query("SELECT * FROM SAIBAN WHERE TABLE_NAME = :tableName FOR UPDATE")
     Optional<Saiban> findByTableName(@Param("tableName") String tableName);
 
     /**
