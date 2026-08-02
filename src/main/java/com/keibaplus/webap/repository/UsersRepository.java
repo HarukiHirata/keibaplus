@@ -22,8 +22,8 @@ public interface UsersRepository extends ListCrudRepository<Users, String> {
          * @param userNo ユーザー番号
          * @return ユーザーテーブル取得結果
          */
-        @Query("SELECT * FROM USERS WHERE USER_NO = :userNo")
-        Optional<Users> findByUserNo(@Param("userNo") String userNo);
+        @Query("SELECT * FROM USERS WHERE USER_NO = :userNo AND DEL_FLG = :delFlg")
+        Optional<Users> findByUserNo(@Param("userNo") String userNo, @Param("delFlg") String delFlg);
 
         /**
          * spring security関連で使用するためユーザーIDで検索する
@@ -31,8 +31,8 @@ public interface UsersRepository extends ListCrudRepository<Users, String> {
          * @param userId ユーザーID
          * @return ユーザーテーブル取得結果
          */
-        @Query("SELECT * FROM USERS WHERE USER_ID = :userId")
-        Optional<Users> findByUserId(@Param("userId") String userId);
+        @Query("SELECT * FROM USERS WHERE USER_ID = :userId AND DEL_FLG = :delFlg")
+        Optional<Users> findByUserId(@Param("userId") String userId, @Param("delFlg") String delFlg);
 
         /**
          * 重複するユーザーIDがないかを確認するために該当のユーザーIDの有無を検索
@@ -44,9 +44,9 @@ public interface UsersRepository extends ListCrudRepository<Users, String> {
                         SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
                         FROM USERS
                         WHERE USER_ID = :userId
-                        AND DEL_FLG = '0'
+                        AND DEL_FLG = :delFlg
                         """)
-        boolean existsByUserId(String userId);
+        boolean existsByUserId(String userId, String delFlg);
 
         /**
          * 重複するメールアドレスがないかを確認するために該当のメールアドレスの有無を検索
@@ -58,10 +58,10 @@ public interface UsersRepository extends ListCrudRepository<Users, String> {
                         SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
                         FROM USERS
                         WHERE MAIL_ADDRESS = :mailAddress
-                        AND DEL_FLG = '0'
+                        AND DEL_FLG = :delFlg
                         """)
 
-        boolean existsByMailAddress(String mailAddress);
+        boolean existsByMailAddress(String mailAddress, String delFlg);
 
         /**
          * 自身以外で重複するユーザーIDがないかを確認するために該当のユーザーIDの有無を検索
@@ -74,10 +74,10 @@ public interface UsersRepository extends ListCrudRepository<Users, String> {
                         SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
                         FROM USERS
                         WHERE USER_ID = :userId
-                        AND DEL_FLG = '0'
+                        AND DEL_FLG = :delFlg
                         AND USER_NO != :userNo
                         """)
-        boolean existsByUserIdAndUserNo(String userId, String userNo);
+        boolean existsByUserIdAndUserNo(String userId, String delFlg, String userNo);
 
         /**
          * 自身以外で重複するメールアドレスがないかを確認するために該当のメールアドレスの有無を検索
@@ -90,11 +90,11 @@ public interface UsersRepository extends ListCrudRepository<Users, String> {
                         SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
                         FROM USERS
                         WHERE MAIL_ADDRESS = :mailAddress
-                        AND DEL_FLG = '0'
+                        AND DEL_FLG = :delFlg
                         AND USER_NO != :userNo
                         """)
 
-        boolean existsByMailAddressAndUserNo(String mailAddress, String userNo);
+        boolean existsByMailAddressAndUserNo(String mailAddress, String delFlg, String userNo);
 
         /**
          * ユーザー登録

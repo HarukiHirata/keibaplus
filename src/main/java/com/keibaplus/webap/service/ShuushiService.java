@@ -22,6 +22,7 @@ import com.keibaplus.webap.repository.ShuushiSummaryRepository;
 import com.keibaplus.webap.dto.ShuushiRegisterDto;
 import com.keibaplus.webap.dto.ShuushiSearchDto;
 import com.keibaplus.webap.dto.ShuushiUpdateDto;
+import com.keibaplus.webap.common.CommonConst;
 import com.keibaplus.webap.dto.ShuushiKenshuCourseDto;
 
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -68,7 +69,7 @@ public class ShuushiService {
                         // 収支の登録日時を登録するために現在日時を取得
                         LocalDateTime now = LocalDateTime.now();
                         // 収支テーブルの収支Noを登録するために採番テーブルの値を取得して変数に格納
-                        Saiban saiban = saibanRepository.findByTableName("SHUUSHI")
+                        Saiban saiban = saibanRepository.findByTableName(CommonConst.SHUUSHI_TABLE_NAME)
                                         .orElseThrow(() -> new IllegalArgumentException("採番テーブルの値が存在しません"));
                         int newShuushiNo = Integer.parseInt(saiban.getSaibanNo());
 
@@ -83,7 +84,7 @@ public class ShuushiService {
                                         Optional.ofNullable(dto.getKenshuNo()).orElse(0),
                                         dto.getKounyuuKingaku(),
                                         dto.getHaraimodoshi(),
-                                        "0",
+                                        CommonConst.DEL_FLG_BEFORE_DELETE,
                                         now,
                                         now);
                         shuushiRepository.registerShuushi(
@@ -208,7 +209,9 @@ public class ShuushiService {
                                         Optional.ofNullable(dto.getKenshuNo()).orElse(0),
                                         dto.getKounyuuKingaku(),
                                         dto.getHaraimodoshi(),
-                                        now);
+                                        now,
+                                        getLoginUserNo(),
+                                        CommonConst.DEL_FLG_BEFORE_DELETE);
                         // ログ出力
                         logger.info("収支更新成功 userNo={} shuushiNo={}", getLoginUserNo(), dto.getShuushiNo());
                 } catch (Exception e) {
@@ -239,7 +242,7 @@ public class ShuushiService {
         public void deleteShuushi(Integer shuushiNo) {
                 try {
                         // 収支削除処理・ログ出力
-                        shuushiRepository.deleteShuushi("1", shuushiNo);
+                        shuushiRepository.deleteShuushi(CommonConst.DEL_FLG_AFTER_DELETE, shuushiNo, getLoginUserNo());
                         logger.info("収支削除成功 userNo={} shuushiNo={}", getLoginUserNo(), shuushiNo);
                 } catch (Exception e) {
                         // 失敗した場合はログ出力・exceptionをthrow

@@ -4,6 +4,7 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
 
+import com.keibaplus.webap.common.CommonConst;
 import com.keibaplus.webap.entity.Users;
 import com.keibaplus.webap.repository.UsersRepository;
 
@@ -29,7 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
         // ユーザーIDで検索したデータをusersエンティティに格納
-        Users user = usersRepository.findByUserId(username)
+        Users user = usersRepository.findByUserId(username, CommonConst.DEL_FLG_BEFORE_DELETE)
                 .orElseThrow(() -> new UsernameNotFoundException("ユーザーが存在しません"));
 
         // // 取得したデータを使用できるようにするためUserDetailsを独自で実装したLoginUserのインスタンスに格納
@@ -48,7 +49,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUserNo(String userNo)
             throws UsernameNotFoundException {
         // ユーザーIDで検索したデータをusersエンティティに格納
-        Users user = usersRepository.findByUserNo(userNo)
+        Users user = usersRepository.findByUserNo(userNo, CommonConst.DEL_FLG_BEFORE_DELETE)
                 .orElseThrow(() -> new UsernameNotFoundException("ユーザーが存在しません"));
 
         return createLoginUser(user);

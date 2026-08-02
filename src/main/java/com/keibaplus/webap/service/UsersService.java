@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.keibaplus.webap.dto.UsersResponseDto;
 import com.keibaplus.webap.dto.UsersUpdateDto;
+import com.keibaplus.webap.common.CommonConst;
 import com.keibaplus.webap.dto.UsersRegisterDto;
 import com.keibaplus.webap.entity.Users;
 import com.keibaplus.webap.entity.Saiban;
@@ -96,7 +97,7 @@ public class UsersService {
                         // ユーザーの登録日時を登録するために現在日時を取得
                         LocalDateTime now = LocalDateTime.now();
                         // ユーザーテーブルの収ユーザー番号を登録するために採番テーブルの値を取得して変数に格納
-                        Saiban saiban = saibanRepository.findByTableName("USERS")
+                        Saiban saiban = saibanRepository.findByTableName(CommonConst.USERS_TABLE_NAME)
                                         .orElseThrow(() -> new IllegalArgumentException("採番テーブルの値が存在しません"));
                         String newUserNo = saiban.getPrefix() + saiban.getSaibanNo();
                         // ユーザーエンティティを用いてユーザーの入力値を登録
@@ -105,7 +106,7 @@ public class UsersService {
                                         dto.getUserId(),
                                         passwordEncoder.encode(dto.getPassword()),
                                         dto.getMailAddress(),
-                                        "0",
+                                        CommonConst.DEL_FLG_BEFORE_DELETE,
                                         now,
                                         now);
                         usersRepository.registerUser(
@@ -140,7 +141,7 @@ public class UsersService {
          */
         public boolean existsByUserId(String userId) {
                 // ユーザーIDの重複がないようにするために入力されたユーザーIDが既にある場合はtrueを返却
-                if (usersRepository.existsByUserId(userId)) {
+                if (usersRepository.existsByUserId(userId, CommonConst.DEL_FLG_BEFORE_DELETE)) {
                         return true;
                 } else {
                         return false;
@@ -155,7 +156,7 @@ public class UsersService {
          */
         public boolean existsByMailAddress(String mailAddress) {
                 // メールアドレスの重複がないようにするために入力されたメールアドレスが既にある場合はtrueを返却
-                if (usersRepository.existsByMailAddress(mailAddress)) {
+                if (usersRepository.existsByMailAddress(mailAddress, CommonConst.DEL_FLG_BEFORE_DELETE)) {
                         return true;
                 } else {
                         return false;
@@ -170,7 +171,7 @@ public class UsersService {
          * @return 自身以外で入力されたユーザーIDがある場合はtrue、そうでない場合はfalse
          */
         public boolean existsByUserIdAndUserNo(String userId, String userNo) {
-                if (usersRepository.existsByUserIdAndUserNo(userId, userNo)) {
+                if (usersRepository.existsByUserIdAndUserNo(userId, CommonConst.DEL_FLG_BEFORE_DELETE, userNo)) {
                         return true;
                 } else {
                         return false;
@@ -185,7 +186,8 @@ public class UsersService {
          * @return 自身以外で入力されたメールアドレスがある場合はtrue、そうでない場合はfalse
          */
         public boolean existsByMailAddressAndUserNo(String mailAddress, String userNo) {
-                if (usersRepository.existsByMailAddressAndUserNo(mailAddress, userNo)) {
+                if (usersRepository.existsByMailAddressAndUserNo(mailAddress, CommonConst.DEL_FLG_BEFORE_DELETE,
+                                userNo)) {
                         return true;
                 } else {
                         return false;
@@ -199,7 +201,7 @@ public class UsersService {
          */
         public UsersUpdateDto getUserByUserNo() {
                 // ユーザーデータ取得
-                Users user = usersRepository.findByUserNo(getLoginUserNo())
+                Users user = usersRepository.findByUserNo(getLoginUserNo(), CommonConst.DEL_FLG_BEFORE_DELETE)
                                 .orElseThrow(() -> new IllegalArgumentException("ユーザーテーブルの値が存在しません"));
                 // ユーザー情報更新用DTOのインスタンス作成
                 UsersUpdateDto dto = new UsersUpdateDto();
@@ -256,7 +258,7 @@ public class UsersService {
                         // ユーザー情報の更新日時を登録するために現在日時を取得
                         LocalDateTime now = LocalDateTime.now();
                         // 引数のユーザー番号を用いてユーザー削除
-                        usersRepository.deleteUser(userNo, "1", now);
+                        usersRepository.deleteUser(userNo, CommonConst.DEL_FLG_AFTER_DELETE, now);
                         // ログ出力
                         logger.info("ユーザー削除成功 userNo={}", userNo);
                 } catch (Exception e) {
