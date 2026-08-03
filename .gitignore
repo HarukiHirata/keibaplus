@@ -34,3 +34,8 @@ build/
 
 ### log ###
 logs/
+
+### properties ###
+application.properties
+application-loc.properties
+application-sta.properties
