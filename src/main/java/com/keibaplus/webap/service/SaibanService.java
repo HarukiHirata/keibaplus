@@ -3,6 +3,7 @@ package com.keibaplus.webap.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.keibaplus.webap.entity.Saiban;
 import com.keibaplus.webap.repository.SaibanRepository;
@@ -17,36 +18,26 @@ public class SaibanService {
         this.saibanRepository = saibanRepository;
     }
 
-    public String getNewNo(String tableName) {
+    public String getNewNoAndUpdateNo(String tableName) {
         try {
             Saiban saiban = saibanRepository.findByTableName(tableName)
                     .orElseThrow(() -> new IllegalArgumentException("採番テーブルの値が存在しません"));
-            if (!saiban.getPrefix().isEmpty()) {
-                return saiban.getPrefix() + saiban.getSaibanNo();
+            String prefix = saiban.getPrefix();
+            String currentNo = saiban.getSaibanNo();
+            String newNo;
+            if (StringUtils.hasText(prefix)) {
+                newNo = String.format("%08d", (Integer.parseInt(currentNo) + 1));
+                saibanRepository.updateSaibanNo(newNo, tableName);
+                return prefix + currentNo;
             } else {
-                return saiban.getSaibanNo();
+                newNo = Integer.toString(Integer.parseInt(currentNo) + 1);
+                saibanRepository.updateSaibanNo(newNo, tableName);
+                return currentNo;
             }
 
         } catch (Exception e) {
             logger.error("採番処理失敗", e);
             throw new RuntimeException("採番処理でエラーが発生しました", e);
-        }
-    }
-
-    public void updateSaibanNo(String tableName) {
-        Saiban saiban = saibanRepository.findByTableName(tableName)
-                .orElseThrow(() -> new IllegalArgumentException("採番テーブルの値が存在しません"));
-
-        String prefix = saiban.getPrefix();
-
-        int currentSaibanNo = Integer.parseInt(saiban.getSaibanNo());
-
-        if (!prefix.isEmpty()) {
-            String newSaibanNo = String.format("%08d", (currentSaibanNo + 1));
-            saibanRepository.updateSaibanNo(newSaibanNo, tableName);
-        } else {
-            String newSaibanNo = Integer.toString(currentSaibanNo + 1);
-            saibanRepository.updateSaibanNo(newSaibanNo, tableName);
         }
     }
 }

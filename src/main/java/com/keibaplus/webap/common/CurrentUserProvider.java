@@ -1,6 +1,7 @@
 package com.keibaplus.webap.common;
 
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.security.core.Authentication;
 
 import com.keibaplus.webap.service.LoginUser;
@@ -9,13 +10,14 @@ import com.keibaplus.webap.service.LoginUser;
  * ログインユーザー情報を取得するための共通処理
  *
  */
-public class LoginUserInfo {
+@Component
+public class CurrentUserProvider {
     /**
      * ログインユーザー情報取得処理
      * 
      * @return ログインユーザー情報
      */
-    private static LoginUser getLoginUser() {
+    private LoginUser getCurrentLoginUser() {
         // Spring Securityの認証情報を取得
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         // ユーザー名以外のデータを取得するためにPrincipalを格納してそこからユーザー情報を取得
@@ -28,8 +30,8 @@ public class LoginUserInfo {
      * 
      * @return getLoginUser()のユーザー番号
      */
-    public static String getLoginUserNo() {
-        return getLoginUser().getUserNo();
+    public String getLoginUserNo() {
+        return getCurrentLoginUser().getUserNo();
     }
 
     /**
@@ -37,8 +39,8 @@ public class LoginUserInfo {
      * 
      * @return getLoginUser()のユーザーID
      */
-    public static String getLoginUserId() {
-        return getLoginUser().getUserId();
+    public String getLoginUserId() {
+        return getCurrentLoginUser().getUserId();
     }
 
     /**
@@ -46,8 +48,8 @@ public class LoginUserInfo {
      * 
      * @return getLoginUser()のメールアドレス
      */
-    public static String getLoginUserMailAddress() {
-        return getLoginUser().getMailAddress();
+    public String getLoginUserMailAddress() {
+        return getCurrentLoginUser().getMailAddress();
     }
 
 }

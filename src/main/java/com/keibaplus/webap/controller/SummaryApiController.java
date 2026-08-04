@@ -2,6 +2,7 @@ package com.keibaplus.webap.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.keibaplus.webap.dto.ShuushiSummaryDto;
 import com.keibaplus.webap.common.CommonConst;
-import com.keibaplus.webap.common.LoginUserInfo;
+import com.keibaplus.webap.common.CurrentUserProvider;
 import com.keibaplus.webap.dto.ShuushiKenshuCourseDto;
 import com.keibaplus.webap.dto.ShuushiSearchDto;
 import com.keibaplus.webap.service.ShuushiService;
@@ -24,6 +25,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/api/shuushisummary")
 public class SummaryApiController {
+
+    @Autowired
+    private CurrentUserProvider currentUserProvider;
 
     // 収支集計処理のためにShuushiSummaryServiceのインスタンスを使用
     private final ShuushiSummaryService shuushiSummaryService;
@@ -40,7 +44,7 @@ public class SummaryApiController {
     @PostMapping("/search")
     public ShuushiSummaryDto search(@RequestBody ShuushiSearchDto dto) {
         // セキュリティの関係上controllerで収支集計対象のUserNoを指定
-        dto.setUserNo(LoginUserInfo.getLoginUserNo());
+        dto.setUserNo(currentUserProvider.getLoginUserNo());
         // 削除されていないレコードを対象
         dto.setDelFlg(CommonConst.DEL_FLG_ACTIVE);
         // ShuushiSummaryServiceの収支集計処理の結果をreturn
@@ -56,7 +60,7 @@ public class SummaryApiController {
     @PostMapping("/itiran")
     public List<ShuushiKenshuCourseDto> itiran(@RequestBody ShuushiSearchDto dto) {
         // セキュリティの関係上controllerで収支一覧取得対象のUserNoを指定
-        dto.setUserNo(LoginUserInfo.getLoginUserNo());
+        dto.setUserNo(currentUserProvider.getLoginUserNo());
         // 削除されていないレコードを対象
         dto.setDelFlg(CommonConst.DEL_FLG_ACTIVE);
         // ShuushiServiceの収支一覧取得処理の結果をreturn
