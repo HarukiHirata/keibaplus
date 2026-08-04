@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.keibaplus.webap.dto.UsersResponseDto;
 import com.keibaplus.webap.dto.UsersUpdateDto;
 import com.keibaplus.webap.common.CommonConst;
+import com.keibaplus.webap.common.LoginUserInfo;
 import com.keibaplus.webap.dto.UsersRegisterDto;
 import com.keibaplus.webap.entity.Users;
 import com.keibaplus.webap.entity.Saiban;
@@ -31,59 +32,19 @@ import java.time.LocalDateTime;
 public class UsersService {
         // 必要なrepositoryのインスタンスを使用
         private final UsersRepository usersRepository;
-        private final SaibanRepository saibanRepository;
+        private final SaibanService saibanService;
         private final PasswordEncoder passwordEncoder;
         private final CustomUserDetailsService customUserDetailsService;
         // ロガーの定義
         private static final Logger logger = LoggerFactory.getLogger(UsersService.class);
 
         // コンストラクタ
-        public UsersService(UsersRepository usersRepository, SaibanRepository saibanRepository,
+        public UsersService(UsersRepository usersRepository, SaibanService saibanService,
                         PasswordEncoder passwordEncoder, CustomUserDetailsService customUserDetailsService) {
                 this.usersRepository = usersRepository;
-                this.saibanRepository = saibanRepository;
+                this.saibanService = saibanService;
                 this.passwordEncoder = passwordEncoder;
                 this.customUserDetailsService = customUserDetailsService;
-        }
-
-        /**
-         * ログインユーザー情報取得処理
-         * 
-         * @return ログインユーザー情報
-         */
-        public LoginUser getLoginUser() {
-                // Spring Securityの認証情報を取得
-                Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-                // ユーザー名以外のデータを取得するためにPrincipalを格納してそこからユーザー情報を取得
-                LoginUser loginUser = (LoginUser) auth.getPrincipal();
-                return loginUser;
-        }
-
-        /**
-         * ログインユーザー番号取得処理
-         * 
-         * @return getLoginUser()のユーザー番号
-         */
-        public String getLoginUserNo() {
-                return getLoginUser().getUserNo();
-        }
-
-        /**
-         * ログインユーザーID取得処理
-         * 
-         * @return getLoginUser()のユーザーID
-         */
-        public String getLoginUserId() {
-                return getLoginUser().getUserId();
-        }
-
-        /**
-         * ログインユーザーメールアドレス取得処理
-         * 
-         * @return getLoginUser()のメールアドレス
-         */
-        public String getLoginUserMailAddress() {
-                return getLoginUser().getMailAddress();
         }
 
         /**
@@ -96,10 +57,9 @@ public class UsersService {
                 try {
                         // ユーザーの登録日時を登録するために現在日時を取得
                         LocalDateTime now = LocalDateTime.now();
-                        // ユーザーテーブルの収ユーザー番号を登録するために採番テーブルの値を取得して変数に格納
-                        Saiban saiban = saibanRepository.findByTableName(CommonConst.USERS_TABLE_NAME)
-                                        .orElseThrow(() -> new IllegalArgumentException("採番テーブルの値が存在しません"));
-                        String newUserNo = saiban.getPrefix() + saiban.getSaibanNo();
+
+                        // ユーザー番号登録のために採番テーブルの値を取得
+                        String newUserNo = saibanService.getNewNo(CommonConst.USERS_TABLE_NAME);
                         // ユーザーエンティティを用いてユーザーの入力値を登録
                         Users user = new Users(
                                         newUserNo,
@@ -118,10 +78,8 @@ public class UsersService {
                                         user.getInsDate(),
                                         user.getUpdDate());
 
-                        // 次のユーザーの登録に使用するため採番テーブルの値をインクリメント
-                        String newSaibanNo = String.format("%08d", (Integer.parseInt(saiban.getSaibanNo()) + 1));
-
-                        saibanRepository.updateSaibanNo(newSaibanNo, CommonConst.USERS_TABLE_NAME);
+                        // 採番テーブルの値を更新
+                        saibanService.updateSaibanNo(CommonConst.USERS_TABLE_NAME);
 
                         // ログ出力
                         logger.info("ユーザー登録成功 userNo={}", user.getUserNo());
@@ -201,7 +159,7 @@ public class UsersService {
          */
         public UsersUpdateDto getUserByUserNo() {
                 // ユーザーデータ取得
-                Users user = usersRepository.findByUserNo(getLoginUserNo(), CommonConst.DEL_FLG_ACTIVE)
+                Users user = usersRepository.findByUserNo(LoginUserInfo.getLoginUserNo(), CommonConst.DEL_FLG_ACTIVE)
                                 .orElseThrow(() -> new IllegalArgumentException("ユーザーテーブルの値が存在しません"));
                 // ユーザー情報更新用DTOのインスタンス作成
                 UsersUpdateDto dto = new UsersUpdateDto();
@@ -224,22 +182,22 @@ public class UsersService {
                         LocalDateTime now = LocalDateTime.now();
                         // ユーザー情報更新用DTOを用いてユーザーの入力値を登録
                         usersRepository.updateUser(
-                                        getLoginUserNo(),
+                                        LoginUserInfo.getLoginUserNo(),
                                         dto.getUserId(),
                                         dto.getMailAddress(),
                                         now);
 
                         // パスワードだけは変更しない場合は入力しないように画面上で記載しているためパスワードは入力された場合に専用のメソッドを使用
                         if (!(dto.getPassword() == null) && !(dto.getPassword().isBlank())) {
-                                usersRepository.updatePassword(getLoginUserNo(),
+                                usersRepository.updatePassword(LoginUserInfo.getLoginUserNo(),
                                                 passwordEncoder.encode(dto.getPassword()));
                         }
 
                         // 画面などに表示するログインユーザー情報を更新するためPrincipalを再作成
-                        refreshLoginUser(getLoginUserNo());
+                        refreshLoginUser(LoginUserInfo.getLoginUserNo());
 
                         // ログ出力
-                        logger.info("ユーザー情報変更成功 userNo={}", getLoginUserNo());
+                        logger.info("ユーザー情報変更成功 userNo={}", LoginUserInfo.getLoginUserNo());
                 } catch (Exception e) {
                         // 失敗した場合はログ出力・exceptionをthrow
                         logger.error("ユーザー情報変更失敗", e);

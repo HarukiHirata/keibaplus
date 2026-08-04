@@ -18,18 +18,15 @@ import org.slf4j.LoggerFactory;
 import com.keibaplus.webap.dto.ShuushiRegisterDto;
 import com.keibaplus.webap.dto.ShuushiSearchDto;
 import com.keibaplus.webap.dto.ShuushiUpdateDto;
+import com.keibaplus.webap.common.LoginUserInfo;
 import com.keibaplus.webap.dto.ShuushiKenshuCourseDto;
 import com.keibaplus.webap.service.ShuushiService;
-import com.keibaplus.webap.service.UsersService;
 
 /**
  * 収支管理処理関係のコントローラー
  */
 @Controller
 public class ShuushiController {
-
-    // ログインユーザー番号などを取得するためにUsersServiceのインスタンスを使用
-    private final UsersService usersService;
 
     // 収支管理処理のためにShuushiServiceのインスタンスを使用
     private final ShuushiService shuushiService;
@@ -38,8 +35,7 @@ public class ShuushiController {
     private static final Logger logger = LoggerFactory.getLogger(ShuushiController.class);
 
     // コンストラクタ
-    public ShuushiController(UsersService usersService, ShuushiService shuushiService) {
-        this.usersService = usersService;
+    public ShuushiController(ShuushiService shuushiService) {
         this.shuushiService = shuushiService;
     }
 
@@ -52,12 +48,12 @@ public class ShuushiController {
     @GetMapping("/shuushiregister")
     public String shuushiRegisterPage(Model model, HttpServletRequest request) {
         // modelに必要な値を設定（ログインユーザー情報・収支登録用DTO・券種一覧・コース一覧）
-        model.addAttribute("loginUserNo", usersService.getLoginUserNo());
+        model.addAttribute("loginUserNo", LoginUserInfo.getLoginUserNo());
         model.addAttribute("form", new ShuushiRegisterDto());
         model.addAttribute("kenshuList", shuushiService.findAllKenshu());
         model.addAttribute("courseList", shuushiService.findAllCourse());
         // ログ出力・テンプレートをreturn
-        logger.info("収支登録画面表示 uri={} userNo={}", request.getRequestURI(), usersService.getLoginUserNo());
+        logger.info("収支登録画面表示 uri={} userNo={}", request.getRequestURI(), LoginUserInfo.getLoginUserNo());
         return "shuushiregister";
     }
 
@@ -78,7 +74,7 @@ public class ShuushiController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("kenshuList", shuushiService.findAllKenshu());
             model.addAttribute("courseList", shuushiService.findAllCourse());
-            logger.info("収支登録画面表示 uri={} userNo={}", request.getRequestURI(), usersService.getLoginUserNo());
+            logger.info("収支登録画面表示 uri={} userNo={}", request.getRequestURI(), LoginUserInfo.getLoginUserNo());
             return "shuushiregister";
         }
         // バリデーションエラーがなければShuushiServiceの登録処理
@@ -96,13 +92,13 @@ public class ShuushiController {
     @GetMapping("/shuushilist")
     public String shuushiList(Model model, HttpServletRequest request) {
         // modelに必要な値を設定（ログインユーザー情報・収支検索用DTO・券種一覧・コース一覧）
-        model.addAttribute("loginUserNo", usersService.getLoginUserNo());
-        model.addAttribute("loginUserId", usersService.getLoginUserId());
+        model.addAttribute("loginUserNo", LoginUserInfo.getLoginUserNo());
+        model.addAttribute("loginUserId", LoginUserInfo.getLoginUserId());
         model.addAttribute("form", new ShuushiSearchDto());
         model.addAttribute("kenshuList", shuushiService.findAllKenshu());
         model.addAttribute("courseList", shuushiService.findAllCourse());
         // ログ出力・テンプレートをreturn
-        logger.info("収支一覧画面表示 uri={} userNo={}", request.getRequestURI(), usersService.getLoginUserNo());
+        logger.info("収支一覧画面表示 uri={} userNo={}", request.getRequestURI(), LoginUserInfo.getLoginUserNo());
         return "shuushilist";
     }
 
@@ -122,7 +118,7 @@ public class ShuushiController {
         model.addAttribute("kenshuList", shuushiService.findAllKenshu());
         model.addAttribute("courseList", shuushiService.findAllCourse());
         // ログ出力・テンプレートをreturn
-        logger.info("収支編集画面表示 uri={} userNo={} shuushiNo={}", request.getRequestURI(), usersService.getLoginUserNo(),
+        logger.info("収支編集画面表示 uri={} userNo={} shuushiNo={}", request.getRequestURI(), LoginUserInfo.getLoginUserNo(),
                 shuushiNo);
         return "shuushiedit";
     }
@@ -147,7 +143,7 @@ public class ShuushiController {
             model.addAttribute("kenshuList", shuushiService.findAllKenshu());
             model.addAttribute("courseList", shuushiService.findAllCourse());
             logger.info("収支編集画面表示 uri={} userNo={} shuushiNo={}", request.getRequestURI(),
-                    usersService.getLoginUserNo(),
+                    LoginUserInfo.getLoginUserNo(),
                     dto.getShuushiNo());
             return "shuushiedit";
         }
@@ -171,7 +167,7 @@ public class ShuushiController {
         // modelに必要な値を設定（収支データ）
         model.addAttribute("shuushi", dto);
         // ログ出力・テンプレートをreturn
-        logger.info("収支削除画面表示 uri={} userNo={} shuushiNo={}", request.getRequestURI(), usersService.getLoginUserNo(),
+        logger.info("収支削除画面表示 uri={} userNo={} shuushiNo={}", request.getRequestURI(), LoginUserInfo.getLoginUserNo(),
                 shuushiNo);
         return "shuushidelete";
     }

@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.keibaplus.webap.common.LoginUserInfo;
 import com.keibaplus.webap.dto.ShuushiSearchDto;
 import com.keibaplus.webap.service.ShuushiService;
-import com.keibaplus.webap.service.UsersService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -19,9 +19,6 @@ import jakarta.servlet.http.HttpServletRequest;
 @Controller
 public class LoginController {
 
-    // ログインユーザー番号などを取得するためにUsersServiceのインスタンスを使用
-    private final UsersService usersService;
-
     // 券種やコースの一覧を取得するためにShuushiServiceのインスタンスを使用
     private final ShuushiService shuushiService;
 
@@ -29,8 +26,7 @@ public class LoginController {
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     // コンストラクタ
-    public LoginController(UsersService usersService, ShuushiService shuushiService) {
-        this.usersService = usersService;
+    public LoginController(ShuushiService shuushiService) {
         this.shuushiService = shuushiService;
     }
 
@@ -83,10 +79,10 @@ public class LoginController {
     @GetMapping("/top")
     public String top(Model model, HttpServletRequest request) {
         // ログ出力
-        logger.info("トップ画面表示 uri={} userNo={}", request.getRequestURI(), usersService.getLoginUserNo());
+        logger.info("トップ画面表示 uri={} userNo={}", request.getRequestURI(), LoginUserInfo.getLoginUserNo());
         // modelに必要な値を設定（ログインユーザー情報・収支検索用DTO・券種一覧・コース一覧）
-        model.addAttribute("loginUserNo", usersService.getLoginUserNo());
-        model.addAttribute("loginUserId", usersService.getLoginUserId());
+        model.addAttribute("loginUserNo", LoginUserInfo.getLoginUserNo());
+        model.addAttribute("loginUserId", LoginUserInfo.getLoginUserId());
         model.addAttribute("form", new ShuushiSearchDto());
         model.addAttribute("kenshuList", shuushiService.findAllKenshu());
         model.addAttribute("courseList", shuushiService.findAllCourse());

@@ -17,6 +17,7 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.keibaplus.webap.common.LoginUserInfo;
 import com.keibaplus.webap.dto.UsersRegisterDto;
 import com.keibaplus.webap.dto.UsersUpdateDto;
 import com.keibaplus.webap.service.UsersService;
@@ -100,7 +101,7 @@ public class UsersController {
         model.addAttribute("loginUserNo", dto.getUserNo());
         model.addAttribute("form", dto);
         // ログ出力・テンプレートをreturn
-        logger.info("ユーザー情報変更画面表示 uri={} userNo={}", request.getRequestURI(), usersService.getLoginUserNo());
+        logger.info("ユーザー情報変更画面表示 uri={} userNo={}", request.getRequestURI(), LoginUserInfo.getLoginUserNo());
         return "useredit";
     }
 
@@ -118,15 +119,15 @@ public class UsersController {
             Model model,
             HttpServletRequest request) {
         // ユーザーIDとメールアドレスはUNIQUEであるかチェック
-        if (usersService.existsByUserIdAndUserNo(dto.getUserId(), usersService.getLoginUserNo())) {
+        if (usersService.existsByUserIdAndUserNo(dto.getUserId(), LoginUserInfo.getLoginUserNo())) {
             bindingResult.rejectValue("userId", "error.userId", "入力したユーザーIDは既に使用されています");
         }
-        if (usersService.existsByMailAddressAndUserNo(dto.getMailAddress(), usersService.getLoginUserNo())) {
+        if (usersService.existsByMailAddressAndUserNo(dto.getMailAddress(), LoginUserInfo.getLoginUserNo())) {
             bindingResult.rejectValue("mailAddress", "error.mailAddress", "入力したメールアドレスは既に使用されています");
         }
         // バリデーションエラーがあった場合にユーザー情報更新画面をもう一度表示
         if (bindingResult.hasErrors()) {
-            logger.info("ユーザー情報変更画面表示 uri={} userNo={}", request.getRequestURI(), usersService.getLoginUserNo());
+            logger.info("ユーザー情報変更画面表示 uri={} userNo={}", request.getRequestURI(), LoginUserInfo.getLoginUserNo());
             return "useredit";
         }
         // バリデーションエラーがなければUsersServiceの更新処理
@@ -145,9 +146,9 @@ public class UsersController {
     @GetMapping("/userdelete")
     public String userDeletePage(Model model, HttpServletRequest request) {
         // modelに必要な値を設定（ログインユーザーID）
-        model.addAttribute("loginUserId", usersService.getLoginUserId());
+        model.addAttribute("loginUserId", LoginUserInfo.getLoginUserId());
         // ログ出力・テンプレートをreturn
-        logger.info("ユーザー削除画面表示 uri={} userNo={}", request.getRequestURI(), usersService.getLoginUserNo());
+        logger.info("ユーザー削除画面表示 uri={} userNo={}", request.getRequestURI(), LoginUserInfo.getLoginUserNo());
         return "userdelete";
     }
 
@@ -161,7 +162,7 @@ public class UsersController {
     @PostMapping("/userdelete")
     public String userDelete(HttpServletRequest request, HttpServletResponse response) {
         // UsersServiceの削除処理
-        usersService.deleteUser(usersService.getLoginUserNo());
+        usersService.deleteUser(LoginUserInfo.getLoginUserNo());
         // Spring Securityの認証情報が残ってしまうと登録ユーザーの画面が使えてしまうためログアウト時と同じ処理を実行
         // 認証情報を取得
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
