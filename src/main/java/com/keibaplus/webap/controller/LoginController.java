@@ -20,18 +20,17 @@ import jakarta.servlet.http.HttpServletRequest;
 @Controller
 public class LoginController {
 
-    @Autowired
-    private CurrentUserProvider currentUserProvider;
-
     // 券種やコースの一覧を取得するためにShuushiServiceのインスタンスを使用
     private final ShuushiService shuushiService;
+    private final CurrentUserProvider currentUserProvider;
 
     // ロガーの定義
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     // コンストラクタ
-    public LoginController(ShuushiService shuushiService) {
+    public LoginController(ShuushiService shuushiService, CurrentUserProvider currentUserProvider) {
         this.shuushiService = shuushiService;
+        this.currentUserProvider = currentUserProvider;
     }
 
     /**

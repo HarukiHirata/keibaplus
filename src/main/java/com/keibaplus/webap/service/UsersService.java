@@ -32,24 +32,24 @@ import java.time.LocalDateTime;
 @Service
 public class UsersService {
 
-        @Autowired
-        private CurrentUserProvider currentUserProvider;
-
         // 必要なrepositoryのインスタンスを使用
         private final UsersRepository usersRepository;
         private final SaibanService saibanService;
         private final PasswordEncoder passwordEncoder;
         private final CustomUserDetailsService customUserDetailsService;
+        private final CurrentUserProvider currentUserProvider;
         // ロガーの定義
         private static final Logger logger = LoggerFactory.getLogger(UsersService.class);
 
         // コンストラクタ
         public UsersService(UsersRepository usersRepository, SaibanService saibanService,
-                        PasswordEncoder passwordEncoder, CustomUserDetailsService customUserDetailsService) {
+                        PasswordEncoder passwordEncoder, CustomUserDetailsService customUserDetailsService,
+                        CurrentUserProvider currentUserProvider) {
                 this.usersRepository = usersRepository;
                 this.saibanService = saibanService;
                 this.passwordEncoder = passwordEncoder;
                 this.customUserDetailsService = customUserDetailsService;
+                this.currentUserProvider = currentUserProvider;
         }
 
         /**
@@ -64,7 +64,7 @@ public class UsersService {
                         LocalDateTime now = LocalDateTime.now();
 
                         // ユーザー番号登録のために採番テーブルの値を取得・採番テーブルをこの段階で更新
-                        String newUserNo = saibanService.getNewNoAndUpdateNo(CommonConst.USERS_TABLE_NAME);
+                        String newUserNo = saibanService.issueNextNo(CommonConst.USERS_TABLE_NAME);
                         // ユーザーエンティティを用いてユーザーの入力値を登録
                         Users user = new Users(
                                         newUserNo,

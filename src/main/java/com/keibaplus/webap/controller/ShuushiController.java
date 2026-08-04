@@ -28,18 +28,17 @@ import com.keibaplus.webap.service.ShuushiService;
 @Controller
 public class ShuushiController {
 
-    @Autowired
-    private CurrentUserProvider currentUserProvider;
-
     // 収支管理処理のためにShuushiServiceのインスタンスを使用
     private final ShuushiService shuushiService;
+    private final CurrentUserProvider currentUserProvider;
 
     // ロガーの定義
     private static final Logger logger = LoggerFactory.getLogger(ShuushiController.class);
 
     // コンストラクタ
-    public ShuushiController(ShuushiService shuushiService) {
+    public ShuushiController(ShuushiService shuushiService, CurrentUserProvider currentUserProvider) {
         this.shuushiService = shuushiService;
+        this.currentUserProvider = currentUserProvider;
     }
 
     /**

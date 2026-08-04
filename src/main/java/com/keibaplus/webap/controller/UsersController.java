@@ -29,18 +29,17 @@ import com.keibaplus.webap.service.UsersService;
 @Controller
 public class UsersController {
 
-    @Autowired
-    private CurrentUserProvider currentUserProvider;
-
     // ユーザー管理処理のためにUsersServiceのインスタンスを使用
     private final UsersService usersService;
+    private final CurrentUserProvider currentUserProvider;
 
     // ロガーの定義
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     // コンストラクタ
-    public UsersController(UsersService usersService) {
+    public UsersController(UsersService usersService, CurrentUserProvider currentUserProvider) {
         this.usersService = usersService;
+        this.currentUserProvider = currentUserProvider;
     }
 
     /**

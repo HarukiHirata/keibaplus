@@ -22,14 +22,13 @@ public class CurrentUserProvider {
         // Spring Securityの認証情報を取得
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null
+                || !auth.isAuthenticated()
                 || !(auth.getPrincipal() instanceof LoginUser loginUser)) {
             throw new AuthenticationCredentialsNotFoundException(
                     "ログインユーザーが存在しません");
-        } else {
-            // ユーザー名以外のデータを取得するためにPrincipalを格納してそこからユーザー情報を取得
-            loginUser = (LoginUser) auth.getPrincipal();
-            return loginUser;
         }
+
+        return loginUser;
     }
 
     /**

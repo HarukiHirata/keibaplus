@@ -3,6 +3,7 @@ package com.keibaplus.webap.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.keibaplus.webap.entity.Saiban;
@@ -12,13 +13,14 @@ import com.keibaplus.webap.repository.SaibanRepository;
 public class SaibanService {
     private final SaibanRepository saibanRepository;
 
-    private static final Logger logger = LoggerFactory.getLogger(ShuushiService.class);
+    private static final Logger logger = LoggerFactory.getLogger(SaibanService.class);
 
     public SaibanService(SaibanRepository saibanRepository) {
         this.saibanRepository = saibanRepository;
     }
 
-    public String getNewNoAndUpdateNo(String tableName) {
+    @Transactional
+    public String issueNextNo(String tableName) {
         try {
             Saiban saiban = saibanRepository.findByTableName(tableName)
                     .orElseThrow(() -> new IllegalArgumentException("採番テーブルの値が存在しません"));

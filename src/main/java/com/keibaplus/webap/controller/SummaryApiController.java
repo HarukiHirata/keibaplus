@@ -26,8 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/shuushisummary")
 public class SummaryApiController {
 
-    @Autowired
-    private CurrentUserProvider currentUserProvider;
+    private final CurrentUserProvider currentUserProvider;
 
     // 収支集計処理のためにShuushiSummaryServiceのインスタンスを使用
     private final ShuushiSummaryService shuushiSummaryService;
