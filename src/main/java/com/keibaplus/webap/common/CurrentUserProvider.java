@@ -2,6 +2,7 @@ package com.keibaplus.webap.common;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
 
 import com.keibaplus.webap.service.LoginUser;
@@ -20,9 +21,15 @@ public class CurrentUserProvider {
     private LoginUser getCurrentLoginUser() {
         // Spring Securityの認証情報を取得
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        // ユーザー名以外のデータを取得するためにPrincipalを格納してそこからユーザー情報を取得
-        LoginUser loginUser = (LoginUser) auth.getPrincipal();
-        return loginUser;
+        if (auth == null
+                || !(auth.getPrincipal() instanceof LoginUser loginUser)) {
+            throw new AuthenticationCredentialsNotFoundException(
+                    "ログインユーザーが存在しません");
+        } else {
+            // ユーザー名以外のデータを取得するためにPrincipalを格納してそこからユーザー情報を取得
+            loginUser = (LoginUser) auth.getPrincipal();
+            return loginUser;
+        }
     }
 
     /**
