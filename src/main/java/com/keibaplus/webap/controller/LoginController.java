@@ -10,7 +10,8 @@ import org.slf4j.LoggerFactory;
 
 import com.keibaplus.webap.common.CurrentUserProvider;
 import com.keibaplus.webap.dto.ShuushiSearchDto;
-import com.keibaplus.webap.service.ShuushiService;
+import com.keibaplus.webap.service.MasterDataService;
+import com.keibaplus.webap.service.ShuushiCommandService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -21,16 +22,16 @@ import jakarta.servlet.http.HttpServletRequest;
 public class LoginController {
 
     // 券種やコースの一覧を取得するためにShuushiServiceのインスタンスを使用
-    private final ShuushiService shuushiService;
     private final CurrentUserProvider currentUserProvider;
+    private final MasterDataService masterDataService;
 
     // ロガーの定義
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     // コンストラクタ
-    public LoginController(ShuushiService shuushiService, CurrentUserProvider currentUserProvider) {
-        this.shuushiService = shuushiService;
+    public LoginController(CurrentUserProvider currentUserProvider, MasterDataService masterDataService) {
         this.currentUserProvider = currentUserProvider;
+        this.masterDataService = masterDataService;
     }
 
     /**
@@ -87,8 +88,8 @@ public class LoginController {
         model.addAttribute("loginUserNo", currentUserProvider.getLoginUserNo());
         model.addAttribute("loginUserId", currentUserProvider.getLoginUserId());
         model.addAttribute("form", new ShuushiSearchDto());
-        model.addAttribute("kenshuList", shuushiService.findAllKenshu());
-        model.addAttribute("courseList", shuushiService.findAllCourse());
+        model.addAttribute("kenshuList", masterDataService.findAllKenshu());
+        model.addAttribute("courseList", masterDataService.findAllCourse());
         // テンプレートをreturn
         return "top";
     }

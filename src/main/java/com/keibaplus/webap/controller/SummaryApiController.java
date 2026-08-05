@@ -13,8 +13,9 @@ import com.keibaplus.webap.common.CommonConst;
 import com.keibaplus.webap.common.CurrentUserProvider;
 import com.keibaplus.webap.dto.ShuushiKenshuCourseDto;
 import com.keibaplus.webap.dto.ShuushiSearchDto;
-import com.keibaplus.webap.service.ShuushiService;
+import com.keibaplus.webap.service.ShuushiCommandService;
 import com.keibaplus.webap.service.ShuushiSummaryService;
+import com.keibaplus.webap.service.ShuushiQueryService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,7 +33,7 @@ public class SummaryApiController {
     private final ShuushiSummaryService shuushiSummaryService;
 
     // 収支集計処理のためにShuushiServiceのインスタンスを使用
-    private final ShuushiService shuushiService;
+    private final ShuushiQueryService shuushiQueryService;
 
     /**
      * 収支集計処理
@@ -63,6 +64,6 @@ public class SummaryApiController {
         // 削除されていないレコードを対象
         dto.setDelFlg(CommonConst.DEL_FLG_ACTIVE);
         // ShuushiServiceの収支一覧取得処理の結果をreturn
-        return shuushiService.findAllShushiByLoginUser(dto);
+        return shuushiQueryService.findAllShushiByLoginUser(dto);
     }
 }

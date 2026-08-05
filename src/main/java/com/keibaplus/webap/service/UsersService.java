@@ -36,19 +36,19 @@ public class UsersService {
         private final UsersRepository usersRepository;
         private final SaibanService saibanService;
         private final PasswordEncoder passwordEncoder;
-        private final CustomUserDetailsService customUserDetailsService;
+        private final LoginSessionService loginSessionService;
         private final CurrentUserProvider currentUserProvider;
         // ロガーの定義
         private static final Logger logger = LoggerFactory.getLogger(UsersService.class);
 
         // コンストラクタ
         public UsersService(UsersRepository usersRepository, SaibanService saibanService,
-                        PasswordEncoder passwordEncoder, CustomUserDetailsService customUserDetailsService,
+                        PasswordEncoder passwordEncoder, LoginSessionService loginSessionService,
                         CurrentUserProvider currentUserProvider) {
                 this.usersRepository = usersRepository;
                 this.saibanService = saibanService;
                 this.passwordEncoder = passwordEncoder;
-                this.customUserDetailsService = customUserDetailsService;
+                this.loginSessionService = loginSessionService;
                 this.currentUserProvider = currentUserProvider;
         }
 
@@ -64,10 +64,10 @@ public class UsersService {
                         LocalDateTime now = LocalDateTime.now();
 
                         // ユーザー番号登録のために採番テーブルの値を取得・採番テーブルをこの段階で更新
-                        String newUserNo = saibanService.issueNextNo(CommonConst.USERS_TABLE_NAME);
+                        String registerUserNo = saibanService.issueNextNo(CommonConst.USERS_TABLE_NAME);
                         // ユーザーエンティティを用いてユーザーの入力値を登録
                         Users user = new Users(
-                                        newUserNo,
+                                        registerUserNo,
                                         dto.getUserId(),
                                         passwordEncoder.encode(dto.getPassword()),
                                         dto.getMailAddress(),
@@ -197,7 +197,7 @@ public class UsersService {
                         }
 
                         // 画面などに表示するログインユーザー情報を更新するためPrincipalを再作成
-                        refreshLoginUser(currentUserProvider.getLoginUserNo());
+                        loginSessionService.refreshLoginUser(currentUserProvider.getLoginUserNo());
 
                         // ログ出力
                         logger.info("ユーザー情報変更成功 userNo={}", currentUserProvider.getLoginUserNo());
@@ -227,30 +227,6 @@ public class UsersService {
                         logger.error("ユーザー削除失敗", e);
                         throw new RuntimeException("ユーザー削除処理でエラーが発生しました", e);
                 }
-        }
-
-        private void refreshLoginUser(String userNo) {
-
-                Authentication currentAuthentication = SecurityContextHolder.getContext().getAuthentication();
-
-                // DBから更新後の情報を取得
-                LoginUser updatedLoginUser = (LoginUser) customUserDetailsService.loadUserByUserNo(userNo);
-
-                // 認証済みのAuthenticationを作成
-                UsernamePasswordAuthenticationToken newAuthentication = UsernamePasswordAuthenticationToken
-                                .authenticated(
-                                                updatedLoginUser,
-                                                null,
-                                                updatedLoginUser.getAuthorities());
-
-                // IPアドレスなどの認証詳細情報を引き継ぐ
-                if (currentAuthentication != null) {
-                        newAuthentication.setDetails(currentAuthentication.getDetails());
-                }
-
-                // 現在の認証情報を差し替える
-                SecurityContextHolder.getContext()
-                                .setAuthentication(newAuthentication);
         }
 
 }
