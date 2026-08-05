@@ -48,6 +48,10 @@ public class ShuushiQueryService {
      * @return 収支テーブル取得結果
      */
     public List<ShuushiKenshuCourseDto> findAllShushiByLoginUser(ShuushiSearchDto dto) {
+        // セキュリティの関係上serviceで収支一覧取得対象のUserNoを指定
+        dto.setUserNo(currentUserProvider.getLoginUserNo());
+        // 削除されていないレコードを対象
+        dto.setDelFlg(CommonConst.DEL_FLG_ACTIVE);
         return shuushiSummaryRepository.findByUserNo(dto);
     }
 

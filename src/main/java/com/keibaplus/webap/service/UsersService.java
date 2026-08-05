@@ -197,7 +197,7 @@ public class UsersService {
                         }
 
                         // 画面などに表示するログインユーザー情報を更新するためPrincipalを再作成
-                        loginSessionService.refreshLoginUser(currentUserProvider.getLoginUserNo());
+                        loginSessionService.refreshLoginUser();
 
                         // ログ出力
                         logger.info("ユーザー情報変更成功 userNo={}", currentUserProvider.getLoginUserNo());

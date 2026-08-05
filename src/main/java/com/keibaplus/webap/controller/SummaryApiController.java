@@ -43,10 +43,6 @@ public class SummaryApiController {
      */
     @PostMapping("/search")
     public ShuushiSummaryDto search(@RequestBody ShuushiSearchDto dto) {
-        // セキュリティの関係上controllerで収支集計対象のUserNoを指定
-        dto.setUserNo(currentUserProvider.getLoginUserNo());
-        // 削除されていないレコードを対象
-        dto.setDelFlg(CommonConst.DEL_FLG_ACTIVE);
         // ShuushiSummaryServiceの収支集計処理の結果をreturn
         return shuushiSummaryService.searchSummary(dto);
     }
@@ -59,10 +55,6 @@ public class SummaryApiController {
      */
     @PostMapping("/itiran")
     public List<ShuushiKenshuCourseDto> itiran(@RequestBody ShuushiSearchDto dto) {
-        // セキュリティの関係上controllerで収支一覧取得対象のUserNoを指定
-        dto.setUserNo(currentUserProvider.getLoginUserNo());
-        // 削除されていないレコードを対象
-        dto.setDelFlg(CommonConst.DEL_FLG_ACTIVE);
         // ShuushiServiceの収支一覧取得処理の結果をreturn
         return shuushiQueryService.findAllShushiByLoginUser(dto);
     }
