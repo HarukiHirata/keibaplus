@@ -2,18 +2,14 @@ package com.keibaplus.webap.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.keibaplus.webap.dto.ShuushiSummaryDto;
-import com.keibaplus.webap.common.CommonConst;
-import com.keibaplus.webap.common.CurrentUserProvider;
 import com.keibaplus.webap.dto.ShuushiKenshuCourseDto;
 import com.keibaplus.webap.dto.ShuushiSearchDto;
-import com.keibaplus.webap.service.ShuushiCommandService;
 import com.keibaplus.webap.service.ShuushiSummaryService;
 import com.keibaplus.webap.service.ShuushiQueryService;
 
@@ -26,8 +22,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/api/shuushisummary")
 public class SummaryApiController {
-
-    private final CurrentUserProvider currentUserProvider;
 
     // 収支集計処理のためにShuushiSummaryServiceのインスタンスを使用
     private final ShuushiSummaryService shuushiSummaryService;

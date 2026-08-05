@@ -1,6 +1,5 @@
 package com.keibaplus.webap.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -9,27 +8,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.keibaplus.webap.entity.Saiban;
 import com.keibaplus.webap.entity.Shuushi;
-import com.keibaplus.webap.entity.Kenshu;
-import com.keibaplus.webap.entity.Course;
 import com.keibaplus.webap.repository.ShuushiRepository;
-import com.keibaplus.webap.repository.KenshuRepository;
-import com.keibaplus.webap.repository.CourseRepository;
-import com.keibaplus.webap.repository.SaibanRepository;
-import com.keibaplus.webap.repository.ShuushiKenshuCourseRepository;
-import com.keibaplus.webap.repository.ShuushiSummaryRepository;
 import com.keibaplus.webap.dto.ShuushiRegisterDto;
-import com.keibaplus.webap.dto.ShuushiSearchDto;
 import com.keibaplus.webap.dto.ShuushiUpdateDto;
 import com.keibaplus.webap.common.CommonConst;
 import com.keibaplus.webap.common.CurrentUserProvider;
-import com.keibaplus.webap.dto.ShuushiKenshuCourseDto;
 
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.Authentication;
-
-import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 
 /**
