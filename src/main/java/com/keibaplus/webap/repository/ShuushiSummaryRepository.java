@@ -1,6 +1,7 @@
 package com.keibaplus.webap.repository;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import com.keibaplus.webap.dto.ShuushiSearchDto;
 import com.keibaplus.webap.dto.ShuushiSummaryDto;
@@ -37,40 +38,15 @@ public class ShuushiSummaryRepository {
                 SELECT
                 COALESCE(SUM(KOUNYUU_KINGAKU),0) AS "totalKounyuuKingaku",
                 COALESCE(SUM(HARAIMODOSHI),0) AS "totalHaraimodoshi"
-                FROM SHUUSHI
-                WHERE USER_NO = :userNo
-                AND DEL_FLG = :delFlg
+                FROM SHUUSHI s
+                WHERE s.USER_NO = :userNo
+                AND s.DEL_FLG = :delFlg
                 """);
 
+        sql.append(appendQuery(dto));
+
         // sqlのパラメータを設定するためにMapSqlParameterSourceのインスタンスを使用
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        // ユーザー番号と削除フラグをパラメータに設定
-        params.addValue("userNo", dto.getUserNo());
-        params.addValue("delFlg", dto.getDelFlg());
-
-        // 開始日をSQLとパラメータに設定
-        if (dto.getRaceDateFrom() != null && !dto.getRaceDateFrom().isBlank()) {
-            sql.append(" AND RACE_DATE >= :raceDateFrom");
-            params.addValue("raceDateFrom", dto.getRaceDateFrom());
-        }
-
-        // 終了日をSQLとパラメータに設定
-        if (dto.getRaceDateTo() != null && !dto.getRaceDateTo().isBlank()) {
-            sql.append(" AND RACE_DATE <= :raceDateTo");
-            params.addValue("raceDateTo", dto.getRaceDateTo());
-        }
-
-        // 券種をSQLとパラメータに設定
-        if (dto.getKenshuNo() != null) {
-            sql.append(" AND KENSHU_NO = :kenshuNo");
-            params.addValue("kenshuNo", dto.getKenshuNo());
-        }
-
-        // コースをSQLとパラメータに設定
-        if (dto.getCourseNo() != null) {
-            sql.append(" AND COURSE_NO = :courseNo");
-            params.addValue("courseNo", dto.getCourseNo());
-        }
+        MapSqlParameterSource params = getSqlParameter(dto);
 
         // 上記で組み立てたSQLによって取得したデータをreturn（単一業の想定なのでqueryForObjectを使用）
         return namedParameterJdbcTemplate.queryForObject(sql.toString(), params, (rs,
@@ -111,31 +87,10 @@ public class ShuushiSummaryRepository {
                         AND s.del_flg = :delFlg
                         """);
 
+        sql.append(appendQuery(dto));
+
         // sqlのパラメータを設定するためにMapSqlParameterSourceのインスタンスを使用
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        // ユーザー番号と削除フラグをパラメータに設定
-        params.addValue("userNo", dto.getUserNo());
-        params.addValue("delFlg", dto.getDelFlg());
-
-        if (dto.getRaceDateFrom() != null && !dto.getRaceDateFrom().isBlank()) {
-            sql.append(" AND s.race_date >= :raceDateFrom");
-            params.addValue("raceDateFrom", dto.getRaceDateFrom());
-        }
-
-        if (dto.getRaceDateTo() != null && !dto.getRaceDateTo().isBlank()) {
-            sql.append(" AND s.race_date <= :raceDateTo");
-            params.addValue("raceDateTo", dto.getRaceDateTo());
-        }
-
-        if (dto.getKenshuNo() != null) {
-            sql.append(" AND s.kenshu_no = :kenshuNo");
-            params.addValue("kenshuNo", dto.getKenshuNo());
-        }
-
-        if (dto.getCourseNo() != null) {
-            sql.append(" AND s.course_no = :courseNo");
-            params.addValue("courseNo", dto.getCourseNo());
-        }
+        MapSqlParameterSource params = getSqlParameter(dto);
 
         // 収支一覧画面で表示する際に収支Noの順で表示するためにソート
         sql.append(" ORDER BY s.shuushi_no");
@@ -154,6 +109,56 @@ public class ShuushiSummaryRepository {
                     rs.getInt("haraimodoshi"));
         });
 
+    }
+
+    private StringBuilder appendQuery(ShuushiSearchDto dto) {
+        StringBuilder sql = new StringBuilder();
+        // 開始日をSQLとパラメータに設定
+        if (StringUtils.hasText(dto.getRaceDateFrom())) {
+            sql.append(" AND s.RACE_DATE >= :raceDateFrom");
+        }
+
+        // 終了日をSQLとパラメータに設定
+        if (StringUtils.hasText(dto.getRaceDateTo())) {
+            sql.append(" AND s.RACE_DATE <= :raceDateTo");
+        }
+
+        // 券種をSQLとパラメータに設定
+        if (dto.getKenshuNo() != null) {
+            sql.append(" AND s.KENSHU_NO = :kenshuNo");
+        }
+
+        // コースをSQLとパラメータに設定
+        if (dto.getCourseNo() != null) {
+            sql.append(" AND s.COURSE_NO = :courseNo");
+        }
+
+        return sql;
+
+    }
+
+    private MapSqlParameterSource getSqlParameter(ShuushiSearchDto dto) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("userNo", dto.getUserNo());
+        params.addValue("delFlg", dto.getDelFlg());
+
+        if (dto.getRaceDateFrom() != null && !dto.getRaceDateFrom().isBlank()) {
+            params.addValue("raceDateFrom", dto.getRaceDateFrom());
+        }
+
+        if (dto.getRaceDateTo() != null && !dto.getRaceDateTo().isBlank()) {
+            params.addValue("raceDateTo", dto.getRaceDateTo());
+        }
+
+        if (dto.getKenshuNo() != null) {
+            params.addValue("kenshuNo", dto.getKenshuNo());
+        }
+
+        if (dto.getCourseNo() != null) {
+            params.addValue("courseNo", dto.getCourseNo());
+        }
+
+        return params;
     }
 
 }
