@@ -1,15 +1,17 @@
 package com.keibaplus.webap.dto;
 
-import jakarta.validation.constraints.NotBlank;
+import java.time.LocalDate;
+
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 
 /**
  * 収支登録用DTO
  */
 public class ShuushiRegisterDto {
 
-    @NotBlank(message = "レース日を入力してください")
-    private String raceDate;
+    @NotNull(message = "レース日を入力してください")
+    private LocalDate raceDate;
 
     private Integer courseNo;
 
@@ -17,20 +19,22 @@ public class ShuushiRegisterDto {
 
     private Integer kenshuNo;
 
+    @PositiveOrZero(message = "0以上の数値を入力してください")
     @NotNull(message = "購入金額を入力してください")
     private Integer kounyuuKingaku;
 
+    @PositiveOrZero(message = "0以上の数値を入力してください")
     @NotNull(message = "払い戻しを入力してください")
     private Integer haraimodoshi;
 
     public ShuushiRegisterDto() {
     }
 
-    public String getRaceDate() {
+    public LocalDate getRaceDate() {
         return raceDate;
     }
 
-    public void setRaceDate(String raceDate) {
+    public void setRaceDate(LocalDate raceDate) {
         this.raceDate = raceDate;
     }
 

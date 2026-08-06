@@ -9,6 +9,7 @@ import com.keibaplus.webap.dto.ShuushiKenshuCourseDto;
 
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -101,7 +102,7 @@ public class ShuushiSummaryRepository {
             return new ShuushiKenshuCourseDto(
                     rs.getInt("shuushiNo"),
                     rs.getString("userNo"),
-                    rs.getString("raceDate"),
+                    rs.getObject("raceDate", LocalDate.class),
                     rs.getString("courseName"),
                     rs.getInt("raceNo"),
                     rs.getString("kenshuName"),
@@ -114,12 +115,12 @@ public class ShuushiSummaryRepository {
     private StringBuilder appendQuery(ShuushiSearchDto dto) {
         StringBuilder sql = new StringBuilder();
         // 開始日をSQLとパラメータに設定
-        if (StringUtils.hasText(dto.getRaceDateFrom())) {
+        if (dto.getRaceDateFrom() != null) {
             sql.append(" AND s.RACE_DATE >= :raceDateFrom");
         }
 
         // 終了日をSQLとパラメータに設定
-        if (StringUtils.hasText(dto.getRaceDateTo())) {
+        if (dto.getRaceDateTo() != null) {
             sql.append(" AND s.RACE_DATE <= :raceDateTo");
         }
 
@@ -142,11 +143,11 @@ public class ShuushiSummaryRepository {
         params.addValue("userNo", dto.getUserNo());
         params.addValue("delFlg", dto.getDelFlg());
 
-        if (dto.getRaceDateFrom() != null && !dto.getRaceDateFrom().isBlank()) {
+        if (dto.getRaceDateFrom() != null) {
             params.addValue("raceDateFrom", dto.getRaceDateFrom());
         }
 
-        if (dto.getRaceDateTo() != null && !dto.getRaceDateTo().isBlank()) {
+        if (dto.getRaceDateTo() != null) {
             params.addValue("raceDateTo", dto.getRaceDateTo());
         }
 

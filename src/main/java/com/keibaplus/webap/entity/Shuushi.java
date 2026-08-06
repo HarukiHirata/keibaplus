@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -20,7 +21,7 @@ public class Shuushi {
     private String userNo;
 
     @Column("RACE_DATE")
-    private String raceDate;
+    private LocalDate raceDate;
 
     @Column("COURSE_NO")
     private int courseNo;
@@ -46,7 +47,7 @@ public class Shuushi {
     @Column("UPD_DATE")
     private LocalDateTime updDate;
 
-    public Shuushi(int shuushiNo, String userNo, String raceDate, int courseNo, int raceNo,
+    public Shuushi(int shuushiNo, String userNo, LocalDate raceDate, int courseNo, int raceNo,
             int kenshuNo, int kounyuuKingaku, int haraimodoshi, String delFlg, LocalDateTime insDate,
             LocalDateTime updDate) {
         this.shuushiNo = shuushiNo;
@@ -78,11 +79,11 @@ public class Shuushi {
         this.userNo = userNo;
     }
 
-    public String getRaceDate() {
+    public LocalDate getRaceDate() {
         return raceDate;
     }
 
-    public void setRaceDate(String raceDate) {
+    public void setRaceDate(LocalDate raceDate) {
         this.raceDate = raceDate;
     }
 

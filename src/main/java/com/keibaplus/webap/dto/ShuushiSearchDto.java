@@ -1,13 +1,15 @@
 package com.keibaplus.webap.dto;
 
+import java.time.LocalDate;
+
 public class ShuushiSearchDto {
     private String userNo;
 
     private String delFlg;
 
-    private String raceDateFrom;
+    private LocalDate raceDateFrom;
 
-    private String raceDateTo;
+    private LocalDate raceDateTo;
 
     private Integer kenshuNo;
 
@@ -29,19 +31,19 @@ public class ShuushiSearchDto {
         this.delFlg = delFlg;
     }
 
-    public String getRaceDateFrom() {
+    public LocalDate getRaceDateFrom() {
         return raceDateFrom;
     }
 
-    public void setRaceDateFrom(String raceDateFrom) {
+    public void setRaceDateFrom(LocalDate raceDateFrom) {
         this.raceDateFrom = raceDateFrom;
     }
 
-    public String getRaceDateTo() {
+    public LocalDate getRaceDateTo() {
         return raceDateTo;
     }
 
-    public void setRaceDateTo(String raceDateTo) {
+    public void setRaceDateTo(LocalDate raceDateTo) {
         this.raceDateTo = raceDateTo;
     }
 

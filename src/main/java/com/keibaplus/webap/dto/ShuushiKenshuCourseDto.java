@@ -1,5 +1,7 @@
 package com.keibaplus.webap.dto;
 
+import java.time.LocalDate;
+
 /**
  * 収支表示用DTO（収支テーブル・コーステーブル・券種テーブルを結合して取得）
  */
@@ -8,7 +10,7 @@ public class ShuushiKenshuCourseDto {
 
     private String userNo;
 
-    private String raceDate;
+    private LocalDate raceDate;
 
     private String courseName;
 
@@ -23,7 +25,7 @@ public class ShuushiKenshuCourseDto {
     public ShuushiKenshuCourseDto() {
     }
 
-    public ShuushiKenshuCourseDto(Integer shuushiNo, String userNo, String raceDate, String courseName,
+    public ShuushiKenshuCourseDto(Integer shuushiNo, String userNo, LocalDate raceDate, String courseName,
             Integer raceNo, String kenshuName, Integer kounyuuKingaku, Integer haraimodoshi) {
         this.shuushiNo = shuushiNo;
         this.userNo = userNo;
@@ -51,11 +53,11 @@ public class ShuushiKenshuCourseDto {
         this.userNo = userNo;
     }
 
-    public String getRaceDate() {
+    public LocalDate getRaceDate() {
         return raceDate;
     }
 
-    public void setRaceDate(String raceDate) {
+    public void setRaceDate(LocalDate raceDate) {
         this.raceDate = raceDate;
     }
 
