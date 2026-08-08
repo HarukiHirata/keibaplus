@@ -1,0 +1,1 @@
+CREATE INDEX shuushi_userno_racedate_index ON shuushi (user_no, race_date);

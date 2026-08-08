@@ -1,0 +1,1 @@
+CREATE INDEX shuushi_userno_courseno_index ON shuushi (user_no, course_no);

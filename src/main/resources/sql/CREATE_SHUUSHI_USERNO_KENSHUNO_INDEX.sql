@@ -1,0 +1,1 @@
+CREATE INDEX shuushi_userno_kenshuno_index ON shuushi (user_no, kenshu_no);

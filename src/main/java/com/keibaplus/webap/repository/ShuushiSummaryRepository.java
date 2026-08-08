@@ -66,7 +66,7 @@ public class ShuushiSummaryRepository {
      * @param dto 収支検索用DTO
      * @return 収支データ取得結果
      */
-    public List<ShuushiKenshuCourseDto> findByUserNo(ShuushiSearchDto dto) {
+    public List<ShuushiKenshuCourseDto> findByUserNo(ShuushiSearchDto dto, int limit, long offset) {
         // sqlを組み立てるためStringBuilderのインスタンスを使用
         StringBuilder sql = new StringBuilder();
         // どの条件にも当てはまるようなsql
@@ -90,11 +90,18 @@ public class ShuushiSummaryRepository {
 
         sql.append(appendQuery(dto));
 
+        // 収支一覧画面で表示する際に収支Noの順で表示するためにソート
+        sql.append("""
+                ORDER BY s.shuushi_no
+                LIMIT :limit
+                OFFSET :offset
+                """);
+
         // sqlのパラメータを設定するためにMapSqlParameterSourceのインスタンスを使用
         MapSqlParameterSource params = getSqlParameter(dto);
 
-        // 収支一覧画面で表示する際に収支Noの順で表示するためにソート
-        sql.append(" ORDER BY s.shuushi_no");
+        params.addValue("limit", limit);
+        params.addValue("offset", offset);
 
         // 上記で組み立てたSQLによって取得したデータをreturn（複数行の可能性があるのでqueryを使用）
         return namedParameterJdbcTemplate.query(sql.toString(), params, (rs,
@@ -109,6 +116,26 @@ public class ShuushiSummaryRepository {
                     rs.getInt("kounyuuKingaku"),
                     rs.getInt("haraimodoshi"));
         });
+
+    }
+
+    public long countByUserNo(ShuushiSearchDto dto) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("""
+                SELECT COUNT(*)
+                FROM shuushi s
+                WHERE s.user_no = :userNo
+                AND s.del_flg = :delFlg
+                """);
+        sql.append(appendQuery(dto));
+        MapSqlParameterSource params = getSqlParameter(dto);
+
+        Long count = namedParameterJdbcTemplate.queryForObject(
+                sql.toString(),
+                params,
+                Long.class);
+
+        return count != null ? count : 0L;
 
     }
 

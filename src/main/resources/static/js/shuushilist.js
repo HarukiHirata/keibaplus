@@ -1,6 +1,7 @@
 const csrfToken = document.querySelector('meta[name="_csrf"]').content;
 const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
-async function search() {
+const pageSize = 20;
+async function search(page = 0) {
     const requestBody = {
         raceDateFrom: document.getElementById("raceDateFrom").value,
         raceDateTo: document.getElementById("raceDateTo").value,
@@ -9,9 +10,11 @@ async function search() {
     };
 
     const resultBody = document.getElementById("resultBody");
+    const pagination = document.getElementById("pagination");
+    const resultCount = document.getElementById("resultCount");
 
     try {
-        const response = await fetch('/api/shuushisummary/itiran', {
+        const response = await fetch(`/api/shuushisummary/itiran?page=${page}&size=${pageSize}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -27,8 +30,10 @@ async function search() {
         const data = await response.json();
 
         resultBody.innerHTML = "";
+        pagination.innerHTML = "";
+        resultCount.textContent = `検索結果：${data.totalElements}件`;
 
-        if (!data || data.length === 0) {
+        if (!data.content || data.content.length === 0) {
         resultBody.innerHTML = `
             <tr>
             <td colspan="8" class="text-center">検索結果は0件です</td>
@@ -37,14 +42,9 @@ async function search() {
         return;
         }
 
-        data.forEach(row => {
+        data.content.forEach(row => {
         const tr = document.createElement("tr");
-        let raceNo;
-        if (row.raceNo === 0) {
-            raceNo = "";
-        } else {
-            raceNo = row.raceNo;
-        }
+        const raceNo = row.raceNo === 0 ? "" : row.raceNo;
         tr.innerHTML = `
             <td>
             <a href="/shuushiedit/${row.shuushiNo}" class="btn btn-info">編集</a>
@@ -62,9 +62,13 @@ async function search() {
         resultBody.appendChild(tr);
         });
 
+        renderPagination(data.page, data.totalPages);
+
 
     } catch (error) {
         console.error(error);
+        pagination.innerHTML = "";
+        resultCount.textContent = "";
         resultBody.innerHTML = `
         <tr>
             <td colspan="8" class="text-center text-danger">検索中にエラーが発生しました</td>
@@ -73,4 +77,66 @@ async function search() {
     }
 }
 
-window.addEventListener("load", search);
+function renderPagination(currentPage, totalPages) {
+    const pagination = document.getElementById("pagination");
+    pagination.innerHTML = "";
+
+    if (totalPages <= 1) {
+        return;
+    }
+
+    pagination.appendChild(
+        createPageItem("前へ", currentPage - 1, currentPage === 0)
+    );
+
+    // 現在ページの前後2ページを表示
+    const startPage = Math.max(0, currentPage - 2);
+    const endPage = Math.min(totalPages - 1, currentPage + 2);
+
+    for (let page = startPage; page <= endPage; page++) {
+        pagination.appendChild(
+            createPageItem(
+                String(page + 1),
+                page,
+                false,
+                page === currentPage
+            )
+        );
+    }
+
+    pagination.appendChild(
+        createPageItem(
+            "次へ",
+            currentPage + 1,
+            currentPage >= totalPages - 1
+        )
+    );
+}
+
+function createPageItem(label, page, disabled, active = false) {
+    const li = document.createElement("li");
+    li.className = "page-item";
+
+    if (disabled) {
+        li.classList.add("disabled");
+    }
+
+    if (active) {
+        li.classList.add("active");
+    }
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "page-link";
+    button.textContent = label;
+    button.disabled = disabled;
+
+    if (!disabled && !active) {
+        button.addEventListener("click", () => search(page));
+    }
+
+    li.appendChild(button);
+    return li;
+}
+
+window.addEventListener("load", () => search(0));

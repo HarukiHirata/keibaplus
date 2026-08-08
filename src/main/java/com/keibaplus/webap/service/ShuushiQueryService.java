@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import com.keibaplus.webap.common.CommonConst;
 import com.keibaplus.webap.common.CurrentUserProvider;
+import com.keibaplus.webap.dto.PageResponseDto;
 import com.keibaplus.webap.dto.ShuushiKenshuCourseDto;
 import com.keibaplus.webap.dto.ShuushiSearchDto;
 import com.keibaplus.webap.dto.ShuushiUpdateDto;
@@ -47,12 +48,23 @@ public class ShuushiQueryService {
      * @param dto 収支表示用DTO
      * @return 収支テーブル取得結果
      */
-    public List<ShuushiKenshuCourseDto> findAllShushiByLoginUser(ShuushiSearchDto dto) {
+    public PageResponseDto<ShuushiKenshuCourseDto> findAllShushiByLoginUser(ShuushiSearchDto dto, int page, int size) {
+        // 不正なページ番号・ページサイズを修正
+        int safePage = Math.max(page, 0);
+        int safeSize = Math.min(Math.max(size, 1), 100);
         // セキュリティの関係上serviceで収支一覧取得対象のUserNoを指定
         dto.setUserNo(currentUserProvider.getLoginUserNo());
         // 削除されていないレコードを対象
         dto.setDelFlg(CommonConst.DEL_FLG_ACTIVE);
-        return shuushiSummaryRepository.findByUserNo(dto);
+
+        long totalElements = shuushiSummaryRepository.countByUserNo(dto);
+        long offset = (long) safePage * safeSize;
+
+        List<ShuushiKenshuCourseDto> content = shuushiSummaryRepository.findByUserNo(dto, safeSize, offset);
+
+        int totalPages = totalElements == 0 ? 0 : (int) ((totalElements + safeSize - 1) / safeSize);
+
+        return new PageResponseDto<>(content, safePage, safeSize, totalElements, totalPages);
     }
 
     /**
