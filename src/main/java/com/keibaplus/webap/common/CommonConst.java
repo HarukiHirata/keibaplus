@@ -18,4 +18,10 @@ public final class CommonConst {
 
     public static final int SINGLE_ROW_UPDATE_COUNT = 1;
 
+    public static final int MIN_PAGE_NUM = 0;
+    public static final int MIN_PAGE_SIZE = 1;
+    public static final int MAX_PAGE_SIZE = 100;
+
+    public static final String HANKAKU_SPACE = " ";
+
 }

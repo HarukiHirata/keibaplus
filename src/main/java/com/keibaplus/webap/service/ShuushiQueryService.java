@@ -50,8 +50,8 @@ public class ShuushiQueryService {
      */
     public PageResponseDto<ShuushiKenshuCourseDto> findAllShushiByLoginUser(ShuushiSearchDto dto, int page, int size) {
         // 不正なページ番号・ページサイズを修正
-        int safePage = Math.max(page, 0);
-        int safeSize = Math.min(Math.max(size, 1), 100);
+        int safePage = Math.max(page, CommonConst.MIN_PAGE_NUM);
+        int safeSize = Math.min(Math.max(size, CommonConst.MIN_PAGE_SIZE), CommonConst.MAX_PAGE_SIZE);
         // セキュリティの関係上serviceで収支一覧取得対象のUserNoを指定
         dto.setUserNo(currentUserProvider.getLoginUserNo());
         // 削除されていないレコードを対象

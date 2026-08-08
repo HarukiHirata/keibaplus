@@ -55,7 +55,6 @@ public class SecurityConfig {
                                                 "/privacyPolicy",
                                                 "/userdeletesuccess",
                                                 "/css/**",
-                                                "/api/**",
                                                 "/js/**",
                                                 "/images/**",
                                                 "**/favicon**",

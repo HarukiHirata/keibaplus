@@ -5,6 +5,7 @@ import org.springframework.util.StringUtils;
 
 import com.keibaplus.webap.dto.ShuushiSearchDto;
 import com.keibaplus.webap.dto.ShuushiSummaryDto;
+import com.keibaplus.webap.common.CommonConst;
 import com.keibaplus.webap.dto.ShuushiKenshuCourseDto;
 
 import lombok.RequiredArgsConstructor;
@@ -144,21 +145,25 @@ public class ShuushiSummaryRepository {
         // 開始日をSQLとパラメータに設定
         if (dto.getRaceDateFrom() != null) {
             sql.append(" AND s.RACE_DATE >= :raceDateFrom");
+            sql.append(CommonConst.HANKAKU_SPACE);
         }
 
         // 終了日をSQLとパラメータに設定
         if (dto.getRaceDateTo() != null) {
             sql.append(" AND s.RACE_DATE <= :raceDateTo");
+            sql.append(CommonConst.HANKAKU_SPACE);
         }
 
         // 券種をSQLとパラメータに設定
         if (dto.getKenshuNo() != null) {
             sql.append(" AND s.KENSHU_NO = :kenshuNo");
+            sql.append(CommonConst.HANKAKU_SPACE);
         }
 
         // コースをSQLとパラメータに設定
         if (dto.getCourseNo() != null) {
             sql.append(" AND s.COURSE_NO = :courseNo");
+            sql.append(CommonConst.HANKAKU_SPACE);
         }
 
         return sql;
