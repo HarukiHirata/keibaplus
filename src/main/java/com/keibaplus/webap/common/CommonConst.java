@@ -23,5 +23,6 @@ public final class CommonConst {
     public static final int MAX_PAGE_SIZE = 100;
 
     public static final String HANKAKU_SPACE = " ";
+    public static final String LINE_SEPARATOR = "\r\n";
 
 }

@@ -43,12 +43,13 @@ public class ShuushiQueryService {
     }
 
     /**
-     * 収支取得処理
+     * 収支取得処理（収支一覧画面用・ページングあり）
      * 
      * @param dto 収支表示用DTO
      * @return 収支テーブル取得結果
      */
-    public PageResponseDto<ShuushiKenshuCourseDto> findAllShushiByLoginUser(ShuushiSearchDto dto, int page, int size) {
+    public PageResponseDto<ShuushiKenshuCourseDto> findAllShuushiByLoginUserWithPaging(ShuushiSearchDto dto, int page,
+            int size) {
         // 不正なページ番号・ページサイズを修正
         int safePage = Math.max(page, CommonConst.MIN_PAGE_NUM);
         int safeSize = Math.min(Math.max(size, CommonConst.MIN_PAGE_SIZE), CommonConst.MAX_PAGE_SIZE);
@@ -60,11 +61,19 @@ public class ShuushiQueryService {
         long totalElements = shuushiSummaryRepository.countByUserNo(dto);
         long offset = (long) safePage * safeSize;
 
-        List<ShuushiKenshuCourseDto> content = shuushiSummaryRepository.findByUserNo(dto, safeSize, offset);
+        List<ShuushiKenshuCourseDto> content = shuushiSummaryRepository.findByUserNoWithLimitAndOffset(dto, safeSize,
+                offset);
 
         int totalPages = totalElements == 0 ? 0 : (int) ((totalElements + safeSize - 1) / safeSize);
 
         return new PageResponseDto<>(content, safePage, safeSize, totalElements, totalPages);
+    }
+
+    public List<ShuushiKenshuCourseDto> findAllShuushiByLoginUserWithoutPaging(ShuushiSearchDto dto) {
+        dto.setUserNo(currentUserProvider.getLoginUserNo());
+        dto.setDelFlg(CommonConst.DEL_FLG_ACTIVE);
+
+        return shuushiSummaryRepository.findByUserNoWithoutLimitAndOffset(dto);
     }
 
     /**

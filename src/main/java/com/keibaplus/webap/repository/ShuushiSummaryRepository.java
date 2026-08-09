@@ -45,7 +45,7 @@ public class ShuushiSummaryRepository {
                 AND s.DEL_FLG = :delFlg
                 """);
 
-        sql.append(appendQuery(dto));
+        sql.append(appendConditionQuery(dto));
 
         // sqlのパラメータを設定するためにMapSqlParameterSourceのインスタンスを使用
         MapSqlParameterSource params = getSqlParameter(dto);
@@ -67,29 +67,13 @@ public class ShuushiSummaryRepository {
      * @param dto 収支検索用DTO
      * @return 収支データ取得結果
      */
-    public List<ShuushiKenshuCourseDto> findByUserNo(ShuushiSearchDto dto, int limit, long offset) {
+    public List<ShuushiKenshuCourseDto> findByUserNoWithLimitAndOffset(ShuushiSearchDto dto, int limit, long offset) {
         // sqlを組み立てるためStringBuilderのインスタンスを使用
         StringBuilder sql = new StringBuilder();
         // どの条件にも当てはまるようなsql
-        sql.append(
-                """
-                        SELECT
-                        s.shuushi_no AS "shuushiNo",
-                        s.user_no AS "userNo",
-                        s.race_date AS "raceDate",
-                        c.course_name AS "courseName",
-                        s.race_no AS "raceNo",
-                        k.kenshu_name AS "kenshuName",
-                        s.kounyuu_kingaku AS "kounyuuKingaku",
-                        s.haraimodoshi AS "haraimodoshi"
-                        FROM shuushi s
-                        LEFT JOIN kenshu k ON s.kenshu_no = k.kenshu_no
-                        LEFT JOIN course c ON s.course_no = c.course_no
-                        WHERE s.user_no = :userNo
-                        AND s.del_flg = :delFlg
-                        """);
+        sql.append(appendSelectQuery());
 
-        sql.append(appendQuery(dto));
+        sql.append(appendConditionQuery(dto));
 
         // 収支一覧画面で表示する際に収支Noの順で表示するためにソート
         sql.append("""
@@ -120,6 +104,30 @@ public class ShuushiSummaryRepository {
 
     }
 
+    public List<ShuushiKenshuCourseDto> findByUserNoWithoutLimitAndOffset(ShuushiSearchDto dto) {
+        StringBuilder sql = new StringBuilder();
+        sql.append(appendSelectQuery());
+        sql.append(appendConditionQuery(dto));
+        sql.append("ORDER BY s.shuushi_no");
+
+        MapSqlParameterSource params = getSqlParameter(dto);
+
+        // 上記で組み立てたSQLによって取得したデータをreturn（複数行の可能性があるのでqueryを使用）
+        return namedParameterJdbcTemplate.query(sql.toString(), params, (rs,
+                rowNum) -> {
+            return new ShuushiKenshuCourseDto(
+                    rs.getInt("shuushiNo"),
+                    rs.getString("userNo"),
+                    rs.getObject("raceDate", LocalDate.class),
+                    rs.getString("courseName"),
+                    rs.getInt("raceNo"),
+                    rs.getString("kenshuName"),
+                    rs.getInt("kounyuuKingaku"),
+                    rs.getInt("haraimodoshi"));
+        });
+
+    }
+
     public long countByUserNo(ShuushiSearchDto dto) {
         StringBuilder sql = new StringBuilder();
         sql.append("""
@@ -128,7 +136,7 @@ public class ShuushiSummaryRepository {
                 WHERE s.user_no = :userNo
                 AND s.del_flg = :delFlg
                 """);
-        sql.append(appendQuery(dto));
+        sql.append(appendConditionQuery(dto));
         MapSqlParameterSource params = getSqlParameter(dto);
 
         Long count = namedParameterJdbcTemplate.queryForObject(
@@ -140,7 +148,29 @@ public class ShuushiSummaryRepository {
 
     }
 
-    private StringBuilder appendQuery(ShuushiSearchDto dto) {
+    private StringBuilder appendSelectQuery() {
+        StringBuilder sql = new StringBuilder();
+        sql.append(
+                """
+                        SELECT
+                        s.shuushi_no AS "shuushiNo",
+                        s.user_no AS "userNo",
+                        s.race_date AS "raceDate",
+                        c.course_name AS "courseName",
+                        s.race_no AS "raceNo",
+                        k.kenshu_name AS "kenshuName",
+                        s.kounyuu_kingaku AS "kounyuuKingaku",
+                        s.haraimodoshi AS "haraimodoshi"
+                        FROM shuushi s
+                        LEFT JOIN kenshu k ON s.kenshu_no = k.kenshu_no
+                        LEFT JOIN course c ON s.course_no = c.course_no
+                        WHERE s.user_no = :userNo
+                        AND s.del_flg = :delFlg
+                        """);
+        return sql;
+    }
+
+    private StringBuilder appendConditionQuery(ShuushiSearchDto dto) {
         StringBuilder sql = new StringBuilder();
         // 開始日をSQLとパラメータに設定
         if (dto.getRaceDateFrom() != null) {

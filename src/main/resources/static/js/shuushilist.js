@@ -1,13 +1,16 @@
 const csrfToken = document.querySelector('meta[name="_csrf"]').content;
 const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
 const pageSize = 20;
-async function search(page = 0) {
-    const requestBody = {
+function createSearchCondition() {
+    return {
         raceDateFrom: document.getElementById("raceDateFrom").value,
         raceDateTo: document.getElementById("raceDateTo").value,
         kenshuNo: document.getElementById("kenshuNo").value,
         courseNo: document.getElementById("courseNo").value
     };
+}
+async function search(page = 0) {
+    const requestBody = createSearchCondition();
 
     const resultBody = document.getElementById("resultBody");
     const pagination = document.getElementById("pagination");
@@ -137,6 +140,41 @@ function createPageItem(label, page, disabled, active = false) {
 
     li.appendChild(button);
     return li;
+}
+
+async function downloadCsv() {
+    const requestBody = createSearchCondition();
+
+    try {
+        const response = await fetch("/api/shuushisummary/csv", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                [csrfHeader]: csrfToken
+            },
+            body: JSON.stringify(requestBody)
+        });
+
+        if (!response.ok) {
+            throw new Error("CSVの出力に失敗しました");
+        }
+
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.download = "shuushi.csv";
+
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        URL.revokeObjectURL(url);
+    } catch (error) {
+        console.error(error);
+        alert("CSV出力中にエラーが発生しました");
+    }
 }
 
 window.addEventListener("load", () => search(0));
