@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 /**
  * 収支更新用DTO
  */
@@ -14,6 +16,7 @@ public class ShuushiUpdateDto {
     private String userNo;
 
     @NotNull(message = "レース日を入力してください")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate raceDate;
 
     private Integer courseNo;
