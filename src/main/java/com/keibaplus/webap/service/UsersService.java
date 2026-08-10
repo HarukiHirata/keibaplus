@@ -183,7 +183,9 @@ public class UsersService {
                         // パスワードだけは変更しない場合は入力しないように画面上で記載しているためパスワードは入力された場合に専用のメソッドを使用
                         if (!(dto.getPassword() == null) && !(dto.getPassword().isBlank())) {
                                 usersRepository.updatePassword(currentUserProvider.getLoginUserNo(),
-                                                passwordEncoder.encode(dto.getPassword()));
+                                                passwordEncoder.encode(dto.getPassword()),
+                                                now,
+                                                now);
                         }
 
                         // 画面などに表示するログインユーザー情報を更新するためPrincipalを再作成
