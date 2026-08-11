@@ -15,6 +15,7 @@ public final class CommonConst {
     // テーブル名
     public static final String USERS_TABLE_NAME = "USERS";
     public static final String SHUUSHI_TABLE_NAME = "SHUUSHI";
+    public static final String PASSWORD_RESET_TOKEN_TABLE_NAME = "PASSWORD_RESET_TOKEN";
 
     public static final int SINGLE_ROW_UPDATE_COUNT = 1;
 
