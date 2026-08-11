@@ -176,19 +176,28 @@ public class UsersService {
                         // ユーザー情報の更新日時を登録するために現在日時を取得
                         LocalDateTime now = LocalDateTime.now();
                         // ユーザー情報更新用DTOを用いてユーザーの入力値を登録
-                        usersRepository.updateUser(
+                        int updatedUserCount = usersRepository.updateUser(
                                         currentUserProvider.getLoginUserNo(),
                                         dto.getUserId(),
                                         dto.getMailAddress(),
                                         now);
 
+                        if (updatedUserCount != CommonConst.SINGLE_ROW_UPDATE_COUNT) {
+                                throw new IllegalArgumentException("更新対象のユーザーが存在しないか、権限がありません");
+                        }
+
                         // パスワードだけは変更しない場合は入力しないように画面上で記載しているためパスワードは入力された場合に専用のメソッドを使用
                         if (!(dto.getPassword() == null) && !(dto.getPassword().isBlank())) {
-                                usersRepository.updatePassword(currentUserProvider.getLoginUserNo(),
+                                int updatedPasswordCount = usersRepository.updatePassword(
+                                                currentUserProvider.getLoginUserNo(),
                                                 CommonConst.DEL_FLG_ACTIVE,
                                                 passwordEncoder.encode(dto.getPassword()),
                                                 now,
                                                 now);
+
+                                if (updatedPasswordCount != CommonConst.SINGLE_ROW_UPDATE_COUNT) {
+                                        throw new IllegalArgumentException("更新対象のユーザーが存在しないか、権限がありません");
+                                }
                         }
 
                         // 画面などに表示するログインユーザー情報を更新するためPrincipalを再作成
@@ -214,7 +223,11 @@ public class UsersService {
                         // ユーザー情報の更新日時を登録するために現在日時を取得
                         LocalDateTime now = LocalDateTime.now();
                         // 引数のユーザー番号を用いてユーザー削除
-                        usersRepository.deleteUser(userNo, CommonConst.DEL_FLG_DELETED, now);
+                        int deletedUser = usersRepository.deleteUser(userNo, CommonConst.DEL_FLG_DELETED, now);
+
+                        if (deletedUser != CommonConst.SINGLE_ROW_UPDATE_COUNT) {
+                                throw new IllegalArgumentException("削除対象のユーザーが存在しないか、権限がありません");
+                        }
                         // ログ出力
                         logger.info("ユーザー削除成功 userNo={}", userNo);
                 } catch (Exception e) {

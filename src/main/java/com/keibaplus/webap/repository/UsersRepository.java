@@ -148,7 +148,7 @@ public interface UsersRepository extends ListCrudRepository<Users, String> {
                         UPD_DATE = :updDate
                         WHERE USER_NO = :userNo
                         """)
-        void updateUser(@Param("userNo") String userNo,
+        int updateUser(@Param("userNo") String userNo,
                         @Param("userId") String userId,
                         @Param("mailAddress") String mailAddress,
                         @Param("updDate") LocalDateTime updDate);
@@ -168,7 +168,7 @@ public interface UsersRepository extends ListCrudRepository<Users, String> {
                         WHERE USER_NO = :userNo
                         AND DEL_FLG = :delFlg
                         """)
-        void updatePassword(@Param("userNo") String userNo,
+        int updatePassword(@Param("userNo") String userNo,
                         @Param("delFlg") String delFlg,
                         @Param("password") String password,
                         @Param("updDate") LocalDateTime updDate,
@@ -188,7 +188,7 @@ public interface UsersRepository extends ListCrudRepository<Users, String> {
                         UPD_DATE = :updDate
                         WHERE USER_NO = :userNo
                         """)
-        void deleteUser(@Param("userNo") String userNo,
+        int deleteUser(@Param("userNo") String userNo,
                         @Param("delFlg") String delFlg,
                         @Param("updDate") LocalDateTime updDate);
 
