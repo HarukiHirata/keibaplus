@@ -28,6 +28,9 @@ public class Users {
     @Column("del_flg")
     private String delFlg;
 
+    @Column("password_changed_at")
+    private LocalDateTime passwordChangedAt;
+
     @Column("ins_date")
     private LocalDateTime insDate;
 
@@ -35,12 +38,13 @@ public class Users {
     private LocalDateTime updDate;
 
     public Users(String userNo, String userId, String password, String mailAddress, String delFlg,
-            LocalDateTime insDate, LocalDateTime updDate) {
+            LocalDateTime passwordChangedAt, LocalDateTime insDate, LocalDateTime updDate) {
         this.userNo = userNo;
         this.userId = userId;
         this.password = password;
         this.mailAddress = mailAddress;
         this.delFlg = delFlg;
+        this.passwordChangedAt = passwordChangedAt;
         this.insDate = insDate;
         this.updDate = updDate;
     }
@@ -83,6 +87,14 @@ public class Users {
 
     public void setDelFlg(String delFlg) {
         this.delFlg = delFlg;
+    }
+
+    public LocalDateTime getPasswordChangedAt() {
+        return passwordChangedAt;
+    }
+
+    public void setPasswordChangedAt(LocalDateTime passwordChangedAt) {
+        this.passwordChangedAt = passwordChangedAt;
     }
 
     public LocalDateTime getInsDate() {

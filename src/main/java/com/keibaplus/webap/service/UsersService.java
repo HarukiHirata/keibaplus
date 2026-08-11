@@ -63,6 +63,7 @@ public class UsersService {
                                         dto.getMailAddress(),
                                         CommonConst.DEL_FLG_ACTIVE,
                                         now,
+                                        now,
                                         now);
                         usersRepository.registerUser(
                                         user.getUserNo(),
@@ -70,6 +71,7 @@ public class UsersService {
                                         user.getPassword(),
                                         user.getMailAddress(),
                                         user.getDelFlg(),
+                                        user.getPasswordChangedAt(),
                                         user.getInsDate(),
                                         user.getUpdDate());
 
@@ -183,6 +185,7 @@ public class UsersService {
                         // パスワードだけは変更しない場合は入力しないように画面上で記載しているためパスワードは入力された場合に専用のメソッドを使用
                         if (!(dto.getPassword() == null) && !(dto.getPassword().isBlank())) {
                                 usersRepository.updatePassword(currentUserProvider.getLoginUserNo(),
+                                                CommonConst.DEL_FLG_ACTIVE,
                                                 passwordEncoder.encode(dto.getPassword()),
                                                 now,
                                                 now);
