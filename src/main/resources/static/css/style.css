@@ -1,6 +1,16 @@
+html,body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
 body {
-    background-color: #F8F9FA;
     color: #000000;
+    background-image: url('/images/keibaplus-bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 .btn-responsive {

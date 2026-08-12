@@ -1,6 +1,6 @@
 {
-  "name": "Keibaplus",
-  "short_name": "Keibap",
+  "name": "keibaplus",
+  "short_name": "keibaplus",
   "icons": [
     {
       "src": "/images/web-app-manifest-192x192.png",
