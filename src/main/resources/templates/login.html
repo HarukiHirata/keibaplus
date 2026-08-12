@@ -31,6 +31,14 @@
         ログアウトしました。
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="閉じる"></button>
         </div>
+        <div id="passwordReset"
+        th:if="${param.passwordReset}"
+        class="alert alert-success alert-dismissible fade show small fs-md-5"
+        role="alert"
+        >
+        パスワードの再設定が完了しました。設定したパスワードでログインしてください。
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="閉じる"></button>
+        </div>
       </div>
       <!-- <div class="text-center fs-3" th:if="${param.registered}">登録完了しました。ログインしてください</div>
       <div class="text-center fs-3" th:if="${param.error}">ログインに失敗しました。</div>

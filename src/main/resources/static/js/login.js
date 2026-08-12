@@ -23,4 +23,12 @@ document.addEventListener("DOMContentLoaded", function() {
         }, 3000);
     }
 
+    const passwordResetMessage = document.getElementById("passwordReset");
+    if (passwordResetMessage) {
+        setTimeout(() => {
+            const bsAlert = bootstrap.Alert.getOrCreateInstance(passwordResetMessage);
+            bsAlert.close();
+        }, 3000);
+    }
+
 });

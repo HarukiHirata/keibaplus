@@ -32,11 +32,12 @@ public class PasswordResetController {
     }
 
     /**
-     * メールアドレス入力画面。
+     * パスワードリセット申請画面。
      */
     @GetMapping("/password-reset-request")
-    public String requestPage(Model model) {
+    public String requestPage(Model model, HttpServletRequest request) {
         model.addAttribute("form", new PasswordResetRequestDto());
+        logger.info("パスワードリセット申請画面表示 uri={}", request.getRequestURI());
         return "passwordResetRequest";
     }
 
@@ -60,7 +61,7 @@ public class PasswordResetController {
     }
 
     /**
-     * ユーザー削除成功画面の表示
+     * パスワード再設定用メール送信完了画面の表示
      * 
      * @param request HTTPサーブレットリクエスト情報
      * @return ユーザー削除成功画面のテンプレート
@@ -68,21 +69,24 @@ public class PasswordResetController {
     @GetMapping("/password-reset-mail-sent")
     public String passwordResetMailSentPage(HttpServletRequest request) {
         // ログ出力・テンプレートをreturn
-        logger.info("パスワード再発行メール送信完了画面表示 uri={}", request.getRequestURI());
+        logger.info("パスワード再設定用メール送信完了画面表示 uri={}", request.getRequestURI());
         return "passwordResetMailSent";
     }
 
     /**
-     * メール内リンクから新しいパスワード入力画面を表示。
+     * メール内リンクからパスワード再設定画面を表示。
      */
     @GetMapping("/password-reset")
     public String resetPage(
             @RequestParam("token") String token,
-            Model model) {
+            Model model,
+            HttpServletRequest request) {
 
         if (!passwordResetService.isUsableToken(token)) {
             return "passwordResetInvalid";
         }
+
+        logger.info("パスワード再設定画面表示 uri={}", request.getRequestURI());
 
         PasswordResetDto dto = new PasswordResetDto();
         dto.setToken(token);
