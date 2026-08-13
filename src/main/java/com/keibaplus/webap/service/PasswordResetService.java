@@ -28,10 +28,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PasswordResetService {
 
-    // トークンのバイト数・有効期限
-    private static final int TOKEN_BYTES = 32;
-    private static final long TOKEN_VALID_MINUTES = 30;
-
     // トークン生成処理で使用
     private final SecureRandom secureRandom = new SecureRandom();
 
@@ -81,7 +77,7 @@ public class PasswordResetService {
                 registerPasswordResetTokenNo,
                 user.getUserNo(),
                 tokenHash,
-                now.plusMinutes(TOKEN_VALID_MINUTES),
+                now.plusMinutes(CommonConst.TOKEN_VALID_MINUTES),
                 null,
                 null,
                 now);
@@ -130,7 +126,7 @@ public class PasswordResetService {
                 now,
                 resetToken.getResetTokenId());
 
-        if (usedCount != 1) {
+        if (usedCount != CommonConst.SINGLE_ROW_UPDATE_COUNT) {
             throw new InvalidPasswordResetTokenException();
         }
 
@@ -141,7 +137,7 @@ public class PasswordResetService {
                 now,
                 now);
 
-        if (updatedCount != 1) {
+        if (updatedCount != CommonConst.SINGLE_ROW_UPDATE_COUNT) {
             throw new InvalidPasswordResetTokenException();
         }
 
@@ -157,7 +153,7 @@ public class PasswordResetService {
      */
     private String generateToken() {
         // 指定したバイト数のランダムな文字列を生成
-        byte[] bytes = new byte[TOKEN_BYTES];
+        byte[] bytes = new byte[CommonConst.TOKEN_BYTES];
         secureRandom.nextBytes(bytes);
 
         // URLとして使用できるようにbase64エンコードでreturn

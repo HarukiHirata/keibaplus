@@ -25,6 +25,10 @@ public final class CommonConst {
     public static final int MIN_PAGE_SIZE = 1;
     public static final int MAX_PAGE_SIZE = 100;
 
+    // パスワードリセットトークンバイト数・有効期限
+    public static final int TOKEN_BYTES = 32;
+    public static final long TOKEN_VALID_MINUTES = 30;
+
     // スペース・改行
     public static final String HANKAKU_SPACE = " ";
     public static final String LINE_SEPARATOR = "\r\n";
