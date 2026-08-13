@@ -19,7 +19,10 @@ import com.keibaplus.webap.repository.PasswordResetTokenRepository;
 import com.keibaplus.webap.repository.UsersRepository;
 import com.keibaplus.webap.exception.InvalidPasswordResetTokenException;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class PasswordResetService {
 
     private static final int TOKEN_BYTES = 32;
@@ -32,19 +35,6 @@ public class PasswordResetService {
     private final PasswordEncoder passwordEncoder;
     private final PasswordResetMailService mailService;
     private final SaibanService saibanService;
-
-    public PasswordResetService(
-            UsersRepository usersRepository,
-            PasswordResetTokenRepository tokenRepository,
-            PasswordEncoder passwordEncoder,
-            PasswordResetMailService mailService,
-            SaibanService saibanService) {
-        this.usersRepository = usersRepository;
-        this.tokenRepository = tokenRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.mailService = mailService;
-        this.saibanService = saibanService;
-    }
 
     /**
      * 再設定リンクを発行する。

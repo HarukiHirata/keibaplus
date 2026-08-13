@@ -20,11 +20,14 @@ import com.keibaplus.webap.repository.ShuushiSummaryRepository;
 
 import java.nio.file.AccessDeniedException;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * 収支テーブル取得関連のService
  *
  */
 @Service
+@RequiredArgsConstructor
 public class ShuushiQueryService {
 
     private final ShuushiRepository shuushiRepository;
@@ -33,14 +36,6 @@ public class ShuushiQueryService {
     private final ShuushiKenshuCourseRepository shuushiKenshuCourseRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(ShuushiQueryService.class);
-
-    public ShuushiQueryService(ShuushiRepository shuushiRepository, ShuushiSummaryRepository shuushiSummaryRepository,
-            CurrentUserProvider currentUserProvider, ShuushiKenshuCourseRepository shuushiKenshuCourseRepository) {
-        this.shuushiRepository = shuushiRepository;
-        this.shuushiSummaryRepository = shuushiSummaryRepository;
-        this.currentUserProvider = currentUserProvider;
-        this.shuushiKenshuCourseRepository = shuushiKenshuCourseRepository;
-    }
 
     /**
      * 収支取得処理（収支一覧画面用・ページングあり）

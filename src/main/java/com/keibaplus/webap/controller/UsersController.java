@@ -22,10 +22,13 @@ import com.keibaplus.webap.dto.UsersRegisterDto;
 import com.keibaplus.webap.dto.UsersUpdateDto;
 import com.keibaplus.webap.service.UsersService;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * ユーザー管理処理関係のコントローラー
  */
 @Controller
+@RequiredArgsConstructor
 public class UsersController {
 
     // ユーザー管理処理のためにUsersServiceのインスタンスを使用
@@ -34,12 +37,6 @@ public class UsersController {
 
     // ロガーの定義
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
-
-    // コンストラクタ
-    public UsersController(UsersService usersService, CurrentUserProvider currentUserProvider) {
-        this.usersService = usersService;
-        this.currentUserProvider = currentUserProvider;
-    }
 
     /**
      * ユーザー登録画面の表示

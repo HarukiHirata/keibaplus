@@ -8,18 +8,16 @@ import com.keibaplus.webap.common.CommonConst;
 import com.keibaplus.webap.entity.Users;
 import com.keibaplus.webap.repository.UsersRepository;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * ログインユーザーのデータを取得するためのUserDetailsServiceを独自で実装したクラス
  */
 @Service
+@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
     // ユーザーデータを取得するためUsersRepositoryのインスタンスを使用
     private final UsersRepository usersRepository;
-
-    // コンストラクタ
-    public CustomUserDetailsService(UsersRepository usersRepository) {
-        this.usersRepository = usersRepository;
-    }
 
     /**
      * 収支登録でユーザー番号を設定したりトップ画面でユーザーIDを表示したりするためにログインユーザーの情報を取得

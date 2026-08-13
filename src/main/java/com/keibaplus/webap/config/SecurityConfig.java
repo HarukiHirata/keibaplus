@@ -9,11 +9,14 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import com.keibaplus.webap.service.CustomUserDetailsService;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * Spring Security関連の設定クラス
  */
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
         // 必要なインスタンスを使用
         private final CustomUserDetailsService customUserDetailsService;
@@ -21,19 +24,6 @@ public class SecurityConfig {
         private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
         private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
         private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
-
-        // コンストラクタ
-        public SecurityConfig(CustomUserDetailsService customUserDetailsService,
-                        CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler,
-                        CustomAuthenticationFailureHandler customAuthenticationFailureHandler,
-                        CustomAuthenticationEntryPoint customAuthenticationEntryPoint,
-                        CustomLogoutSuccessHandler customLogoutSuccessHandler) {
-                this.customUserDetailsService = customUserDetailsService;
-                this.customAuthenticationSuccessHandler = customAuthenticationSuccessHandler;
-                this.customAuthenticationFailureHandler = customAuthenticationFailureHandler;
-                this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
-                this.customLogoutSuccessHandler = customLogoutSuccessHandler;
-        }
 
         /**
          * SecurityFilterChainのBean定義

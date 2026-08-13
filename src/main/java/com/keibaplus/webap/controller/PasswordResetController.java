@@ -19,17 +19,15 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import lombok.RequiredArgsConstructor;
+
 @Controller
+@RequiredArgsConstructor
 public class PasswordResetController {
 
     private final PasswordResetService passwordResetService;
 
     private static final Logger logger = LoggerFactory.getLogger(PasswordResetController.class);
-
-    public PasswordResetController(
-            PasswordResetService passwordResetService) {
-        this.passwordResetService = passwordResetService;
-    }
 
     /**
      * パスワードリセット申請画面。

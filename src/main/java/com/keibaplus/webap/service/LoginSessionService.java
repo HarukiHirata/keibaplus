@@ -7,20 +7,17 @@ import org.springframework.stereotype.Service;
 
 import com.keibaplus.webap.common.CurrentUserProvider;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * ユーザー情報更新後に認証情報も更新するための処理
  * 
  */
 @Service
+@RequiredArgsConstructor
 public class LoginSessionService {
     private final CustomUserDetailsService customUserDetailsService;
     private final CurrentUserProvider currentUserProvider;
-
-    public LoginSessionService(CustomUserDetailsService customUserDetailsService,
-            CurrentUserProvider currentUserProvider) {
-        this.customUserDetailsService = customUserDetailsService;
-        this.currentUserProvider = currentUserProvider;
-    }
 
     public void refreshLoginUser() {
         String userNo = currentUserProvider.getLoginUserNo();

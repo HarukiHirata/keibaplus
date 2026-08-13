@@ -16,10 +16,13 @@ import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * ユーザーテーブル関連のService
  */
 @Service
+@RequiredArgsConstructor
 public class UsersService {
 
         // 必要なrepositoryのインスタンスを使用
@@ -30,17 +33,6 @@ public class UsersService {
         private final CurrentUserProvider currentUserProvider;
         // ロガーの定義
         private static final Logger logger = LoggerFactory.getLogger(UsersService.class);
-
-        // コンストラクタ
-        public UsersService(UsersRepository usersRepository, SaibanService saibanService,
-                        PasswordEncoder passwordEncoder, LoginSessionService loginSessionService,
-                        CurrentUserProvider currentUserProvider) {
-                this.usersRepository = usersRepository;
-                this.saibanService = saibanService;
-                this.passwordEncoder = passwordEncoder;
-                this.loginSessionService = loginSessionService;
-                this.currentUserProvider = currentUserProvider;
-        }
 
         /**
          * ユーザー登録処理

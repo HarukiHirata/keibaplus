@@ -13,10 +13,13 @@ import com.keibaplus.webap.service.MasterDataService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * ログイン・認証処理関係のコントローラー
  */
 @Controller
+@RequiredArgsConstructor
 public class LoginController {
 
     // 券種やコースの一覧を取得するためにShuushiServiceのインスタンスを使用
@@ -25,12 +28,6 @@ public class LoginController {
 
     // ロガーの定義
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
-
-    // コンストラクタ
-    public LoginController(CurrentUserProvider currentUserProvider, MasterDataService masterDataService) {
-        this.currentUserProvider = currentUserProvider;
-        this.masterDataService = masterDataService;
-    }
 
     /**
      * ログイン画面の表示

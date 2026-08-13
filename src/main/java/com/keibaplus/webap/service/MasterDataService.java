@@ -9,20 +9,18 @@ import com.keibaplus.webap.entity.Kenshu;
 import com.keibaplus.webap.repository.CourseRepository;
 import com.keibaplus.webap.repository.KenshuRepository;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * マスターテーブルのデータ取得関連のService
  * MasterDataService
  */
 @Service
+@RequiredArgsConstructor
 public class MasterDataService {
 
     private final KenshuRepository kenshuRepository;
     private final CourseRepository courseRepository;
-
-    public MasterDataService(KenshuRepository kenshuRepository, CourseRepository courseRepository) {
-        this.kenshuRepository = kenshuRepository;
-        this.courseRepository = courseRepository;
-    }
 
     /**
      * 券種テーブル取得処理

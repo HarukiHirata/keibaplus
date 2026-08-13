@@ -1,7 +1,6 @@
 package com.keibaplus.webap.repository;
 
 import org.springframework.stereotype.Repository;
-import org.springframework.util.StringUtils;
 
 import com.keibaplus.webap.dto.ShuushiSearchDto;
 import com.keibaplus.webap.dto.ShuushiSummaryDto;

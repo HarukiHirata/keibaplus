@@ -23,10 +23,13 @@ import com.keibaplus.webap.service.MasterDataService;
 import com.keibaplus.webap.service.ShuushiCommandService;
 import com.keibaplus.webap.service.ShuushiQueryService;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * 収支管理処理関係のコントローラー
  */
 @Controller
+@RequiredArgsConstructor
 public class ShuushiController {
 
     // 収支管理処理のためにShuushiServiceのインスタンスを使用
@@ -37,15 +40,6 @@ public class ShuushiController {
 
     // ロガーの定義
     private static final Logger logger = LoggerFactory.getLogger(ShuushiController.class);
-
-    // コンストラクタ
-    public ShuushiController(ShuushiCommandService shuushiCommandService, CurrentUserProvider currentUserProvider,
-            MasterDataService masterDataService, ShuushiQueryService shuushiQueryService) {
-        this.shuushiCommandService = shuushiCommandService;
-        this.currentUserProvider = currentUserProvider;
-        this.masterDataService = masterDataService;
-        this.shuushiQueryService = shuushiQueryService;
-    }
 
     /**
      * 収支登録画面の表示

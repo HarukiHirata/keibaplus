@@ -9,15 +9,14 @@ import org.springframework.util.StringUtils;
 import com.keibaplus.webap.entity.Saiban;
 import com.keibaplus.webap.repository.SaibanRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class SaibanService {
     private final SaibanRepository saibanRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(SaibanService.class);
-
-    public SaibanService(SaibanRepository saibanRepository) {
-        this.saibanRepository = saibanRepository;
-    }
 
     @Transactional
     public String issueNextNo(String tableName) {

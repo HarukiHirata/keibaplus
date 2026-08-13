@@ -17,10 +17,13 @@ import com.keibaplus.webap.common.CurrentUserProvider;
 
 import java.time.LocalDateTime;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * 収支テーブル登録・更新・削除のService
  */
 @Service
+@RequiredArgsConstructor
 public class ShuushiCommandService {
         // 必要なrepositoryのインスタンスを使用
         private final ShuushiRepository shuushiRepository;
@@ -28,14 +31,6 @@ public class ShuushiCommandService {
         private final CurrentUserProvider currentUserProvider;
         // ロガーの定義
         private static final Logger logger = LoggerFactory.getLogger(ShuushiCommandService.class);
-
-        // コンストラクタ
-        public ShuushiCommandService(ShuushiRepository shuushiRepository, SaibanService saibanService,
-                        CurrentUserProvider currentUserProvider) {
-                this.shuushiRepository = shuushiRepository;
-                this.saibanService = saibanService;
-                this.currentUserProvider = currentUserProvider;
-        }
 
         /**
          * 収支登録処理
