@@ -4,6 +4,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.AssertTrue;
 
+/**
+ * パスワード再設定用DTO
+ */
 public class PasswordResetDto {
 
     @NotBlank

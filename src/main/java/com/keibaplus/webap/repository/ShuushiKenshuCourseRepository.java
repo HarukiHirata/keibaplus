@@ -17,6 +17,8 @@ public interface ShuushiKenshuCourseRepository extends ListCrudRepository<Shuush
          * 収支削除画面で表示するために収支・コース・券種テーブルを結合して取得
          * 
          * @param shuushiNo 収支No
+         * @param userNo    ユーザー番号
+         * @param delFlg    削除フラグ
          * @return 収支データ取得結果
          */
         @Query("""

@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MasterDataService {
 
+    // Bean注入
     private final KenshuRepository kenshuRepository;
     private final CourseRepository courseRepository;
 

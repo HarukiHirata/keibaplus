@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UsersService {
 
-        // 必要なrepositoryのインスタンスを使用
+        // Bean注入
         private final UsersRepository usersRepository;
         private final SaibanService saibanService;
         private final PasswordEncoder passwordEncoder;

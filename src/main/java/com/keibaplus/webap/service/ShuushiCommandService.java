@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class ShuushiCommandService {
-        // 必要なrepositoryのインスタンスを使用
+        // Bean注入
         private final ShuushiRepository shuushiRepository;
         private final SaibanService saibanService;
         private final CurrentUserProvider currentUserProvider;

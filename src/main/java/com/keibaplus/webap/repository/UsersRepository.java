@@ -16,180 +16,190 @@ import com.keibaplus.webap.entity.Users;
  */
 public interface UsersRepository extends ListCrudRepository<Users, String> {
 
-        /**
-         * ユーザー情報更新画面でデータを表示するためユーザー番号で検索する
-         * 
-         * @param userNo ユーザー番号
-         * @return ユーザーテーブル取得結果
-         */
-        @Query("SELECT * FROM USERS WHERE USER_NO = :userNo AND DEL_FLG = :delFlg")
-        Optional<Users> findByUserNo(@Param("userNo") String userNo, @Param("delFlg") String delFlg);
+    /**
+     * ユーザー情報更新画面でデータを表示するためユーザー番号で検索する
+     * 
+     * @param userNo ユーザー番号
+     * @param delFlg 削除フラグ
+     * @return ユーザーテーブル取得結果
+     */
+    @Query("SELECT * FROM USERS WHERE USER_NO = :userNo AND DEL_FLG = :delFlg")
+    Optional<Users> findByUserNo(@Param("userNo") String userNo, @Param("delFlg") String delFlg);
 
-        /**
-         * spring security関連で使用するためユーザーIDで検索する
-         * 
-         * @param userId ユーザーID
-         * @return ユーザーテーブル取得結果
-         */
-        @Query("SELECT * FROM USERS WHERE USER_ID = :userId AND DEL_FLG = :delFlg")
-        Optional<Users> findByUserId(@Param("userId") String userId, @Param("delFlg") String delFlg);
+    /**
+     * spring security関連で使用するためユーザーIDで検索する
+     * 
+     * @param userId ユーザーID
+     * @param delFlg 削除フラグ
+     * @return ユーザーテーブル取得結果
+     */
+    @Query("SELECT * FROM USERS WHERE USER_ID = :userId AND DEL_FLG = :delFlg")
+    Optional<Users> findByUserId(@Param("userId") String userId, @Param("delFlg") String delFlg);
 
-        /**
-         * パスワード再設定処理で使用するためメールアドレスで検索する
-         * 
-         * @param mailAddress メールアドレス
-         * @return ユーザーテーブル取得結果
-         */
-        @Query("SELECT * FROM USERS WHERE MAIL_ADDRESS = :mailAddress AND DEL_FLG = :delFlg")
-        Optional<Users> findByMailAddress(@Param("mailAddress") String mailAddress, @Param("delFlg") String delFlg);
+    /**
+     * パスワード再設定処理で使用するためメールアドレスで検索する
+     * 
+     * @param mailAddress メールアドレス
+     * @param delFlg      削除フラグ
+     * @return ユーザーテーブル取得結果
+     */
+    @Query("SELECT * FROM USERS WHERE MAIL_ADDRESS = :mailAddress AND DEL_FLG = :delFlg")
+    Optional<Users> findByMailAddress(@Param("mailAddress") String mailAddress, @Param("delFlg") String delFlg);
 
-        /**
-         * 重複するユーザーIDがないかを確認するために該当のユーザーIDの有無を検索
-         * 
-         * @param userId ユーザーID
-         * @return 検索対象のユーザーIDの有無（1件以上存在する場合は「1」そうでない場合は「0」を返却）
-         */
-        @Query("""
-                        SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
-                        FROM USERS
-                        WHERE USER_ID = :userId
-                        AND DEL_FLG = :delFlg
-                        """)
-        boolean existsByUserId(String userId, String delFlg);
+    /**
+     * 重複するユーザーIDがないかを確認するために該当のユーザーIDの有無を検索
+     * 
+     * @param userId ユーザーID
+     * @param delFlg 削除フラグ
+     * @return 検索対象のユーザーIDの有無（1件以上存在する場合は「1」そうでない場合は「0」を返却）
+     */
+    @Query("""
+            SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+            FROM USERS
+            WHERE USER_ID = :userId
+            AND DEL_FLG = :delFlg
+            """)
+    boolean existsByUserId(String userId, String delFlg);
 
-        /**
-         * 重複するメールアドレスがないかを確認するために該当のメールアドレスの有無を検索
-         * 
-         * @param mailAddress メールアドレス
-         * @return 検索対象のメールアドレスの有無（1件以上存在する場合は「1」そうでない場合は「0」を返却）
-         */
-        @Query("""
-                        SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
-                        FROM USERS
-                        WHERE MAIL_ADDRESS = :mailAddress
-                        AND DEL_FLG = :delFlg
-                        """)
+    /**
+     * 重複するメールアドレスがないかを確認するために該当のメールアドレスの有無を検索
+     * 
+     * @param mailAddress メールアドレス
+     * @param delFlg      削除フラグ
+     * @return 検索対象のメールアドレスの有無（1件以上存在する場合は「1」そうでない場合は「0」を返却）
+     */
+    @Query("""
+            SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+            FROM USERS
+            WHERE MAIL_ADDRESS = :mailAddress
+            AND DEL_FLG = :delFlg
+            """)
 
-        boolean existsByMailAddress(String mailAddress, String delFlg);
+    boolean existsByMailAddress(String mailAddress, String delFlg);
 
-        /**
-         * 自身以外で重複するユーザーIDがないかを確認するために該当のユーザーIDの有無を検索
-         * 
-         * @param userId ユーザーID
-         * @param userNo ユーザー番号
-         * @return 検索対象のユーザーIDの有無（1件以上存在する場合は「1」そうでない場合は「0」を返却）
-         */
-        @Query("""
-                        SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
-                        FROM USERS
-                        WHERE USER_ID = :userId
-                        AND DEL_FLG = :delFlg
-                        AND USER_NO != :userNo
-                        """)
-        boolean existsByUserIdAndUserNo(String userId, String delFlg, String userNo);
+    /**
+     * 自身以外で重複するユーザーIDがないかを確認するために該当のユーザーIDの有無を検索
+     * 
+     * @param userId ユーザーID
+     * @param delFlg 削除フラグ
+     * @param userNo ユーザー番号
+     * @return 検索対象のユーザーIDの有無（1件以上存在する場合は「1」そうでない場合は「0」を返却）
+     */
+    @Query("""
+            SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+            FROM USERS
+            WHERE USER_ID = :userId
+            AND DEL_FLG = :delFlg
+            AND USER_NO != :userNo
+            """)
+    boolean existsByUserIdAndUserNo(String userId, String delFlg, String userNo);
 
-        /**
-         * 自身以外で重複するメールアドレスがないかを確認するために該当のメールアドレスの有無を検索
-         * 
-         * @param mailAddress メールアドレス
-         * @param userNo      ユーザー番号
-         * @return 検索対象のメールアドレスの有無（1件以上存在する場合は「1」そうでない場合は「0」を返却）
-         */
-        @Query("""
-                        SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
-                        FROM USERS
-                        WHERE MAIL_ADDRESS = :mailAddress
-                        AND DEL_FLG = :delFlg
-                        AND USER_NO != :userNo
-                        """)
+    /**
+     * 自身以外で重複するメールアドレスがないかを確認するために該当のメールアドレスの有無を検索
+     * 
+     * @param mailAddress メールアドレス
+     * @param delFlg      削除フラグ
+     * @param userNo      ユーザー番号
+     * @return 検索対象のメールアドレスの有無（1件以上存在する場合は「1」そうでない場合は「0」を返却）
+     */
+    @Query("""
+            SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+            FROM USERS
+            WHERE MAIL_ADDRESS = :mailAddress
+            AND DEL_FLG = :delFlg
+            AND USER_NO != :userNo
+            """)
 
-        boolean existsByMailAddressAndUserNo(String mailAddress, String delFlg, String userNo);
+    boolean existsByMailAddressAndUserNo(String mailAddress, String delFlg, String userNo);
 
-        /**
-         * ユーザー登録
-         * 
-         * @param userNo      ユーザー番号
-         * @param userId      ユーザーID
-         * @param password    パスワード
-         * @param mailAddress メールアドレス
-         * @param delFlg      削除フラグ
-         * @param insDate     登録日時
-         * @param updDate     更新日時
-         */
-        @Modifying
-        @Query("""
-                            INSERT INTO USERS
-                            (USER_NO, USER_ID, PASSWORD, MAIL_ADDRESS, DEL_FLG, PASSWORD_CHANGED_AT, INS_DATE, UPD_DATE)
-                            VALUES
-                            (:userNo, :userId, :password, :mailAddress, :delFlg, :passwordChangedAt, :insDate, :updDate)
-                        """)
-        void registerUser(@Param("userNo") String userNo,
-                        @Param("userId") String userId,
-                        @Param("password") String password,
-                        @Param("mailAddress") String mailAddress,
-                        @Param("delFlg") String delFlg,
-                        @Param("passwordChangedAt") LocalDateTime passwordChangedAt,
-                        @Param("insDate") LocalDateTime insDate,
-                        @Param("updDate") LocalDateTime updDate);
+    /**
+     * ユーザー登録
+     * 
+     * @param userNo      ユーザー番号
+     * @param userId      ユーザーID
+     * @param password    パスワード
+     * @param mailAddress メールアドレス
+     * @param delFlg      削除フラグ
+     * @param insDate     登録日時
+     * @param updDate     更新日時
+     */
+    @Modifying
+    @Query("""
+                INSERT INTO USERS
+                (USER_NO, USER_ID, PASSWORD, MAIL_ADDRESS, DEL_FLG, PASSWORD_CHANGED_AT, INS_DATE, UPD_DATE)
+                VALUES
+                (:userNo, :userId, :password, :mailAddress, :delFlg, :passwordChangedAt, :insDate, :updDate)
+            """)
+    void registerUser(@Param("userNo") String userNo,
+            @Param("userId") String userId,
+            @Param("password") String password,
+            @Param("mailAddress") String mailAddress,
+            @Param("delFlg") String delFlg,
+            @Param("passwordChangedAt") LocalDateTime passwordChangedAt,
+            @Param("insDate") LocalDateTime insDate,
+            @Param("updDate") LocalDateTime updDate);
 
-        /**
-         * ユーザー情報更新
-         * 
-         * @param userNo      ユーザー番号
-         * @param userId      ユーザーID
-         * @param mailAddress メールアドレス
-         * @param updDate     更新日時
-         */
-        @Modifying
-        @Query("""
-                        UPDATE USERS
-                        SET USER_ID = :userId,
-                        MAIL_ADDRESS = :mailAddress,
-                        UPD_DATE = :updDate
-                        WHERE USER_NO = :userNo
-                        """)
-        int updateUser(@Param("userNo") String userNo,
-                        @Param("userId") String userId,
-                        @Param("mailAddress") String mailAddress,
-                        @Param("updDate") LocalDateTime updDate);
+    /**
+     * ユーザー情報更新
+     * 
+     * @param userNo      ユーザー番号
+     * @param userId      ユーザーID
+     * @param mailAddress メールアドレス
+     * @param updDate     更新日時
+     */
+    @Modifying
+    @Query("""
+            UPDATE USERS
+            SET USER_ID = :userId,
+            MAIL_ADDRESS = :mailAddress,
+            UPD_DATE = :updDate
+            WHERE USER_NO = :userNo
+            """)
+    int updateUser(@Param("userNo") String userNo,
+            @Param("userId") String userId,
+            @Param("mailAddress") String mailAddress,
+            @Param("updDate") LocalDateTime updDate);
 
-        /**
-         * パスワード更新（ユーザー情報更新画面でパスワード更新しない場合は未入力としているためほかの項目とメソッドを分割）
-         * 
-         * @param userNo   ユーザー番号
-         * @param password パスワード
-         */
-        @Modifying
-        @Query("""
-                        UPDATE USERS
-                        SET PASSWORD = :password,
-                        UPD_DATE = :updDate,
-                        PASSWORD_CHANGED_AT = :passwordChangedAt
-                        WHERE USER_NO = :userNo
-                        AND DEL_FLG = :delFlg
-                        """)
-        int updatePassword(@Param("userNo") String userNo,
-                        @Param("delFlg") String delFlg,
-                        @Param("password") String password,
-                        @Param("updDate") LocalDateTime updDate,
-                        @Param("passwordChangedAt") LocalDateTime passwordChangedAt);
+    /**
+     * パスワード更新（ユーザー情報更新画面でパスワード更新しない場合は未入力としているためほかの項目とメソッドを分割）
+     * 
+     * @param userNo            ユーザー番号
+     * @param delFlg            削除フラグ
+     * @param password          パスワード
+     * @param updDate           更新日時
+     * @param passwordChangedAt パスワード更新日時
+     */
+    @Modifying
+    @Query("""
+            UPDATE USERS
+            SET PASSWORD = :password,
+            UPD_DATE = :updDate,
+            PASSWORD_CHANGED_AT = :passwordChangedAt
+            WHERE USER_NO = :userNo
+            AND DEL_FLG = :delFlg
+            """)
+    int updatePassword(@Param("userNo") String userNo,
+            @Param("delFlg") String delFlg,
+            @Param("password") String password,
+            @Param("updDate") LocalDateTime updDate,
+            @Param("passwordChangedAt") LocalDateTime passwordChangedAt);
 
-        /**
-         * ユーザー削除
-         * 
-         * @param userNo  ユーザー番号
-         * @param delFlg  削除フラグ
-         * @param updDate 更新日時
-         */
-        @Modifying
-        @Query("""
-                        UPDATE USERS
-                        SET DEL_FLG = :delFlg,
-                        UPD_DATE = :updDate
-                        WHERE USER_NO = :userNo
-                        """)
-        int deleteUser(@Param("userNo") String userNo,
-                        @Param("delFlg") String delFlg,
-                        @Param("updDate") LocalDateTime updDate);
+    /**
+     * ユーザー削除
+     * 
+     * @param userNo  ユーザー番号
+     * @param delFlg  削除フラグ
+     * @param updDate 更新日時
+     */
+    @Modifying
+    @Query("""
+            UPDATE USERS
+            SET DEL_FLG = :delFlg,
+            UPD_DATE = :updDate
+            WHERE USER_NO = :userNo
+            """)
+    int deleteUser(@Param("userNo") String userNo,
+            @Param("delFlg") String delFlg,
+            @Param("updDate") LocalDateTime updDate);
 
 }

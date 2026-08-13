@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LoginController {
 
-    // 券種やコースの一覧を取得するためにShuushiServiceのインスタンスを使用
+    // Beanの注入
     private final CurrentUserProvider currentUserProvider;
     private final MasterDataService masterDataService;
 

@@ -6,6 +6,10 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
 
+/**
+ * パスワードリセットトークンテーブル用エンティティ
+ * PasswordResetToken
+ */
 @Table("password_reset_token")
 public class PasswordResetToken {
 

@@ -30,17 +30,21 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ShuushiQueryService {
 
+    // Bean注入
     private final ShuushiRepository shuushiRepository;
     private final ShuushiSummaryRepository shuushiSummaryRepository;
     private final CurrentUserProvider currentUserProvider;
     private final ShuushiKenshuCourseRepository shuushiKenshuCourseRepository;
 
+    // ロガーの定義
     private static final Logger logger = LoggerFactory.getLogger(ShuushiQueryService.class);
 
     /**
      * 収支取得処理（収支一覧画面用・ページングあり）
      * 
-     * @param dto 収支表示用DTO
+     * @param dto  収支表示用DTO
+     * @param page ページ番号
+     * @param size 該当ページのレコード数
      * @return 収支テーブル取得結果
      */
     public PageResponseDto<ShuushiKenshuCourseDto> findAllShuushiByLoginUserWithPaging(ShuushiSearchDto dto, int page,
@@ -53,18 +57,30 @@ public class ShuushiQueryService {
         // 削除されていないレコードを対象
         dto.setDelFlg(CommonConst.DEL_FLG_ACTIVE);
 
+        // 該当ユーザーの収支テーブルの件数
         long totalElements = shuushiSummaryRepository.countByUserNo(dto);
+
+        // ページ番号×ページサイズでスキップする件数を取得
         long offset = (long) safePage * safeSize;
 
+        // 収支テーブルを検索
         List<ShuushiKenshuCourseDto> content = shuushiSummaryRepository.findByUserNoWithLimitAndOffset(dto, safeSize,
                 offset);
 
+        // 該当ユーザーの全件のページ数を計算して収支テーブル取得結果用（ページングあり）DTOをreturn
         int totalPages = totalElements == 0 ? 0 : (int) ((totalElements + safeSize - 1) / safeSize);
 
         return new PageResponseDto<>(content, safePage, safeSize, totalElements, totalPages);
     }
 
+    /**
+     * 収支取得処理（CSV出力用・ページングなし）
+     * 
+     * @param dto 収支検索用DTO
+     * @return
+     */
     public List<ShuushiKenshuCourseDto> findAllShuushiByLoginUserWithoutPaging(ShuushiSearchDto dto) {
+        // セキュリティ上、ユーザー番号と削除フラグをServiceで設定して収支テーブルの検索結果をreturn
         dto.setUserNo(currentUserProvider.getLoginUserNo());
         dto.setDelFlg(CommonConst.DEL_FLG_ACTIVE);
 

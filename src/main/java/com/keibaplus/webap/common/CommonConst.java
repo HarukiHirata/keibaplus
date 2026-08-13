@@ -17,12 +17,15 @@ public final class CommonConst {
     public static final String SHUUSHI_TABLE_NAME = "SHUUSHI";
     public static final String PASSWORD_RESET_TOKEN_TABLE_NAME = "PASSWORD_RESET_TOKEN";
 
+    // DB更新件数
     public static final int SINGLE_ROW_UPDATE_COUNT = 1;
 
+    // 収支一覧画面の1ページ当たりのレコード数・ページ数
     public static final int MIN_PAGE_NUM = 0;
     public static final int MIN_PAGE_SIZE = 1;
     public static final int MAX_PAGE_SIZE = 100;
 
+    // スペース・改行
     public static final String HANKAKU_SPACE = " ";
     public static final String LINE_SEPARATOR = "\r\n";
 

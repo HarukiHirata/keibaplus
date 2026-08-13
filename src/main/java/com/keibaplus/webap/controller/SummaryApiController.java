@@ -28,12 +28,9 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/shuushisummary")
 public class SummaryApiController {
 
-    // 収支集計処理のためにShuushiSummaryServiceのインスタンスを使用
+    // Bean注入
     private final ShuushiSummaryService shuushiSummaryService;
-
-    // 収支集計処理のためにShuushiServiceのインスタンスを使用
     private final ShuushiQueryService shuushiQueryService;
-
     private final ShuushiCsvService shuushiCsvService;
 
     /**
@@ -51,7 +48,9 @@ public class SummaryApiController {
     /**
      * 収支一覧取得処理
      * 
-     * @param dto 収支検索用DTO
+     * @param dto  収支検索用DTO
+     * @param page 収支一覧画面のページ番号
+     * @param size 収支一覧画面の該当ページのレコード数
      * @return ShuushiServiceの収支一覧取得結果
      */
     @PostMapping("/itiran")
@@ -62,12 +61,20 @@ public class SummaryApiController {
         return shuushiQueryService.findAllShuushiByLoginUserWithPaging(dto, page, size);
     }
 
+    /**
+     * 収支一覧CSV出力機能
+     * 
+     * @param dto 収支検索用DTO
+     * @return HTTPステータスレスポンス
+     */
     @PostMapping(value = "/csv", produces = "text/csv;charset=UTF-8")
     public ResponseEntity<byte[]> downloadCsv(
             @RequestBody ShuushiSearchDto dto) {
 
+        // CSV作成処理
         byte[] csv = shuushiCsvService.createCsv(dto);
 
+        // 作成したCSVをHTTPステータスレスポンスで返却
         return ResponseEntity.ok()
                 .header(
                         HttpHeaders.CONTENT_DISPOSITION,

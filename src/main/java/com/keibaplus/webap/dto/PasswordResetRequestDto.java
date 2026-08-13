@@ -3,6 +3,9 @@ package com.keibaplus.webap.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Email;
 
+/**
+ * パスワードリセット申請用DTO
+ */
 public class PasswordResetRequestDto {
 
     @NotBlank(message = "メールアドレスを入力してください")

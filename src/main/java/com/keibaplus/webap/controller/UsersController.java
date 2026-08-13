@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UsersController {
 
-    // ユーザー管理処理のためにUsersServiceのインスタンスを使用
+    // Bean注入
     private final UsersService usersService;
     private final CurrentUserProvider currentUserProvider;
 
@@ -61,6 +61,7 @@ public class UsersController {
      * @param dto           ユーザー登録用DTO
      * @param bindingResult バリデーション結果
      * @param model         Modelインスタンス
+     * @param request       HTTPサーブレットリクエスト情報
      * @return ユーザー登録画面のテンプレートかログイン画面へのリダイレクト
      */
     @PostMapping("/register")
@@ -111,6 +112,7 @@ public class UsersController {
      * @param dto           ユーザー情報更新用DTO
      * @param bindingResult バリデーション結果
      * @param model         Modelインスタンス
+     * @param request       HTTPサーブレットリクエスト情報
      * @return ユーザー情報更新画面のテンプレートかトップページ画面へのリダイレクト
      */
     @PostMapping("/useredit")
